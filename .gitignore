@@ -1,3 +1,7 @@
+# config file
+.env*
+!.env.sample
+
 # compiled output
 /dist
 /node_modules
