@@ -38,6 +38,6 @@ export class UserController {
     @Body('email') email: string,
     @Body('role') role: Role,
   ) {
-    const result = await this.userService.updateUser(id, name, email, role);
+    await this.userService.updateUser(id, name, email, role);
   }
 }
