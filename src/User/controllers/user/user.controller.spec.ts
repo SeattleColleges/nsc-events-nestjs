@@ -17,7 +17,8 @@ describe('UserController', () => {
     mockUserService = {
       addUser: jest
         .fn()
-        .mockImplementation((name, email, role) => Promise.resolve('some_id')),
+        .mockImplementation((/*name, email, role*/) =>
+          Promise.resolve('some_id')),
       getAllUsers: jest.fn().mockReturnValue(mockUsers), // Define getAllUsers here
       getUserById: jest
         .fn()
@@ -25,7 +26,7 @@ describe('UserController', () => {
       getUserByEmail: jest.fn().mockReturnValue('some_email'),
       updateUser: jest
         .fn()
-        .mockImplementation((id, name, email, role) => Promise.resolve()),
+        .mockImplementation((/*id, name, email, role*/) => Promise.resolve()),
       removeUser: jest.fn(),
     };
 
