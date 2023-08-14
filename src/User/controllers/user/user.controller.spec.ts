@@ -18,6 +18,7 @@ describe('UserController', () => {
       addUser: jest
         .fn()
         .mockImplementation((name, email, role) => Promise.resolve('some_id')),
+      getAllUsers: jest.fn().mockReturnValue(mockUsers), // Define getAllUsers here
       getUserById: jest
         .fn()
         .mockImplementation((id) => mockUsers.find((user) => user.id === id)),
