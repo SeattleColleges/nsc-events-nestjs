@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { Role, UserDocument } from '../../types/user.model';
 import { InjectModel } from '@nestjs/mongoose';
@@ -75,8 +75,5 @@ export class UserService {
     const updated = await updatedUser.save();
     console.log(updated);
     return updated;
-  }
-  removeUser() {
-    console.log('soft-deleted user');
   }
 }
