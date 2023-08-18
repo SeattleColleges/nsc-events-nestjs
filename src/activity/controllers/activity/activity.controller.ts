@@ -1,14 +1,11 @@
 import { Controller, Get } from '@nestjs/common';
+import { ActivityService } from 'src/activity/services/activity/activity.service';
 
 @Controller('activity')
 export class ActivityController {
-
+    constructor(private activityService: ActivityService) {}
     @Get('')
     getActivity() {
-        return {
-            id: 1,
-            email: 'taylor@gmail.com',
-            createdAt: new Date(),
-        }
+        return this.activityService.getActivity();
     }
 }
