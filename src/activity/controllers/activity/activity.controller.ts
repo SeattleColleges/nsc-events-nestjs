@@ -3,9 +3,10 @@ import { ActivityService } from 'src/activity/services/activity/activity.service
 
 @Controller('activity')
 export class ActivityController {
-    constructor(private activityService: ActivityService) {}
+    constructor(private readonly activityService: ActivityService) {}
+    
     @Get('')
-    getActivity() {
-        return this.activityService.getActivity();
+    async getAllActivities() {
+        return await this.activityService.getAllActivities();
     }
 }
