@@ -1,10 +1,10 @@
 import { Controller, Get } from '@nestjs/common';
 
-@Controller('event')
-export class EventController {
+@Controller('activity')
+export class ActivityController {
 
     @Get('')
-    getEvent() {
+    getActivity() {
         return {
             id: 1,
             email: 'taylor@gmail.com',
