@@ -17,4 +17,10 @@ export class ActivityService {
     // But we should use serialization which comes in a later video, and we will
     // on a future iteration. May need it here for eventCreatorId.
   }
+
+  async addEvent(eventTitle: string, eventCategory: string, eventTags: string[]): Promise<any> {
+    const newEvent = new this.activityModel({ eventTitle, eventCategory, eventTags});
+    const result = await newEvent.save();
+    return result._id;
+  }
 }
