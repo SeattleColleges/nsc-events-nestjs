@@ -5,16 +5,16 @@ import { ActivityDocument } from 'src/activity/types/activity.model';
 
 @Injectable()
 export class ActivityService {
-    constructor(@InjectModel('Activity') private activityModel: Model<ActivityDocument>) {
+  constructor(
+    @InjectModel('Activity') private activityModel: Model<ActivityDocument>,
+  ) {
     // activity defined in activity.module.ts
-
-    }
-    async getAllActivities(): Promise<any> {
-        const activities: ActivityDocument[] = await this.activityModel.find().exec();
-        return activities.map((activity) => ({
-            eventTitle: activity.eventTitle,
-            eventCategory: activity.eventCategory,
-            eventTags: activity.eventTags,
-        }));
-    } 
+  }
+  async getAllActivities(): Promise<ActivityDocument[]> {
+    return await this.activityModel.find().exec();
+    // only reason to map is to transform the data. In the case of user.
+    // I was mapping to transform the data to hide sensitive information
+    // But we should use serialization which comes in a later video, and we will
+    // on a future iteration. May need it here for eventCreatorId.
+  }
 }
