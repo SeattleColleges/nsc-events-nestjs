@@ -93,7 +93,7 @@ export class ActivityController {
     @Body('eventPrerequisites') eventPrerequisites: string,
     @Body('eventCancellationPolicy') eventCancellationPolicy: string,
     @Body('eventContact') eventContact: string,
-    @Body('eventSocialMedia') eventSocialMedia: [], //{"facebook": string, "twitter": string, "instagram": string, "hashtag": string},
+    @Body('eventSocialMedia') eventSocialMedia: {"facebook": string, "twitter": string, "instagram": string, "hashtag": string},
     @Body('eventPrivacy') eventPrivacy: string,
     @Body('eventAccessibility') eventAccessibility: string,
   ) {
