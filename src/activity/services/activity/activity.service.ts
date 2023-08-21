@@ -52,7 +52,7 @@ export class ActivityService {
       eventContact: activity.eventContact,
       eventSocialMedia: activity.eventSocialMedia,
       eventPrivacy: activity.eventPrivacy,
-      eventAccessibility: activity.eventAccessibility
+      eventAccessibility: activity.eventAccessibility,
     } as ActivityDocument;
   }
 
@@ -81,7 +81,7 @@ export class ActivityService {
     eventPrivacy: string,
     eventAccessibility: string,
   ): Promise<any> {
-    const newEvent = new this.activityModel({ 
+    const newEvent = new this.activityModel({
       eventCreatorId,
       eventTitle,
       eventDescription,
@@ -133,10 +133,10 @@ export class ActivityService {
     eventCancellationPolicy: string,
     eventContact: string,
     eventSocialMedia: {
-      "facebook": string,
-      "twitter": string,
-      "instagram": string,
-      "hashtag": string
+      facebook: string,
+      twitter: string,
+      instagram: string,
+      hashtag: string
     },
     eventPrivacy: string,
     eventAccessibility: string,
