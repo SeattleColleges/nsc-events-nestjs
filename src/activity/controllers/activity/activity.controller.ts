@@ -3,21 +3,21 @@ import { ActivityService } from 'src/activity/services/activity/activity.service
 
 @Controller('activity')
 export class ActivityController {
-    constructor(private readonly activityService: ActivityService) {}
-    
-    @Get('')
-    async getAllActivities() {
-        return await this.activityService.getAllActivities();
-    }
+  constructor(private readonly activityService: ActivityService) {}
+  
+  @Get('')
+  async getAllActivities() {
+    return await this.activityService.getAllActivities();
+  }
 
-    @Get(':id')
-    async getActivityById(@Param('id') id: string) {
-        console.log(id);
-        return this.activityService.getActivityById(id);
-    }
+  @Get(':id')
+  async getActivityById(@Param('id') id: string) {
+    console.log(id);
+    return this.activityService.getActivityById(id);
+  }
 
-    @Post('add')
-    async addEvent(
+  @Post('add')
+  async addEvent(
     @Body('eventCreatorId') eventCreatorId: string,
     @Body('eventTitle') eventTitle: string,
     @Body('eventDescription') eventDescription: string,
@@ -41,38 +41,38 @@ export class ActivityController {
     @Body('eventSocialMedia') eventSocialMedia: [],
     @Body('eventPrivacy') eventPrivacy: string,
     @Body('eventAccessibility') eventAccessibility: string,
-    ) {
+  ) {
     const newEvent = await this.activityService.addEvent(
-    eventCreatorId,
-    eventTitle,
-    eventDescription,
-    eventCategory,
-    eventDate,
-    eventStartTime,
-    eventEndTime,
-    eventLocation,
-    eventCoverPhoto,
-    eventHost,
-    eventWebsite,
-    eventRegistration,
-    eventCapacity,
-    eventCost,
-    eventTags,
-    eventSchedule,
-    eventSpeakers,
-    eventPrerequisites,
-    eventCancellationPolicy,
-    eventContact,
-    eventSocialMedia,
-    eventPrivacy,
-    eventAccessibility,
+      eventCreatorId,
+      eventTitle,
+      eventDescription,
+      eventCategory,
+      eventDate,
+      eventStartTime,
+      eventEndTime,
+      eventLocation,
+      eventCoverPhoto,
+      eventHost,
+      eventWebsite,
+      eventRegistration,
+      eventCapacity,
+      eventCost,
+      eventTags,
+      eventSchedule,
+      eventSpeakers,
+      eventPrerequisites,
+      eventCancellationPolicy,
+      eventContact,
+      eventSocialMedia,
+      eventPrivacy,
+      eventAccessibility,
     );
     console.log(newEvent);
     return { id: newEvent };
-    }
+  }
 
-    @Patch('update/:id')
-    async updateActivity(
+  @Patch('update/:id')
+  async updateActivity(
     @Param('id') id: string,
     @Body('eventCreatorId') eventCreatorId: string,
     @Body('eventTitle') eventTitle: string,
@@ -97,32 +97,32 @@ export class ActivityController {
     @Body('eventSocialMedia') eventSocialMedia: {facebook: string, twitter: string, instagram: string, hashtag: string},
     @Body('eventPrivacy') eventPrivacy: string,
     @Body('eventAccessibility') eventAccessibility: string,
-    ) {
+  ) {
     await this.activityService.updateActivity(
-    id,
-    eventCreatorId,
-    eventTitle,
-    eventDescription,
-    eventCategory,
-    eventDate,
-    eventStartTime,
-    eventEndTime,
-    eventLocation,
-    eventCoverPhoto,
-    eventHost,
-    eventWebsite,
-    eventRegistration,
-    eventCapacity,
-    eventCost,
-    eventTags,
-    eventSchedule,
-    eventSpeakers,
-    eventPrerequisites,
-    eventCancellationPolicy,
-    eventContact,
-    eventSocialMedia,
-    eventPrivacy,
-    eventAccessibility,
+      id,
+      eventCreatorId,
+      eventTitle,
+      eventDescription,
+      eventCategory,
+      eventDate,
+      eventStartTime,
+      eventEndTime,
+      eventLocation,
+      eventCoverPhoto,
+      eventHost,
+      eventWebsite,
+      eventRegistration,
+      eventCapacity,
+      eventCost,
+      eventTags,
+      eventSchedule,
+      eventSpeakers,
+      eventPrerequisites,
+      eventCancellationPolicy,
+      eventContact,
+      eventSocialMedia,
+      eventPrivacy,
+      eventAccessibility,
     );
-    }
+  }
 }
