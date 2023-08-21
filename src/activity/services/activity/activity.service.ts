@@ -111,8 +111,36 @@ export class ActivityService {
   }
 
   async updateActivity(
-    id: string,eventCreatorId: string,eventTitle: string,eventDescription: string,eventCategory: string,eventDate: Date,eventStartTime: string,eventEndTime: string,eventLocation: string,eventCoverPhoto: string,eventHost: string,eventWebsite: string,eventRegistration: string,eventCapacity: string,eventCost: string,eventTags: string[],eventSchedule: string,eventSpeakers: string[],eventPrerequisites: string,eventCancellationPolicy: string,eventContact: string,eventSocialMedia: {facebook: string;twitter: string;instagram: string;hashtag: string;},eventPrivacy: string,eventAccessibility: string,
-  ) {
+    id: string,
+    eventCreatorId: string,
+    eventTitle: string,
+    eventDescription: string,
+    eventCategory: string,
+    eventDate: Date,
+    eventStartTime: string,
+    eventEndTime: string,
+    eventLocation: string,
+    eventCoverPhoto: string,
+    eventHost: string,
+    eventWebsite: string,
+    eventRegistration: string,
+    eventCapacity: string,
+    eventCost: string,
+    eventTags: string[],
+    eventSchedule: string,
+    eventSpeakers: string[],
+    eventPrerequisites: string,
+    eventCancellationPolicy: string,
+    eventContact: string,
+    eventSocialMedia: {
+      "facebook": string;
+      "twitter": string;
+      "instagram": string;
+      "hashtag": string;
+    },
+    eventPrivacy: string,
+    eventAccessibility: string,
+    ) {
     const updatedActivity = await this.activityModel.findById(id).exec();
     if (eventCreatorId) {
       console.log('eventCreatorId ', eventCreatorId);
