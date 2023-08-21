@@ -133,14 +133,14 @@ export class ActivityService {
     eventCancellationPolicy: string,
     eventContact: string,
     eventSocialMedia: {
-      "facebook": string;
-      "twitter": string;
-      "instagram": string;
-      "hashtag": string;
+      facebook: string;
+      twitter: string;
+      instagram: string;
+      hashtag: string;
     },
     eventPrivacy: string,
     eventAccessibility: string,
-    ) {
+  ) {
     const updatedActivity = await this.activityModel.findById(id).exec();
     if (eventCreatorId) {
       console.log('eventCreatorId ', eventCreatorId);
