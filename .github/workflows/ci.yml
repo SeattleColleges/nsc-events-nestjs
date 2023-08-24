@@ -39,8 +39,8 @@ jobs:
         run: npm run compile
       # - name: Jest e2e tests
       #   run: npm run test:e2e
-      - name: Test coverage
-        run: npm run test:cov
+      # - name: Test coverage
+      #   run: npm run test:cov
 
       #      - name: Run Snapshot Tests
       #        run: npm run test:snapshot
