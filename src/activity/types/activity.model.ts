@@ -22,7 +22,7 @@ export interface ActivityDocument extends Document {
   eventPrerequisites: string;
   eventCancellationPolicy: string;
   eventContact: string;
-  eventSocialMedia: object; //{
+  eventSocialMedia: object; //{ these are key-value pairs so will use an object
   //   facebook: string;
   //   twitter: string;
   //   instagram: string;
