@@ -19,7 +19,7 @@ export class CreateActivityDto {
   eventPrerequisites: string;
   eventCancellationPolicy: string;
   eventContact: string;
-  eventSocialMedia: any[];
+  eventSocialMedia: object;
   eventPrivacy: string;
   eventAccessibility: string;
 }
