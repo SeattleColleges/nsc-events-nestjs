@@ -1,4 +1,4 @@
-export class CreateActivityDto {
+export class ActivityDto {
   eventCreatorId: string;
   eventTitle: string;
   eventDescription: string;
