@@ -7,6 +7,7 @@ describe('UserController', () => {
   let controller: UserController;
   let mockUserService;
 
+  // TODO: move mockUsers to their own file in test/mock-data
   const mockUsers = [
     { id: '1', name: 'Alice', email: 'alice@example.com', role: 'user' },
     { id: '2', name: 'Bob', email: 'bob@example.com', role: 'admin' },
