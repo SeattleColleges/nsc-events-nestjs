@@ -12,7 +12,6 @@ export class UserController {
     @Body('role') role: string,
   ) {
     const generatedId = await this.userService.addUser(name, email, role);
-    console.log(generatedId);
     return { id: generatedId };
   }
 
@@ -23,7 +22,6 @@ export class UserController {
 
   @Get(':id')
   async getUserById(@Param('id') id: string) {
-    console.log(id);
     return this.userService.getUserById(id);
   }
 

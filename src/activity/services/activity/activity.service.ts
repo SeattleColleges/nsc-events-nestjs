@@ -2,7 +2,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ActivityDocument } from 'src/activity/types/activity.model';
-import { CreateActivityDto } from '../../types/create-activity.dto';
+import { ActivityDto } from '../../types/activity.dto';
 
 @Injectable()
 export class ActivityService {
@@ -57,13 +57,13 @@ export class ActivityService {
     } as ActivityDocument;
   }
 
-  async addEvent(createActivityDto: CreateActivityDto): Promise<any> {
+  async addEvent(createActivityDto: ActivityDto): Promise<any> {
     const newEvent = new this.activityModel(createActivityDto);
     const result = await newEvent.save();
     return result._id;
   }
 
-  async updateActivity(id: string, createActivityDto: CreateActivityDto) {
+  async updateActivity(id: string, createActivityDto: ActivityDto) {
     const updatedActivity = await this.activityModel.findById(id).exec();
 
     Object.keys(createActivityDto).forEach((key) => {

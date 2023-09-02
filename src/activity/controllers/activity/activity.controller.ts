@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
-import { ActivityService } from 'src/activity/services/activity/activity.service';
-import { CreateActivityDto } from '../../types/create-activity.dto';
+import { ActivityService } from '../../services/activity/activity.service';
+import { ActivityDto } from '../../types/activity.dto';
 
 @Controller('activity')
 export class ActivityController {
@@ -17,17 +17,13 @@ export class ActivityController {
   }
 
   @Post('add')
-  async addEvent(@Body() createActivityDto: CreateActivityDto) {
-    const newEvent = await this.activityService.addEvent(createActivityDto);
-    console.log(newEvent);
+  async addEvent(@Body() activity: ActivityDto) {
+    const newEvent = await this.activityService.addEvent(activity);
     return { id: newEvent };
   }
 
   @Patch('update/:id')
-  async updateActivity(
-    @Param('id') id: string,
-    @Body() createActivityDto: CreateActivityDto,
-  ) {
-    await this.activityService.updateActivity(id, createActivityDto);
+  async updateActivity(@Param('id') id: string, @Body() activity: ActivityDto) {
+    await this.activityService.updateActivity(id, activity);
   }
 }
