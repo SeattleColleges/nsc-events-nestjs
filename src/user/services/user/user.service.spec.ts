@@ -4,9 +4,10 @@ import { getModelToken } from '@nestjs/mongoose';
 
 describe('UserService', () => {
   let service: UserService;
-  let mockModel;
+  let mockModel: jest.Mock<any, any, any>;
 
   beforeEach(async () => {
+    // save is called in the addEvent method so we must mock its behavior.
     mockModel = jest.fn().mockImplementation(() => ({
       save: jest.fn().mockResolvedValue({ _id: 'some_id' }),
     }));
@@ -28,7 +29,7 @@ describe('UserService', () => {
     expect(service).toBeDefined();
   });
 
-  it('should add a user', async () => {
+  it('addUser should return id', async () => {
     const result = await service.addUser('name', 'email@example.com', 'user');
     expect(result).toBeDefined();
     expect(result).toBe('some_id');
