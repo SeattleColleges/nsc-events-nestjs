@@ -3,7 +3,7 @@ import { ActivityController } from './activity.controller';
 
 describe('ActivityController', () => {
   let controller: ActivityController;
-
+  // TODO: add necessary mocked methods
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ActivityController],
