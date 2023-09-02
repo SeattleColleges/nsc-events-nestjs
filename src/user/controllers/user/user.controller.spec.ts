@@ -5,7 +5,14 @@ import { Role } from '../../types/user.model';
 
 describe('UserController', () => {
   let controller: UserController;
-  let mockUserService;
+  let mockUserService: {
+    addUser: any;
+    getAllUsers: any;
+    getUserById: any;
+    getUserByEmail: any;
+    updateUser: any;
+    removeUser?: jest.Mock<any, any, any>;
+  };
 
   // TODO: move mockUsers to their own file in test/mock-data
   const mockUsers = [
