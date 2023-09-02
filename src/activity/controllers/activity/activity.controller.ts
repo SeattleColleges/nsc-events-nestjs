@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
-import { ActivityService } from 'src/activity/services/activity/activity.service';
+import { ActivityService } from '../../services/activity/activity.service';
 import { ActivityDto } from '../../types/activity.dto';
 
 @Controller('activity')
