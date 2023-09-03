@@ -4,11 +4,6 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 export interface SocialMedia {
   [key: string]: string;
-  facebook: string;
-  instagram: string;
-  twitter: string;
-  linkedin: string;
-  hashtag: string;
 }
 @Schema({
   timestamps: true,
