@@ -32,7 +32,7 @@ export class ActivityController {
   async addEvent(
     @Body() activity: CreateActivityDto,
   ): Promise<Activity & { _id: Types.ObjectId }> {
-    return await this.activityService.addEvent(activity);
+    return await this.activityService.createEvent(activity);
   }
 
   @Put('update/:id')
