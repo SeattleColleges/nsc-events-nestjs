@@ -12,7 +12,7 @@ export function IsSocialMedia(validationOptions?: ValidationOptions) {
       propertyName: propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any) {
           if (typeof value !== 'object') return false;
           if (Object.keys(value).length == 0) {
             return false;
