@@ -15,7 +15,7 @@
 # This setup ensures that code changes are always integrated and tested (CI) when they're made on a new branch.
 
 name: CI On Branch Creation
-run-name: CI (On Branch Creation)
+run-name: CI Triggered on New Branch
 
 on:
 
@@ -23,4 +23,5 @@ on:
 
 jobs:
   CI:
+    name: on new branch
     uses: ./.github/workflows/ci.yml # reusable workflow file path
