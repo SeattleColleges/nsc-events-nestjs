@@ -1,6 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import mongoose, { Model, Types } from 'mongoose';
 import { Activity } from '../../schemas/activity.schema';
 import { Query } from 'express-serve-static-core';
 
@@ -38,13 +38,11 @@ export class ActivityService {
   }
 
   async getActivityById(id: string): Promise<Activity> {
-    console.log('service id: ', id);
-    let activity: Activity;
-    try {
-      activity = await this.activityModel.findById(id).exec();
-    } catch (error) {
-      throw new HttpException('Activity not found!', 404);
+    const isValidId = mongoose.isValidObjectId(id);
+    if (!isValidId) {
+      throw new HttpException('Please enter correct id.', 404);
     }
+    const activity = await this.activityModel.findById(id).exec();
     if (!activity) {
       throw new HttpException('Activity not found!', 404);
     }
