@@ -47,4 +47,6 @@ export class ActivityController {
   async deleteActivityById(@Param('id') id: string): Promise<Activity> {
     return this.activityService.deleteActivityById(id);
   }
+
+  // TODO: add route handler to search by host path: host | club/keyword = club
 }

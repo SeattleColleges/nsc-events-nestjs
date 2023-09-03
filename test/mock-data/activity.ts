@@ -1,6 +1,6 @@
-import { ActivityDto } from '../../src/activity/types/activity.dto';
+import { CreateActivityDto } from '../../src/activity/dto/create-activity.dto';
 
-const mockActivity: ActivityDto = {
+const mockActivity: CreateActivityDto = {
   eventCreatorId: 'user-guid',
   eventTitle: 'Sample Event',
   eventDescription: 'This is a sample event description.',
@@ -28,6 +28,7 @@ const mockActivity: ActivityDto = {
     twitter: 'https://twitter.com/sampleevent',
     instagram: 'https://www.instagram.com/sampleevent',
     hashtag: '#SampleEvent2023',
+    linkedin: 'https://www.linkedin/in/sampleProfile',
   },
   eventPrivacy: 'Public',
   eventAccessibility: 'Wheelchair accessible venue.',
