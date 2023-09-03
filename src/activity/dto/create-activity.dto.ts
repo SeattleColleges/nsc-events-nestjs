@@ -27,18 +27,15 @@ export class CreateActivityDto {
   readonly eventDescription: string;
 
   @IsNotEmpty()
-  @IsString()
+  @IsString() //TODO: lead dev talk to PO and turn this into enum
   readonly eventCategory: string;
 
-  @IsNotEmpty()
   @IsDateString()
   readonly eventDate: Date;
 
-  @IsNotEmpty()
   @IsTime()
   readonly eventStartTime: string;
 
-  @IsNotEmpty()
   @IsTime()
   readonly eventEndTime: string;
 
@@ -67,6 +64,7 @@ export class CreateActivityDto {
   readonly eventCapacity: string;
 
   @IsOptional()
+  @IsNotEmpty()
   @IsString()
   readonly eventCost: string;
 
@@ -76,9 +74,11 @@ export class CreateActivityDto {
   readonly eventTags: string[];
 
   @IsOptional()
+  @IsNotEmpty()
   @IsString()
   readonly eventSchedule: string;
 
+  @IsOptional()
   @IsArray({
     message:
       "eventSpeakers must be an array. Did you mean to enter ['speaker']?",
@@ -90,10 +90,12 @@ export class CreateActivityDto {
   readonly eventSpeakers: string[];
 
   @IsOptional()
+  @IsNotEmpty()
   @IsString()
   readonly eventPrerequisites: string;
 
   @IsOptional()
+  @IsNotEmpty()
   @IsString()
   readonly eventCancellationPolicy: string;
 
@@ -106,6 +108,7 @@ export class CreateActivityDto {
   readonly eventSocialMedia: SocialMedia;
 
   @IsOptional()
+  @IsNotEmpty()
   @IsString()
   readonly eventPrivacy: string;
 
