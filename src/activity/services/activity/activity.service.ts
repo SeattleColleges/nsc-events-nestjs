@@ -14,7 +14,7 @@ export class ActivityService {
   }
   async getAllActivities(query: Query): Promise<Activity[]> {
     // pagination options
-    const resPerPage = 2;
+    const resPerPage = 5;
     const currentPage: number = Number(query.page) || 1;
 
     // skips the number of results according to page number and number of results per page
