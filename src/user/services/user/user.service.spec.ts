@@ -1,38 +1,39 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ActivityService } from './activity.service';
+import { UserService } from './user.service';
 import { getModelToken } from '@nestjs/mongoose';
-import mockActivity from '../../../../test/mock-data/activity';
 
-describe('ActivityService', () => {
-  let service: ActivityService;
+describe('UserService', () => {
+  let service: UserService;
   let mockModel: jest.Mock<any, any, any>;
 
   beforeEach(async () => {
     // save is called in the addEvent method so we must mock its behavior.
     mockModel = jest.fn().mockImplementation(() => ({
-      save: jest.fn().mockResolvedValue({ ...mockActivity, _id: 'DUMMY_ID' }),
+      save: jest.fn().mockResolvedValue({ _id: 'some_id' }),
     }));
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        ActivityService,
+        UserService,
         {
-          provide: getModelToken('Activity'),
+          provide: getModelToken('User'),
           useValue: mockModel,
         },
       ],
     }).compile();
 
-    service = module.get<ActivityService>(ActivityService);
+    service = module.get<UserService>(UserService);
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
 
-  it('addEvent should return id', async () => {
-    const result = await service.addEvent(mockActivity);
+  it('addUser should return id', async () => {
+    const result = await service.addUser('name', 'email@example.com', 'user');
     expect(result).toBeDefined();
-    expect(result).toBe('DUMMY_ID');
+    expect(result).toBe('some_id');
   });
+
+  // Other tests remain the same
 });
