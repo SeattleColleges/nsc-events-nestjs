@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { ActivityService } from '../../services/activity/activity.service';
 import { Activity } from '../../schemas/activity.schema';
-import { Types } from 'mongoose';
 import { CreateActivityDto } from '../../dto/create-activity.dto';
 import { UpdateActivityDto } from '../../dto/update-activity.dto';
 import { Query as ExpressQuery } from 'express-serve-static-core';
