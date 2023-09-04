@@ -1,6 +1,4 @@
-// import { Model, model, models } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-// import { ActivityDocument } from './activity.model';
 
 export interface SocialMedia {
   [key: string]: string;
