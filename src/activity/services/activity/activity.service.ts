@@ -1,6 +1,10 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import mongoose, { Model, Types } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { Activity } from '../../schemas/activity.schema';
 import { Query } from 'express-serve-static-core';
 
@@ -21,17 +25,17 @@ export class ActivityService {
     const skip = resPerPage * (currentPage - 1);
 
     // search by event tags
-    const keyword = query.keyword
+    const tag = query.tag
       ? {
           eventTags: {
             // using regex to look if any entries contain the text
-            $regex: query.keyword,
+            $regex: query.tag,
             $options: 'i', // case insensitive
           },
         }
       : {};
     return await this.activityModel
-      .find({ ...keyword })
+      .find({ ...tag })
       .limit(resPerPage)
       .skip(skip)
       .exec();
@@ -40,38 +44,29 @@ export class ActivityService {
   async getActivityById(id: string): Promise<Activity> {
     const isValidId = mongoose.isValidObjectId(id);
     if (!isValidId) {
-      throw new HttpException('Please enter correct id.', 404);
+      throw new BadRequestException('Please enter correct id.');
     }
     const activity = await this.activityModel.findById(id).exec();
     if (!activity) {
-      throw new HttpException('Activity not found!', 404);
+      throw new NotFoundException('Activity not found!');
     }
     return activity;
   }
 
-  async createEvent(
-    createActivity: Activity,
-  ): Promise<Activity & { _id: Types.ObjectId }> {
-    const newEvent = new this.activityModel(createActivity);
-    return await newEvent.save();
+  async createEvent(createActivity: Activity): Promise<Activity> {
+    return await this.activityModel.create(createActivity);
   }
 
-  async updateActivityById(
-    id: string,
-    activity: Activity,
-  ): Promise<Activity & { _id: Types.ObjectId }> {
-    const updatedActivity = await this.activityModel
+  async updateActivityById(id: string, activity: Activity): Promise<Activity> {
+    return await this.activityModel
       .findByIdAndUpdate(id, activity, {
         new: true,
         runValidators: true,
       })
       .exec();
-    return await updatedActivity.save();
   }
 
-  async deleteActivityById(
-    id: string,
-  ): Promise<Activity & { _id: Types.ObjectId }> {
+  async deleteActivityById(id: string): Promise<Activity> {
     return await this.activityModel.findByIdAndDelete(id).exec();
   }
 }
