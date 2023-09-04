@@ -1,7 +1,7 @@
 import { CreateActivityDto } from '../../src/activity/dto/create-activity.dto';
 
-const mockActivity: CreateActivityDto = {
-  eventCreatorId: 'user-guid',
+const createMockActivity: CreateActivityDto = {
+  eventCreatorId: '11f4fb4f18500161673ba4ac',
   eventTitle: 'Sample Event',
   eventDescription: 'This is a sample event description.',
   eventCategory: 'Tech',
@@ -34,4 +34,4 @@ const mockActivity: CreateActivityDto = {
   eventAccessibility: 'Wheelchair accessible venue.',
 };
 
-export default mockActivity;
+export default createMockActivity;
