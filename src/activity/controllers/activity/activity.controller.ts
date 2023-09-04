@@ -29,9 +29,7 @@ export class ActivityController {
   }
 
   @Post('new')
-  async addEvent(
-    @Body() activity: CreateActivityDto,
-  ): Promise<Activity & { _id: Types.ObjectId }> {
+  async addEvent(@Body() activity: CreateActivityDto): Promise<Activity> {
     return await this.activityService.createEvent(activity);
   }
 
@@ -39,7 +37,7 @@ export class ActivityController {
   async updateActivityById(
     @Param('id') id: string,
     @Body() activity: UpdateActivityDto,
-  ): Promise<Activity & { _id: Types.ObjectId }> {
+  ): Promise<Activity> {
     return await this.activityService.updateActivityById(id, activity);
   }
 
