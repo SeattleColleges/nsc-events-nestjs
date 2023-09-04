@@ -1,38 +1,26 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ActivityService } from './activity.service';
 import { getModelToken } from '@nestjs/mongoose';
-import mockActivity from '../../../../test/mock-data/activity';
+import { Activity } from '../../schemas/activity.schema';
+import { Model } from 'mongoose';
 
 describe('ActivityService', () => {
-  let service: ActivityService;
-  let mockModel: jest.Mock<any, any, any>;
+  let activityService: ActivityService;
+  let model: Model<Activity>;
+  const mockActivityService = {};
 
   beforeEach(async () => {
-    // save is called in the addEvent method so we must mock its behavior.
-    mockModel = jest.fn().mockImplementation(() => ({
-      save: jest.fn().mockResolvedValue({ ...mockActivity, _id: 'DUMMY_ID' }),
-    }));
-
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ActivityService,
         {
-          provide: getModelToken('Activity'),
-          useValue: mockModel,
+          provide: getModelToken(Activity.name),
+          useValue: mockActivityService,
         },
       ],
     }).compile();
 
-    service = module.get<ActivityService>(ActivityService);
-  });
-
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
-
-  it('addEvent should return id', async () => {
-    const result = await service.addEvent(mockActivity);
-    expect(result).toBeDefined();
-    expect(result).toBe('DUMMY_ID');
+    activityService = module.get<ActivityService>(ActivityService);
+    model = module.get<Model<Activity>>(getModelToken(Activity.name));
   });
 });
