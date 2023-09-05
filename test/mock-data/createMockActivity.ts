@@ -1,7 +1,7 @@
 import { CreateActivityDto } from '../../src/activity/dto/create-activity.dto';
 
 const createMockActivity: CreateActivityDto = {
-  createdByUser: undefined,
+  createdByUser: undefined, // client cannot enter ObjectId for User. validation enforced
   eventTitle: 'Sample Event',
   eventDescription: 'This is a sample event description.',
   eventCategory: 'Tech',
