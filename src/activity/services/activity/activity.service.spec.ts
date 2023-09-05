@@ -1,11 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ActivityService } from './activity.service';
+import mongoose, { Model } from 'mongoose';
 import { getModelToken } from '@nestjs/mongoose';
 import { Activity } from '../../schemas/activity.schema';
-import mockActivityFromDB from '../../../../test/mock-data/returned-mock-activity';
-import mongoose, { Model } from 'mongoose';
+import { CreateActivityDto } from '../../dto/create-activity.dto';
+import { User } from '../../../auth/schemas/user.schema';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import createMockActivity from '../../../../test/mock-data/createMockActivity';
+import mockActivityFromDB from '../../../../test/mock-data/returned-mock-activity';
 
 describe('ActivityService', () => {
   let activityService: ActivityService;
@@ -17,6 +19,13 @@ describe('ActivityService', () => {
     findByIdAndUpdate: jest.fn(),
     findByIdAndDelete: jest.fn(),
   };
+
+  const mockUser = {
+    _id: '64f6b79583e4cdccda1a02b2',
+    name: 'BC Ko',
+    email: 'bc@gmail.com',
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -43,7 +52,7 @@ describe('ActivityService', () => {
                 exec: jest.fn().mockResolvedValue([mockActivityFromDB]),
               }),
             }),
-          }) as any,
+          } as any),
       );
       const result = await activityService.getAllActivities(query);
       expect(model.find).toHaveBeenCalledWith({
@@ -62,7 +71,7 @@ describe('ActivityService', () => {
         () =>
           ({
             exec: jest.fn().mockResolvedValue(mockActivityFromDB),
-          }) as any,
+          } as any),
       );
     });
     it('should find and return an event by ID', async () => {
@@ -99,25 +108,27 @@ describe('ActivityService', () => {
   });
 
   // TODO: refactor with user after doing auth Jest #1 vid timestamp 29:50
-  // describe('createEvent', () => {
-  //   it('should create and return an event', async () => {
-  //     const newEvent = createMockActivity;
-  //     jest
-  //       .spyOn(model, 'create')
-  //       .mockImplementationOnce(() => Promise.resolve(mockActivityFromDB));
-  //     const result = await activityService.createEvent(
-  //       // https://www.youtube.com/watch?v=aBjmdLmE2zI&list=PLdAEGQHOerPAMLdJim5Peryj6_2Q-477Z&index=7
-  //       newEvent /*, mockUser as User*/,
-  //     );
-  //     expect(result).toEqual(newEvent);
-  //   });
-  // });
+  describe('createEvent', () => {
+    it('should create and return an event', async () => {
+      const newEvent = createMockActivity;
+      jest
+        .spyOn(model, 'create')
+        .mockImplementationOnce(() => Promise.resolve(newEvent) as any);
+
+      const result = (await activityService.createEvent(
+        createMockActivity as CreateActivityDto,
+        mockUser as User,
+      )) as unknown as Activity;
+
+      expect(result).toEqual(newEvent);
+    });
+  });
 
   describe('updateActivityById', () => {
     it('should update and return an event', async () => {
       const updatedEvent = {
         ...createMockActivity,
-        eventTitle: 'Updated Title',
+        eventTitle: 'Original Title',
       };
       const activity = { eventTitle: 'Updated Title' };
       jest.spyOn(model, 'findByIdAndUpdate').mockReturnValue({
