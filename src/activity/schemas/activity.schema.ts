@@ -1,4 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { User } from '../../auth/schemas/user.schema';
+import mongoose from 'mongoose';
 
 export interface SocialMedia {
   [key: string]: string;
@@ -7,8 +9,11 @@ export interface SocialMedia {
   timestamps: true,
 })
 export class Activity {
-  @Prop()
-  eventCreatorId: string;
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  })
+  createdByUser: User;
 
   @Prop()
   eventTitle: string;
