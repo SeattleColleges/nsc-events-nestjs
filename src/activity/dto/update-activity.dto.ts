@@ -4,6 +4,7 @@ import {
   IsArray,
   IsDateString,
   IsEmail,
+  IsEmpty,
   IsNotEmpty,
   IsNumberString,
   IsOptional,
@@ -12,12 +13,11 @@ import {
 } from 'class-validator';
 import { IsTime } from '../../../custom-validators/is-time';
 import { IsSocialMedia } from '../../../custom-validators/is-social-media';
+import { User } from '../../auth/schemas/user.schema';
 
 export class UpdateActivityDto {
-  @IsOptional()
-  @IsNotEmpty()
-  @IsString() // TODO restrict so user cannot set this. Will be included on create of event from user data.
-  readonly eventCreatorId: string;
+  @IsEmpty({ message: 'You cannot pass user id.' })
+  readonly createdByUser: User;
 
   @IsOptional()
   @IsNotEmpty()
