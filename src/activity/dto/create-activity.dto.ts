@@ -4,6 +4,7 @@ import {
   IsArray,
   IsDateString,
   IsEmail,
+  IsEmpty,
   IsNotEmpty,
   IsNumberString,
   IsOptional,
@@ -12,11 +13,11 @@ import {
 } from 'class-validator';
 import { IsTime } from '../../../custom-validators/is-time';
 import { IsSocialMedia } from '../../../custom-validators/is-social-media';
+import { User } from '../../auth/schemas/user.schema';
 
 export class CreateActivityDto {
-  @IsNotEmpty()
-  @IsString() // TODO restrict so user cannot set this. Will be included on create of event from user data.
-  readonly eventCreatorId: string;
+  @IsEmpty({ message: 'You cannot pass user id.' })
+  readonly createdByUser: User;
 
   @IsNotEmpty()
   @IsString()
@@ -27,7 +28,7 @@ export class CreateActivityDto {
   readonly eventDescription: string;
 
   @IsNotEmpty()
-  @IsString() //TODO: lead dev talk to PO and turn this into enum
+  @IsString() //TODO: lead dev talk to PO and possibly turn this into enum to give admin more fine-grained control
   readonly eventCategory: string;
 
   @IsDateString()
