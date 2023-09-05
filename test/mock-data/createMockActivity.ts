@@ -1,7 +1,7 @@
 import { CreateActivityDto } from '../../src/activity/dto/create-activity.dto';
 
 const createMockActivity: CreateActivityDto = {
-  eventCreatorId: '11f4fb4f18500161673ba4ac',
+  createdByUser: undefined,
   eventTitle: 'Sample Event',
   eventDescription: 'This is a sample event description.',
   eventCategory: 'Tech',
