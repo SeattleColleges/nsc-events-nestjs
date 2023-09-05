@@ -43,7 +43,7 @@ describe('ActivityService', () => {
                 exec: jest.fn().mockResolvedValue([mockActivityFromDB]),
               }),
             }),
-          }) as any,
+          } as any),
       );
       const result = await activityService.getAllActivities(query);
       expect(model.find).toHaveBeenCalledWith({
@@ -62,7 +62,7 @@ describe('ActivityService', () => {
         () =>
           ({
             exec: jest.fn().mockResolvedValue(mockActivityFromDB),
-          }) as any,
+          } as any),
       );
     });
     it('should find and return an event by ID', async () => {
@@ -102,7 +102,9 @@ describe('ActivityService', () => {
   // describe('createEvent', () => {
   //   it('should create and return an event', async () => {
   //     const newEvent = createMockActivity;
-  //     jest.spyOn(model, 'create').mockImplementationOnce( () => Promise.resolve(mockActivityFromDB));
+  //     jest
+  //       .spyOn(model, 'create')
+  //       .mockImplementationOnce(() => Promise.resolve(mockActivityFromDB));
   //     const result = await activityService.createEvent(
   //       // https://www.youtube.com/watch?v=aBjmdLmE2zI&list=PLdAEGQHOerPAMLdJim5Peryj6_2Q-477Z&index=7
   //       newEvent /*, mockUser as User*/,
