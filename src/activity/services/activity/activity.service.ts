@@ -7,6 +7,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { Activity } from '../../schemas/activity.schema';
 import { Query } from 'express-serve-static-core';
+import { User } from '../../../auth/schemas/user.schema';
 
 @Injectable()
 export class ActivityService {
@@ -23,7 +24,7 @@ export class ActivityService {
 
     // skips the number of results according to page number and number of results per page
     const skip = resPerPage * (currentPage - 1);
-
+    // TODO: add ability to query by host/club
     // search by event tags
     const tag = query.tag
       ? {
@@ -53,8 +54,10 @@ export class ActivityService {
     return activity;
   }
 
-  async createEvent(createActivity: Activity): Promise<Activity> {
-    return await this.activityModel.create(createActivity);
+  async createEvent(activity: Activity, creator: User): Promise<Activity> {
+    console.log('creator: ', creator);
+    const data = Object.assign(activity, { createdByUser: creator._id });
+    return await this.activityModel.create(data);
   }
 
   async updateActivityById(id: string, activity: Activity): Promise<Activity> {
