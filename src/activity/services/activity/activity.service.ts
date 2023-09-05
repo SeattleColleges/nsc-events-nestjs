@@ -55,12 +55,12 @@ export class ActivityService {
   }
 
   async createEvent(activity: Activity, creator: User): Promise<Activity> {
-    console.log('creator: ', creator);
     const data = Object.assign(activity, { createdByUser: creator._id });
     return await this.activityModel.create(data);
   }
 
   async updateActivityById(id: string, activity: Activity): Promise<Activity> {
+    // TODO: return a bad request exception when item doesn't exist
     return await this.activityModel
       .findByIdAndUpdate(id, activity, {
         new: true,
