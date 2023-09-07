@@ -47,15 +47,39 @@ export class ActivityController {
   }
 
   @Put('update/:id')
+  @UseGuards(AuthGuard())
   async updateActivityById(
     @Param('id') id: string,
     @Body() activity: UpdateActivityDto,
+    @Req() req: any,
   ): Promise<Activity> {
-    return await this.activityService.updateActivityById(id, activity);
+    // return activity to retrieve createdByUser property value
+    const preOperationActivity = await this.activityService.getActivityById(id);
+    // admin can make edits regardless
+    if (req.user.role === Role.admin) {
+      return await this.activityService.updateActivityById(id, activity);
+    }
+    // have to check if they are the creator and if they still have creator access
+    if (
+      preOperationActivity.createdByUser.equals(req.user._id) &&
+      req.user.role === Role.creator
+    ) {
+      return await this.activityService.updateActivityById(id, activity);
+    } else {
+      throw new UnauthorizedException();
+    }
   }
 
   @Delete('remove/:id')
-  async deleteActivityById(@Param('id') id: string): Promise<Activity> {
-    return this.activityService.deleteActivityById(id);
+  @UseGuards(AuthGuard())
+  async deleteActivityById(
+    @Param('id') id: string,
+    @Req() req: any,
+  ): Promise<Activity> {
+    if (req.user.role == Role.admin) {
+      return this.activityService.deleteActivityById(id);
+    } else {
+      throw new UnauthorizedException();
+    }
   }
 }
