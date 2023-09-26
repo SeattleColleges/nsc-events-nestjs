@@ -1,3 +1,5 @@
+// Left as a framework in case we need to add user routes outside of auth. (i.e. Admin features etc.)
+
 // import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 // import { UserService } from '../../services/user/user.service';
 // import { Role } from '../../schemas/user.model';
