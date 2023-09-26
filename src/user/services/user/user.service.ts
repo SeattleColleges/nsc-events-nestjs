@@ -1,3 +1,5 @@
+// Left as a framework in case we need to add user routes outside of auth. (i.e. Admin features etc.)
+
 // import { HttpException, Injectable } from '@nestjs/common';
 // import { Model } from 'mongoose';
 // import { Role, UserDocument } from '../../schemas/user.model';
