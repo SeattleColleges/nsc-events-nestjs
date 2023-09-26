@@ -1,7 +1,6 @@
-import { ActivityDto } from '../../src/activity/types/activity.dto';
-
-const mockActivity: ActivityDto = {
-  eventCreatorId: 'user-guid',
+const mockActivityFromDB = {
+  _id: '64f4fb4f18500161673ba4ac',
+  eventCreatorId: '11f4fb4f18500161673ba4ac',
   eventTitle: 'Sample Event',
   eventDescription: 'This is a sample event description.',
   eventCategory: 'Tech',
@@ -28,9 +27,13 @@ const mockActivity: ActivityDto = {
     twitter: 'https://twitter.com/sampleevent',
     instagram: 'https://www.instagram.com/sampleevent',
     hashtag: '#SampleEvent2023',
+    linkedin: 'https://www.linkedin/in/sampleProfile',
   },
   eventPrivacy: 'Public',
   eventAccessibility: 'Wheelchair accessible venue.',
+  createdAt: '2023-09-03T21:31:59.362Z',
+  updatedAt: '2023-09-03T21:31:59.362Z',
+  __v: 0,
 };
 
-export default mockActivity;
+export default mockActivityFromDB;

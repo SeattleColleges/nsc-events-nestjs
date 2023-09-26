@@ -1,29 +1,85 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  Req,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common';
 import { ActivityService } from '../../services/activity/activity.service';
-import { ActivityDto } from '../../types/activity.dto';
+import { Activity } from '../../schemas/activity.schema';
+import { CreateActivityDto } from '../../dto/create-activity.dto';
+import { UpdateActivityDto } from '../../dto/update-activity.dto';
+import { Query as ExpressQuery } from 'express-serve-static-core';
+import { AuthGuard } from '@nestjs/passport';
+import { Role } from '../../../auth/schemas/user.schema';
 
-@Controller('activity')
+@Controller('events')
 export class ActivityController {
   constructor(private readonly activityService: ActivityService) {}
   @Get('')
-  async getAllActivities() {
-    return await this.activityService.getAllActivities();
+  async getAllActivities(@Query() query: ExpressQuery): Promise<Activity[]> {
+    return await this.activityService.getAllActivities(query);
   }
 
-  @Get(':id')
-  async getActivityById(@Param('id') id: string) {
-    console.log(id);
+  @Get('find/:id')
+  async findActivityById(@Param('id') id: string): Promise<Activity> {
     return this.activityService.getActivityById(id);
   }
 
-  @Post('add')
-  async addEvent(@Body() activity: ActivityDto) {
-    const newEvent = await this.activityService.addEvent(activity);
-    return { id: newEvent };
+  @Post('new')
+  @UseGuards(AuthGuard())
+  async addEvent(
+    @Body() activity: CreateActivityDto,
+    @Req() req: any,
+  ): Promise<Activity> {
+    console.log(req.user);
+    if (req.user.role != Role.user) {
+      return await this.activityService.createEvent(activity, req.user);
+    } else {
+      throw new UnauthorizedException();
+    }
   }
 
-  @Patch('update/:id')
-  async updateActivity(@Param('id') id: string, @Body() activity: ActivityDto) {
-    await this.activityService.updateActivity(id, activity);
+  @Put('update/:id')
+  @UseGuards(AuthGuard())
+  async updateActivityById(
+    @Param('id') id: string,
+    @Body() activity: UpdateActivityDto,
+    @Req() req: any,
+  ): Promise<Activity> {
+    // return activity to retrieve createdByUser property value
+    const preOperationActivity = await this.activityService.getActivityById(id);
+    // admin can make edits regardless
+    if (req.user.role === Role.admin) {
+      return await this.activityService.updateActivityById(id, activity);
+    }
+    // have to check if they are the creator and if they still have creator access
+    if (
+      preOperationActivity.createdByUser.equals(req.user._id) &&
+      req.user.role === Role.creator
+    ) {
+      return await this.activityService.updateActivityById(id, activity);
+    } else {
+      throw new UnauthorizedException();
+    }
+  }
+
+  @Delete('remove/:id')
+  @UseGuards(AuthGuard())
+  async deleteActivityById(
+    @Param('id') id: string,
+    @Req() req: any,
+  ): Promise<Activity> {
+    if (req.user.role == Role.admin) {
+      return this.activityService.deleteActivityById(id);
+    } else {
+      throw new UnauthorizedException();
+    }
   }
 }

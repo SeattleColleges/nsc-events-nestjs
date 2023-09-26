@@ -1,75 +1,75 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { ActivityDocument } from 'src/activity/types/activity.model';
-import { ActivityDto } from '../../types/activity.dto';
+import mongoose, { Model } from 'mongoose';
+import { Activity } from '../../schemas/activity.schema';
+import { Query } from 'express-serve-static-core';
+import { User } from '../../../auth/schemas/user.schema';
 
 @Injectable()
 export class ActivityService {
   constructor(
-    @InjectModel('Activity') private activityModel: Model<ActivityDocument>,
+    @InjectModel(Activity.name)
+    private activityModel: Model<Activity>,
   ) {
     // activity defined in activity.module.ts
   }
-  async getAllActivities(): Promise<ActivityDocument[]> {
-    return await this.activityModel.find().exec();
-    // only reason to map is to transform the data. In the case of user.
-    // I was mapping to transform the data to hide sensitive information
-    // But we should use serialization which comes in a later video, and we will
-    // on a future iteration. May need it here for eventCreatorId.
+  async getAllActivities(query: Query): Promise<Activity[]> {
+    // pagination options
+    const resPerPage = 5;
+    const currentPage: number = Number(query.page) || 1;
+
+    // skips the number of results according to page number and number of results per page
+    const skip = resPerPage * (currentPage - 1);
+    // TODO: add ability to query by host/club
+    // search by event tags
+    const tag = query.tag
+      ? {
+          eventTags: {
+            // using regex to look if any entries contain the text
+            $regex: query.tag,
+            $options: 'i', // case insensitive
+          },
+        }
+      : {};
+    return await this.activityModel
+      .find({ ...tag })
+      .limit(resPerPage)
+      .skip(skip)
+      .exec();
   }
 
-  async getActivityById(id: string): Promise<ActivityDocument> {
-    console.log('service id: ', id);
-    let activity: ActivityDocument;
-    try {
-      activity = await this.activityModel.findById(id).exec();
-    } catch (error) {
-      throw new HttpException('Activity not found!', 404);
+  async getActivityById(id: string): Promise<Activity> {
+    const isValidId = mongoose.isValidObjectId(id);
+    if (!isValidId) {
+      throw new BadRequestException('Please enter correct id.');
     }
+    const activity = await this.activityModel.findById(id).exec();
     if (!activity) {
-      throw new HttpException('Activity not found!', 404);
+      throw new NotFoundException('Activity not found!');
     }
-    return {
-      eventCreatorId: activity.eventCreatorId,
-      eventTitle: activity.eventTitle,
-      eventDescription: activity.eventDescription,
-      eventCategory: activity.eventCategory,
-      eventDate: activity.eventDate,
-      eventStartTime: activity.eventStartTime,
-      eventEndTime: activity.eventEndTime,
-      eventLocation: activity.eventLocation,
-      eventCoverPhoto: activity.eventCoverPhoto,
-      eventHost: activity.eventHost,
-      eventWebsite: activity.eventWebsite,
-      eventRegistration: activity.eventRegistration,
-      eventCapacity: activity.eventCapacity,
-      eventCost: activity.eventCost,
-      eventTags: activity.eventTags,
-      eventSchedule: activity.eventSchedule,
-      eventSpeakers: activity.eventSpeakers,
-      eventPrerequisites: activity.eventPrerequisites,
-      eventCancellationPolicy: activity.eventCancellationPolicy,
-      eventContact: activity.eventContact,
-      eventSocialMedia: activity.eventSocialMedia,
-      eventPrivacy: activity.eventPrivacy,
-      eventAccessibility: activity.eventAccessibility,
-    } as ActivityDocument;
+    return activity;
   }
 
-  async addEvent(createActivityDto: ActivityDto): Promise<any> {
-    const newEvent = new this.activityModel(createActivityDto);
-    const result = await newEvent.save();
-    return result._id;
+  async createEvent(activity: Activity, creator: User): Promise<Activity> {
+    const data = Object.assign(activity, { createdByUser: creator._id });
+    return await this.activityModel.create(data);
   }
 
-  async updateActivity(id: string, createActivityDto: ActivityDto) {
-    const updatedActivity = await this.activityModel.findById(id).exec();
+  async updateActivityById(id: string, activity: Activity): Promise<Activity> {
+    // TODO: return a bad request exception when item doesn't exist
+    return await this.activityModel
+      .findByIdAndUpdate(id, activity, {
+        new: true,
+        runValidators: true,
+      })
+      .exec();
+  }
 
-    Object.keys(createActivityDto).forEach((key) => {
-      updatedActivity[key] = createActivityDto[key];
-    });
-
-    return await updatedActivity.save();
+  async deleteActivityById(id: string): Promise<Activity> {
+    return await this.activityModel.findByIdAndDelete(id).exec();
   }
 }
