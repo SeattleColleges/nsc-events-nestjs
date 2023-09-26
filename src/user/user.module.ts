@@ -1,3 +1,5 @@
+// Left as a framework in case we need to add user routes outside of auth. (i.e. Admin features etc.)
+
 // import { Module } from '@nestjs/common';
 // import { MongooseModule } from '@nestjs/mongoose';
 // import { UserController } from './controllers/user/user.controller';
