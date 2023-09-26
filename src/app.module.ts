@@ -14,6 +14,7 @@ import { AuthModule } from './auth/auth.module';
       isGlobal: true,
     }),
     MongooseModule.forRoot(process.env.MONGODB_URI),
+    // commenting out in case we need to build out a route for the user separate from auth
     /*UserModule,*/
     ActivityModule,
     AuthModule,
