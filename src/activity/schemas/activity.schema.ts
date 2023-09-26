@@ -88,7 +88,9 @@ export class Activity {
 }
 
 export const ActivitySchema = SchemaFactory.createForClass(Activity);
-
+////////////////////////////////////////////////////////////////////////////////////
+// this is another way of creating a schema. The above leverages typescript ////////
+////////////////////////////////////////////////////////////////////////////////////
 // export const ActivitySchema = new Schema<ActivityDocument>({
 //   eventCreatorId: { type: String, required: true, unique: false },
 //   eventTitle: { type: String, required: true, unique: true },
