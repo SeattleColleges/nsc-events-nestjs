@@ -62,7 +62,7 @@ export class AuthService {
 
   ////////////////////////////////////////////////////
   // Admin routes
-  //
+  ////////////////////////////////////////////////////
   // Admin add user
   async adminAddUser(signUpDto: SignUpDto, token: string): Promise<User> {
     const { name, email, password, role } = signUpDto;
@@ -150,7 +150,7 @@ export class AuthService {
       console.log('updateResult: ', updateResult);
     }
   }
-
+  ////////////////////////////////////////////////////
   // End Admin routes
   ////////////////////////////////////////////////////
 }
