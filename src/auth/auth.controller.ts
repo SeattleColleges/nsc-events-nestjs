@@ -50,7 +50,6 @@ export class AuthController {
       message: 'User role successfully updated to creator.',
     };
   }
-
   // End Admin routes //
   ////////////////////////////////////////////////////
 }
