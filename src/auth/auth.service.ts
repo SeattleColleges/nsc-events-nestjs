@@ -60,8 +60,9 @@ export class AuthService {
     return { token };
   }
 
-  // Admin only routes
-
+  ////////////////////////////////////////////////////
+  // Admin routes
+  //
   // Admin add user
   async adminAddUser(signUpDto: SignUpDto, token: string): Promise<User> {
     const { name, email, password, role } = signUpDto;
@@ -117,4 +118,39 @@ export class AuthService {
   }
 
   // Update creator role
+  async adminUpdateCreatorRole(
+    userEmail: string,
+    token: string,
+  ): Promise<void> {
+    // Decode our token
+    let decoded;
+    try {
+      decoded = this.jwtService.verify(token);
+    } catch (error) {
+      throw new BadRequestException('Invalid token');
+    }
+
+    const requestorId = decoded.id;
+    const requestor = await this.userModel.findById(requestorId);
+
+    if (!requestor || requestor.role !== 'admin') {
+      throw new UnauthorizedException('Only admins can update roles');
+    }
+
+    const toBeUpdated = await this.userModel.findOne({ email: userEmail });
+    const updateResult = await this.userModel.findByIdAndUpdate(
+      toBeUpdated,
+      { role: 'creator' },
+      { new: true },
+    );
+
+    if (!updateResult) {
+      throw new NotFoundException('User not found');
+    } else {
+      console.log('updateResult: ', updateResult);
+    }
+  }
+
+  // End Admin routes
+  ////////////////////////////////////////////////////
 }
