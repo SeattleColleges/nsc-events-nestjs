@@ -25,11 +25,6 @@ export class CreateUserDto {
   name: string;
 
   @IsNotEmpty()
-  @IsString()
-  @MinLength(8, { message: 'Password must contain 8 characters or more.' })
-  password: string;
-
-  @IsNotEmpty()
   @IsEnum(Role)
   role: Role;
 }
