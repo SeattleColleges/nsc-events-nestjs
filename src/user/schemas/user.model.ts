@@ -28,4 +28,4 @@
 //   readonly role: Role;
 // }
 //
-// export const UserSchema = SchemaFactory.createForClass(U);
+// export const UserAuthSchema = SchemaFactory.createForClass(U);
