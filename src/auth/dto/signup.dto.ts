@@ -1,5 +1,5 @@
 import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
-import { Role } from '../schemas/user.schema';
+import { Role } from '../schemas/userAuthSchema';
 
 export class SignUpDto {
   @IsNotEmpty()
