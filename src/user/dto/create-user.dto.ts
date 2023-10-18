@@ -21,7 +21,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   @IsAlpha()
-  @MinLength(2, { message: 'Name must be longer than 2 letters.' })
+  @MinLength(2, { message: 'Must be equal to or longer than 2 letters' })
   name: string;
 
   @IsNotEmpty()
