@@ -4,7 +4,7 @@ import mongoose, { Model } from 'mongoose';
 import { getModelToken } from '@nestjs/mongoose';
 import { Activity } from '../../schemas/activity.schema';
 import { CreateActivityDto } from '../../dto/create-activity.dto';
-import { User } from '../../../auth/schemas/user.schema';
+import { User } from '../../../auth/schemas/userAuth.model';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import createMockActivity from '../../../../test/mock-data/createMockActivity';
 import mockActivityFromDB from '../../../../test/mock-data/returned-mock-activity';
@@ -52,7 +52,7 @@ describe('ActivityService', () => {
                 exec: jest.fn().mockResolvedValue([mockActivityFromDB]),
               }),
             }),
-          }) as any,
+          } as any),
       );
       const result = await activityService.getAllActivities(query);
       expect(model.find).toHaveBeenCalledWith({
@@ -71,7 +71,7 @@ describe('ActivityService', () => {
         () =>
           ({
             exec: jest.fn().mockResolvedValue(mockActivityFromDB),
-          }) as any,
+          } as any),
       );
     });
     it('should find and return an event by ID', async () => {

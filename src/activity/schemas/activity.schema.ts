@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { User } from '../../auth/schemas/user.schema';
+import { User } from '../../auth/schemas/userAuth.model';
 import mongoose from 'mongoose';
 
 export interface SocialMedia {

@@ -7,8 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User } from './schemas/user.schema';
-
+import { User } from './schemas/userAuth.model';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { SignUpDto } from './dto/signup.dto';
@@ -25,7 +24,12 @@ export class AuthService {
 
   async signUp(signUpDto: SignUpDto): Promise<{ token: string }> {
     const { name, email, password, role } = signUpDto;
+
+    console.log('name: ', name);
+    console.log('email: ', email);
+    console.log('password: ', password);
     const hashedPassword = await bcrypt.hash(password, 10);
+    console.log('hashedPassword: ', hashedPassword);
     const user = await this.userModel.create({
       name,
       email,
@@ -151,6 +155,6 @@ export class AuthService {
     }
   }
   ////////////////////////////////////////////////////
-  // End Admin routes
+  //     End Admin routes                           //
   ////////////////////////////////////////////////////
 }

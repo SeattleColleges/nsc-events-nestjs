@@ -13,7 +13,7 @@ import {
 } from 'class-validator';
 import { IsTime } from '../../../custom-validators/is-time';
 import { IsSocialMedia } from '../../../custom-validators/is-social-media';
-import { User } from '../../auth/schemas/user.schema';
+import { User } from '../../auth/schemas/userAuth.model';
 
 export class UpdateActivityDto {
   @IsEmpty({ message: 'You cannot pass user id.' })

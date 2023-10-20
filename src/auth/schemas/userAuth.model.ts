@@ -1,11 +1,12 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 export enum Role {
   admin = 'admin',
   creator = 'creator',
   user = 'user',
 }
+
 @Schema({
   timestamps: true,
 })
