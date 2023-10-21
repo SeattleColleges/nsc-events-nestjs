@@ -52,7 +52,7 @@ describe('ActivityService', () => {
                 exec: jest.fn().mockResolvedValue([mockActivityFromDB]),
               }),
             }),
-          } as any),
+          }) as any,
       );
       const result = await activityService.getAllActivities(query);
       expect(model.find).toHaveBeenCalledWith({
