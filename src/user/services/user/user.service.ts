@@ -1,4 +1,13 @@
-import { HttpException, Injectable } from '@nestjs/common';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import {
+  BadRequestException,
+  ForbiddenException,
+  HttpException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import * as bcrypt from 'bcryptjs';
 import { Model } from 'mongoose';
 import { Role, UserDocument } from '../../schemas/user.model';
 import { InjectModel } from '@nestjs/mongoose';
@@ -76,4 +85,35 @@ export class UserService {
     console.log(updated);
     return updated;
   }
+
+  // ----------------- Admin routes -------------------------------- //
+
+  // ----------------- Admin add user ----------------- //
+  async adminAddUser(
+    name: string,
+    email: string,
+    password: string,
+    role: Role,
+  ): Promise<string> {
+    // Password is saved as a hash so it is not stored in plain text
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new this.userModel({
+      name,
+      email,
+      password: hashedPassword,
+      role,
+    });
+    try {
+      const result = await newUser.save();
+      return result._id;
+    } catch (error) {
+      if (error.code === 11000) {
+        // MongoDB duplicate key error
+        throw new Error('User with this email already exists');
+      }
+      throw error('error creating a user');
+    }
+  }
+
+  // ----------------- End Admin Routes ------------------------ //
 }

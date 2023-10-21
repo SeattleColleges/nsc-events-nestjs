@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Req,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UserService } from '../../services/user/user.service';
 import { Role } from '../../schemas/user.model';
 
@@ -38,4 +47,33 @@ export class UserController {
   ) {
     await this.userService.updateUser(id, name, email, role);
   }
+
+  // ----------------- Admin routes -------------------------------- //
+
+  // ----------------- Admin Add User ------------------------------ //
+  @Post('admin/add')
+  // @UseGuards(AuthGuard())
+  async adminAddUser(
+    @Body('name') name: string,
+    @Body('email') email: string,
+    @Body('password') password: string,
+    @Body('role') role: Role,
+    @Req() req: any,
+  ) {
+    /* if (req.user.role === Role.admin) {
+      const generatedId = await this.userService.addUser(name, email, role);
+      return { id: generatedId };
+    } else {
+      throw new UnauthorizedException();
+    } */
+    const generatedId = await this.userService.adminAddUser(
+      name,
+      email,
+      password,
+      role,
+    );
+    return { id: generatedId };
+  }
+
+  // ----------------- End Admin routes ---------------------------- //
 }
