@@ -12,6 +12,8 @@ import * as bcrypt from 'bcryptjs';
 import { Model } from 'mongoose';
 import { Role, UserDocument } from '../../schemas/user.model';
 import { InjectModel } from '@nestjs/mongoose';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { log } from 'console';
 
 @Injectable()
 export class UserService {
@@ -90,13 +92,8 @@ export class UserService {
   // ================== Admin routes =============================== \\
 
   // ----------------- Admin add user ----------------- \\
-  async adminAddUser(
-    name: string,
-    email: string,
-    password: string,
-    role: Role,
-  ): Promise<string> {
-    // Password is saved as a hash so it is not stored in plain text
+  async adminAddUser(createUserDto: CreateUserDto): Promise<string> {
+    const { name, email, password, role } = createUserDto;
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new this.userModel({
       name,
@@ -108,11 +105,8 @@ export class UserService {
       const result = await newUser.save();
       return result._id;
     } catch (error) {
-      if (error.code === 11000) {
-        // MongoDB duplicate key error
-        throw new Error('User with this email already exists');
-      }
-      throw error('error creating a user');
+      log(error);
+      return error;
     }
   }
 

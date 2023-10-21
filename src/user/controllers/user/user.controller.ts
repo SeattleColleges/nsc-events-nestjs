@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from '../../services/user/user.service';
 import { Role } from '../../schemas/user.model';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -54,25 +55,9 @@ export class UserController {
   // ----------------- Admin Add User ------------------------------ \\
   @Post('admin/add')
   // @UseGuards(AuthGuard())
-  async adminAddUser(
-    @Body('name') name: string,
-    @Body('email') email: string,
-    @Body('password') password: string,
-    @Body('role') role: Role,
-    @Req() req: any,
-  ) {
-    /* if (req.user.role === Role.admin) {
-      const generatedId = await this.userService.addUser(name, email, role);
-      return { id: generatedId };
-    } else {
-      throw new UnauthorizedException();
-    } */
-    const generatedId = await this.userService.adminAddUser(
-      name,
-      email,
-      password,
-      role,
-    );
+  async adminAddUser(@Body() createUserDto: CreateUserDto, @Req() req: any) {
+    const { name, email, password, role } = createUserDto;
+    const generatedId = await this.userService.adminAddUser(createUserDto);
     return { id: generatedId };
   }
 
@@ -91,18 +76,13 @@ export class UserController {
   // ----------------- Admin Update User --------------------------- //
   @Patch('admin/update/:id')
   // @UseGuards(AuthGuard())
+  @Patch('admin/update/:id')
   async adminUpdateUser(
     @Param('id') id: string,
-    @Body('name') name: string,
-    @Body('email') email: string,
-    @Body('role') role: Role,
+    @Body() createUserDto: CreateUserDto,
     @Req() req: any,
   ) {
-    /* if (req.user.role === Role.admin) {
-        await this.userService.updateUser(id, name, email, role);
-      } else {
-        throw new UnauthorizedException();
-      } */
+    const { name, email, role } = createUserDto;
     await this.userService.adminUpdateUser(id, name, email, role);
   }
   // ================== End Admin routes ======================== \\
