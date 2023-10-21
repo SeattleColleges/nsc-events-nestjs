@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Body,
   Controller,
@@ -56,7 +57,6 @@ export class UserController {
   @Post('admin/add')
   // @UseGuards(AuthGuard())
   async adminAddUser(@Body() createUserDto: CreateUserDto, @Req() req: any) {
-    const { name, email, password, role } = createUserDto;
     const generatedId = await this.userService.adminAddUser(createUserDto);
     return { id: generatedId };
   }
@@ -82,8 +82,7 @@ export class UserController {
     @Body() createUserDto: CreateUserDto,
     @Req() req: any,
   ) {
-    const { name, email, role } = createUserDto;
-    await this.userService.adminUpdateUser(id, name, email, role);
+    await this.userService.adminUpdateUser(createUserDto, id);
   }
   // ================== End Admin routes ======================== \\
 }

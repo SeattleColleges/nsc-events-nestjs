@@ -125,23 +125,11 @@ export class UserService {
 
   // ----------------- Admin update user ----------------- \\
   async adminUpdateUser(
+    createUserDto: CreateUserDto,
     id: string,
-    name: string,
-    email: string,
-    role: Role,
   ): Promise<UserDocument> {
     const updatedUser = await this.userModel.findById(id).exec();
-    if (name) {
-      updatedUser.name = name;
-    }
-    if (email) {
-      updatedUser.email = email;
-    }
-    if (role) {
-      updatedUser.role = role;
-    }
     const updated = await updatedUser.save();
-    // console.log(updated);
     return updated;
   }
 
