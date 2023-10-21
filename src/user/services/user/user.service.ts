@@ -3,6 +3,7 @@ import {
   BadRequestException,
   ForbiddenException,
   HttpException,
+  HttpStatus,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -112,6 +113,19 @@ export class UserService {
         throw new Error('User with this email already exists');
       }
       throw error('error creating a user');
+    }
+  }
+
+  // ----------------- Admin delete user ----------------- //
+  async adminDeleteUser(id: string): Promise<void> {
+    try {
+      const user = await this.userModel.findByIdAndDelete(id).exec();
+
+      if (!user) {
+        throw new HttpException('User not found!', HttpStatus.NOT_FOUND);
+      }
+    } catch (error) {
+      throw new Error('Error deleting user: ' + error);
     }
   }
 

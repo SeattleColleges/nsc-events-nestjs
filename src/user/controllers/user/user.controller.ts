@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Req,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Req } from '@nestjs/common';
 import { UserService } from '../../services/user/user.service';
 import { Role } from '../../schemas/user.model';
 
@@ -73,6 +64,18 @@ export class UserController {
       role,
     );
     return { id: generatedId };
+  }
+
+  // ----------------- Admin Delete User --------------------------- //
+  @Delete('admin/delete/:id')
+  // @UseGuards(AuthGuard())
+  async adminDeleteUser(@Param('id') id: string, @Req() req: any) {
+    /* if (req.user.role === Role.admin) {
+        await this.userService.deleteUser(id);
+      } else {
+        throw new UnauthorizedException();
+      } */
+    await this.userService.adminDeleteUser(id);
   }
 
   // ----------------- End Admin routes ---------------------------- //
