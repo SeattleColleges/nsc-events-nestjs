@@ -87,9 +87,9 @@ export class UserService {
     return updated;
   }
 
-  // ----------------- Admin routes -------------------------------- //
+  // ================== Admin routes =============================== \\
 
-  // ----------------- Admin add user ----------------- //
+  // ----------------- Admin add user ----------------- \\
   async adminAddUser(
     name: string,
     email: string,
@@ -116,7 +116,7 @@ export class UserService {
     }
   }
 
-  // ----------------- Admin delete user ----------------- //
+  // ----------------- Admin delete user ----------------- \\
   async adminDeleteUser(id: string): Promise<void> {
     try {
       const user = await this.userModel.findByIdAndDelete(id).exec();
@@ -129,5 +129,27 @@ export class UserService {
     }
   }
 
-  // ----------------- End Admin Routes ------------------------ //
+  // ----------------- Admin update user ----------------- \\
+  async adminUpdateUser(
+    id: string,
+    name: string,
+    email: string,
+    role: Role,
+  ): Promise<UserDocument> {
+    const updatedUser = await this.userModel.findById(id).exec();
+    if (name) {
+      updatedUser.name = name;
+    }
+    if (email) {
+      updatedUser.email = email;
+    }
+    if (role) {
+      updatedUser.role = role;
+    }
+    const updated = await updatedUser.save();
+    // console.log(updated);
+    return updated;
+  }
+
+  // ================== End Admin routes ======================== \\
 }

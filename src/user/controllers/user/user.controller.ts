@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Req,
+} from '@nestjs/common';
 import { UserService } from '../../services/user/user.service';
 import { Role } from '../../schemas/user.model';
 
@@ -39,9 +48,10 @@ export class UserController {
     await this.userService.updateUser(id, name, email, role);
   }
 
-  // ----------------- Admin routes -------------------------------- //
+  // ================== Admin routes =============================== \\
+  // TODO: Add AuthGuard to all admin routes and check for admin roles
 
-  // ----------------- Admin Add User ------------------------------ //
+  // ----------------- Admin Add User ------------------------------ \\
   @Post('admin/add')
   // @UseGuards(AuthGuard())
   async adminAddUser(
@@ -78,5 +88,22 @@ export class UserController {
     await this.userService.adminDeleteUser(id);
   }
 
-  // ----------------- End Admin routes ---------------------------- //
+  // ----------------- Admin Update User --------------------------- //
+  @Patch('admin/update/:id')
+  // @UseGuards(AuthGuard())
+  async adminUpdateUser(
+    @Param('id') id: string,
+    @Body('name') name: string,
+    @Body('email') email: string,
+    @Body('role') role: Role,
+    @Req() req: any,
+  ) {
+    /* if (req.user.role === Role.admin) {
+        await this.userService.updateUser(id, name, email, role);
+      } else {
+        throw new UnauthorizedException();
+      } */
+    await this.userService.adminUpdateUser(id, name, email, role);
+  }
+  // ================== End Admin routes ======================== \\
 }
