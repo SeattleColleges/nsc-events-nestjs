@@ -20,13 +20,27 @@ export class UserService {
   constructor(@InjectModel('User') private userModel: Model<UserDocument>) {
     // User defined in user.module.ts
   }
-  async addUser(name: string, email: string, role: string): Promise<string> {
-    const newUser = new this.userModel({ name, email, role }); // doc will be expanded to name: name etc.
-    const result = await newUser.save();
-    // return mongodb generated id note the underscore.
-    return result._id;
+
+  // ----------------- Add user ----------------- \\
+  async newUser(createUserDto: CreateUserDto): Promise<string> {
+    const { name, email, password, role } = createUserDto;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new this.userModel({
+      name,
+      email,
+      password: hashedPassword,
+      role,
+    });
+    try {
+      const result = await newUser.save();
+      return result._id;
+    } catch (error) {
+      log(error);
+      return error;
+    }
   }
 
+  // ----------------- Get all users ----------------- \\
   async getAllUsers(): Promise<any> {
     //fix: Use serialization to mask password, so we don't have to transform the data
     const users: UserDocument[] = await this.userModel.find().exec();
@@ -37,6 +51,8 @@ export class UserService {
       role: user.role,
     }));
   }
+
+  // ----------------- Get user by id ----------------- \\
   async getUserById(id: string): Promise<UserDocument> {
     console.log('service id: ', id);
     let user: UserDocument;
@@ -56,6 +72,7 @@ export class UserService {
     } as UserDocument;
   }
 
+  // ----------------- Get user by email ----------------- \\
   async getUserByEmail(email: string): Promise<UserDocument> {
     let user: UserDocument;
     try {
@@ -70,48 +87,31 @@ export class UserService {
 
     return user;
   }
+
+  // ----------------- Update user ----------------- \\
   async updateUser(id: string, name: string, email: string, role: Role) {
     const updatedUser = await this.userModel.findById(id).exec();
+    if (!updatedUser) {
+      throw new NotFoundException('User not found');
+    }
+
     if (name) {
-      console.log('name ', name);
       updatedUser.name = name;
     }
     if (email) {
-      console.log('email ', email);
       updatedUser.email = email;
     }
     if (role) {
-      console.log('role ', role);
       updatedUser.role = role;
     }
+
     const updated = await updatedUser.save();
     console.log(updated);
     return updated;
   }
 
-  // ================== Admin routes =============================== \\
-
-  // ----------------- Admin add user ----------------- \\
-  async adminAddUser(createUserDto: CreateUserDto): Promise<string> {
-    const { name, email, password, role } = createUserDto;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new this.userModel({
-      name,
-      email,
-      password: hashedPassword,
-      role,
-    });
-    try {
-      const result = await newUser.save();
-      return result._id;
-    } catch (error) {
-      log(error);
-      return error;
-    }
-  }
-
-  // ----------------- Admin delete user ----------------- \\
-  async adminDeleteUser(id: string): Promise<void> {
+  // ----------------- Delete user ----------------- \\
+  async removeUser(id: string): Promise<void> {
     try {
       const user = await this.userModel.findByIdAndDelete(id).exec();
 
@@ -121,16 +121,6 @@ export class UserService {
     } catch (error) {
       throw new Error('Error deleting user: ' + error);
     }
-  }
-
-  // ----------------- Admin update user ----------------- \\
-  async adminUpdateUser(
-    createUserDto: CreateUserDto,
-    id: string,
-  ): Promise<UserDocument> {
-    const updatedUser = await this.userModel.findById(id).exec();
-    const updated = await updatedUser.save();
-    return updated;
   }
 
   // ================== End Admin routes ======================== \\
