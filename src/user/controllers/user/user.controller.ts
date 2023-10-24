@@ -15,7 +15,7 @@ import { CreateUserDto } from 'src/user/dto/create-user.dto';
 
 // ================== User admin routes ======================== \\
 // TODO: Add AuthGuard to all admin routes and check for admin roles
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -35,7 +35,7 @@ export class UserController {
   }
 
   // ----------------- Get User ------------------------------ \\
-  @Get(':id')
+  @Get('find/:id')
   // @UseGuards(AuthGuard())
   async getUserById(@Param('id') id: string) {
     return this.userService.getUserById(id);
