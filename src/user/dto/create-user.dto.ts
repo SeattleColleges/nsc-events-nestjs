@@ -1,4 +1,4 @@
-import { Role } from '../../auth/schemas/user.schema';
+import { Role } from '../../auth/schemas/userAuthSchema';
 import {
   IsAlpha,
   IsEmail,
