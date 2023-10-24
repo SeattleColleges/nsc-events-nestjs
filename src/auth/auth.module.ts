@@ -22,7 +22,7 @@ import { JwtStrategy } from './jwt.strategy';
         };
       },
     }),
-    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
+    MongooseModule.forFeature([{ name: 'User', schema: UserAuthSchema }]),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],

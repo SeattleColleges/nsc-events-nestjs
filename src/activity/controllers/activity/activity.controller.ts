@@ -19,6 +19,7 @@ import { Query as ExpressQuery } from 'express-serve-static-core';
 import { AuthGuard } from '@nestjs/passport';
 import { Role } from '../../../auth/schemas/userAuth.model';
 
+
 @Controller('events')
 export class ActivityController {
   constructor(private readonly activityService: ActivityService) {}

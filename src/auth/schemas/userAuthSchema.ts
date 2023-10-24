@@ -1,13 +1,5 @@
-import { Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-
-export interface UserDocument extends Document {
-  id: string;
-  email: string;
-  name: string;
-  password: string;
-  role: Role;
-}
+import { Document } from 'mongoose';
 
 export enum Role {
   admin = 'admin',
@@ -17,7 +9,7 @@ export enum Role {
 @Schema({
   timestamps: true,
 })
-export class U extends Document {
+export class User extends Document {
   @Prop()
   name: string;
 
@@ -28,7 +20,7 @@ export class U extends Document {
   password: string;
 
   @Prop()
-  readonly role: Role;
+  role: Role;
 }
 
-export const UserSchema = SchemaFactory.createForClass(U);
+export const UserAuthSchema = SchemaFactory.createForClass(User);
