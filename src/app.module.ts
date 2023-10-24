@@ -1,9 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
-/*
 import { UserModule } from './user/user.module';
-*/
 import { ActivityModule } from './activity/activity.module';
 import { AuthModule } from './auth/auth.module';
 
@@ -14,7 +12,7 @@ import { AuthModule } from './auth/auth.module';
       isGlobal: true,
     }),
     MongooseModule.forRoot(process.env.MONGODB_URI),
-    /*UserModule,*/
+    UserModule,
     ActivityModule,
     AuthModule,
   ],

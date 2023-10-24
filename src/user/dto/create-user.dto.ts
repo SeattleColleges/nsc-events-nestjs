@@ -1,4 +1,4 @@
-import { Role } from '../../auth/schemas/userAuthSchema';
+import { Role } from '../../auth/schemas/userAuth.model';
 import {
   IsAlpha,
   IsEmail,
@@ -21,8 +21,13 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   @IsAlpha()
-  @MinLength(2, { message: 'Must be equal to or longer than 2 letters' })
+  @MinLength(2, { message: 'Name must be longer than 2 letters.' })
   name: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @MinLength(8, { message: 'Password must contain 8 characters or more.' })
+  password: string;
 
   @IsNotEmpty()
   @IsEnum(Role)
