@@ -13,7 +13,7 @@ import { UserService } from '../../services/user/user.service';
 import { Role } from '../../schemas/user.model';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 
-// ================== Admin routes =============================== \\
+// ================== User admin routes ======================== \\
 // TODO: Add AuthGuard to all admin routes and check for admin roles
 @Controller('user')
 export class UserController {
