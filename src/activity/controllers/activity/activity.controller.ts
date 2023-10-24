@@ -17,7 +17,7 @@ import { CreateActivityDto } from '../../dto/create-activity.dto';
 import { UpdateActivityDto } from '../../dto/update-activity.dto';
 import { Query as ExpressQuery } from 'express-serve-static-core';
 import { AuthGuard } from '@nestjs/passport';
-import { Role } from '../../../auth/schemas/userAuthSchema';
+import { Role } from '../../../auth/schemas/userAuth.model';
 
 @Controller('events')
 export class ActivityController {

@@ -7,7 +7,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { Activity } from '../../schemas/activity.schema';
 import { Query } from 'express-serve-static-core';
-import { User } from '../../../auth/schemas/userAuthSchema';
+import { User } from '../../../auth/schemas/userAuth.model';
 
 @Injectable()
 export class ActivityService {

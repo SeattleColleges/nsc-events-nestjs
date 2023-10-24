@@ -1,10 +1,11 @@
+/* eslint-disable prettier/prettier */
 import { Test, TestingModule } from '@nestjs/testing';
 import { ActivityService } from './activity.service';
 import mongoose, { Model } from 'mongoose';
 import { getModelToken } from '@nestjs/mongoose';
 import { Activity } from '../../schemas/activity.schema';
 import { CreateActivityDto } from '../../dto/create-activity.dto';
-import { User } from '../../../auth/schemas/userAuthSchema';
+import { User } from '../../../auth/schemas/userAuth.model';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import createMockActivity from '../../../../test/mock-data/createMockActivity';
 import mockActivityFromDB from '../../../../test/mock-data/returned-mock-activity';
