@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from '../../services/user/user.service';
 import { Role } from '../../schemas/user.model';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { CreateUserDto } from '../../dto/create-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 
 // ================== User admin routes ======================== \\
