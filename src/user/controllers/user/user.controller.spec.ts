@@ -61,12 +61,6 @@ describe('UserController', () => {
         mockUser.email,
         mockUser.role,
       );
-      await controller.updateUser(
-        mockUser.id,
-        mockUser.name,
-        mockUser.email,
-        mockUser.role,
-      );
     });
 
     it('should delete a user', async () => {
