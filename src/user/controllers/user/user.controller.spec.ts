@@ -1,70 +1,71 @@
-// import { Test, TestingModule } from '@nestjs/testing';
-// import { UserController } from './user.controller';
-// import { UserService } from '../../services/user/user.service';
-// import { Role } from 'src/auth/schemas/userAuth.model';
-// import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { Test, TestingModule } from '@nestjs/testing';
+import { UserController } from './user.controller';
+import { UserService } from '../../services/user/user.service';
+import { Role } from '../../../auth/schemas/userAuth.model';
 
-// const mockUserService = {
-//   adminAddUser: jest.fn().mockResolvedValue('someId'),
-//   adminUpdateUser: jest.fn().mockResolvedValue(null),
-//   adminDeleteUser: jest.fn().mockResolvedValue(null),
-// };
+type MockCreateUserDto = {
+  id: string;
+  email: string;
+  name: string;
+  password: string;
+  role: Role;
+};
 
-// describe('UserController', () => {
-//   let controller: UserController;
+const mockUserService = {
+  newUser: jest.fn().mockResolvedValue('someId'),
+  updateUser: jest.fn().mockResolvedValue(null),
+  removeUser: jest.fn().mockResolvedValue(null),
+};
 
-//   beforeEach(async () => {
-//     const module: TestingModule = await Test.createTestingModule({
-//       controllers: [UserController],
-//       providers: [
-//         {
-//           provide: UserService,
-//           useValue: mockUserService,
-//         },
-//       ],
-//     }).compile();
+describe('UserController', () => {
+  let controller: UserController;
 
-//     controller = module.get<UserController>(UserController);
-//     jest.clearAllMocks();
-//   });
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [UserController],
+      providers: [
+        {
+          provide: UserService,
+          useValue: mockUserService,
+        },
+      ],
+    }).compile();
 
-//   describe('Admin CRUD operations', () => {
-//     it('should add, update, and delete a user', async () => {
-//       const createUserDto: CreateUserDto = {
-//         id: 'testId',
-//         name: 'test',
-//         email: 'jeremy@gmail.com',
-//         password: '1234567890',
-//         role: Role.admin,
-//       };
-//       const updatedName = 'updatedName';
-//       const req = { user: { role: 'admin' } };
+    controller = module.get<UserController>(UserController);
+    jest.clearAllMocks();
+  });
 
-//       // Create
-//       const generatedId = await controller.adminAddUser(createUserDto, req);
-//       expect(generatedId.id).toEqual('someId');
-//       expect(mockUserService.adminAddUser).toHaveBeenCalledWith(
-//         createUserDto.name,
-//         createUserDto.email,
-//         createUserDto.password,
-//         createUserDto.role,
-//       );
+  describe('Admin CRUD operations', () => {
+    const mockRequest = { user: { role: 'admin' } };
+    const mockUser: MockCreateUserDto = {
+      id: 'testId',
+      name: 'test',
+      email: 'jeremy@gmail.com',
+      password: '1234567890',
+      role: Role.admin,
+    };
 
-//       // Update
-//       createUserDto.name = updatedName;
-//       await controller.adminUpdateUser(generatedId.id, createUserDto, req);
-//       expect(mockUserService.adminUpdateUser).toHaveBeenCalledWith(
-//         generatedId.id,
-//         updatedName,
-//         createUserDto.email,
-//         createUserDto.role,
-//       );
+    it('should add a user', async () => {
+      const result = await controller.adminAddUser(mockUser, mockRequest);
+      expect(result.id).toEqual('someId');
+      expect(mockUserService.newUser).toHaveBeenCalledWith(mockUser);
+    });
 
-//       // Delete
-//       await controller.adminDeleteUser(generatedId.id, req);
-//       expect(mockUserService.adminDeleteUser).toHaveBeenCalledWith(
-//         generatedId.id,
-//       );
-//     }, 30000);
-//   });
-// });
+    it('should update a user', async () => {
+      const updatedName = 'updatedName';
+      mockUser.name = updatedName;
+
+      await controller.updateUser(
+        mockUser.id,
+        mockUser.name,
+        mockUser.email,
+        mockUser.role,
+      );
+    });
+
+    it('should delete a user', async () => {
+      await controller.adminDeleteUser(mockUser.id, mockRequest);
+      expect(mockUserService.removeUser).toHaveBeenCalledWith(mockUser.id);
+    });
+  });
+});
