@@ -9,7 +9,7 @@ run-name: CI Triggered On Pull-Request
 # Will run CI workflow on an opened or reopened PR for easy reference. For compilation, unit tests, code coverage etc.
 on:
   pull_request:
-    types: [opened, reopened]
+    types: [opened, synchronize, reopened]
 jobs:
   Continuous-Integration:
     uses: ./.github/workflows/ci.yml
