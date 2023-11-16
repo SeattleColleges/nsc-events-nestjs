@@ -6,7 +6,6 @@ import {
   Get,
   Param,
   Patch,
-  Post,
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from '../../services/user/user.service';
@@ -20,12 +19,6 @@ import { AuthGuard } from '@nestjs/passport';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  // ----------------- Add User ------------------------------- \\
-  @Post('new')
-  async adminAddUser(@Body() createUserDto: CreateUserDto, @Req() req: any) {
-    const generatedId = await this.userService.newUser(createUserDto);
-    return { id: generatedId };
-  }
 
   // ----------------- Get Users ----------------------------- \\
   @Get('')

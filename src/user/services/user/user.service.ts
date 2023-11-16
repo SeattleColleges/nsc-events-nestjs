@@ -20,24 +20,6 @@ export class UserService {
     // User defined in user.module.ts
   }
 
-  // ----------------- Add user ----------------- \\
-  async newUser(createUserDto: CreateUserDto): Promise<string> {
-    const { name, email, password, role } = createUserDto;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new this.userModel({
-      name,
-      email,
-      password: hashedPassword,
-      role,
-    });
-    try {
-      const result = await newUser.save();
-      return result._id;
-    } catch (error) {
-      log(error);
-      return error;
-    }
-  }
 
   // ----------------- Get all users ----------------- \\
   async getAllUsers(): Promise<any> {
