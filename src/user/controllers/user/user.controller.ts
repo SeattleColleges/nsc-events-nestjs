@@ -46,7 +46,7 @@ export class UserController {
 
   // ----------------- Delete User --------------------------- //
   @Delete('remove/:id')
-  async adminDeleteUser(@Param('id') id: string, @Req() req: any) {
+  async adminDeleteUser(@Param('id') id: string) {
     await this.userService.removeUser(id);
   }
 
