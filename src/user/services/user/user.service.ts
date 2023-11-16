@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { Model } from 'mongoose';
-import { Role, UserDocument } from '../../schemas/user.model';
+import { UserDocument } from '../../schemas/user.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { log } from 'console';
 
@@ -64,8 +64,12 @@ export class UserService {
     if (!user) {
       throw new HttpException('User not found!', 404);
     }
-
-    return user;
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    } as UserDocument;
   }
 
   // ----------------- Update user ----------------- \\
