@@ -11,7 +11,6 @@ import * as bcrypt from 'bcryptjs';
 import { Model } from 'mongoose';
 import { Role, UserDocument } from '../../schemas/user.model';
 import { InjectModel } from '@nestjs/mongoose';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { log } from 'console';
 
 @Injectable()
@@ -70,25 +69,14 @@ export class UserService {
   }
 
   // ----------------- Update user ----------------- \\
-  async updateUser(id: string, name: string, email: string, role: Role) {
-    const updatedUser = await this.userModel.findById(id).exec();
-    if (!updatedUser) {
-      throw new NotFoundException('User not found');
+  async updateUser(id: string, user: UserDocument) {
+    if (user === null) {
+      throw new BadRequestException(`Updated User not supplied`);
     }
-
-    if (name) {
-      updatedUser.name = name;
-    }
-    if (email) {
-      updatedUser.email = email;
-    }
-    if (role) {
-      updatedUser.role = role;
-    }
-
-    const updated = await updatedUser.save();
-    console.log(updated);
-    return updated;
+    return await this.userModel.findByIdAndUpdate(id, user, {
+      new: true,
+      runValidators: true
+    }).exec();
   }
 
   // ----------------- Delete user ----------------- \\

@@ -9,9 +9,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from '../../services/user/user.service';
-import { Role } from '../../schemas/user.model';
-import { CreateUserDto } from '../../dto/create-user.dto';
+import { UserDocument } from '../../schemas/user.model';
 import { AuthGuard } from '@nestjs/passport';
+import { UpdateUserDto } from '../../dto/update-user.dto';
 
 // ================== User admin routes ======================== \\
 @Controller('users')
@@ -40,13 +40,8 @@ export class UserController {
 
   // ----------------- Update User --------------------------- \\
   @Patch('update/:id')
-  async updateUser(
-    @Param('id') id: string,
-    @Body('name') name: string,
-    @Body('email') email: string,
-    @Body('role') role: Role,
-  ) {
-    await this.userService.updateUser(id, name, email, role);
+  async updateUser(@Param('id') id: string, @Body() userDto: UpdateUserDto) {
+    return await this.userService.updateUser(id, userDto as UserDocument);
   }
 
   // ----------------- Delete User --------------------------- //
