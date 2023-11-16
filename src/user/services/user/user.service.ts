@@ -4,14 +4,10 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
-  NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
-import * as bcrypt from 'bcryptjs';
 import { Model } from 'mongoose';
 import { UserDocument } from '../../schemas/user.model';
 import { InjectModel } from '@nestjs/mongoose';
-import { log } from 'console';
 
 @Injectable()
 export class UserService {
