@@ -1,71 +1,102 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
 import { UserService } from '../../services/user/user.service';
-import { Role } from '../../../auth/schemas/userAuth.model';
-
-type MockCreateUserDto = {
-  id: string;
-  email: string;
-  name: string;
-  password: string;
-  role: Role;
-};
-
-const mockUserService = {
-  newUser: jest.fn().mockResolvedValue('someId'),
-  updateUser: jest.fn().mockResolvedValue(null),
-  removeUser: jest.fn().mockResolvedValue(null),
-};
+import { Role, UserDocument } from '../../schemas/user.model';
+import { UpdateUserDto } from '../../dto/update-user.dto';
 
 describe('UserController', () => {
   let controller: UserController;
+  let service: UserService;
+
+  const mockUserService = {
+    newUser: jest.fn(),
+    getAllUsers: jest.fn(),
+    getUserById: jest.fn(),
+    getUserByEmail: jest.fn(),
+    updateUser: jest.fn(),
+    removeUser: jest.fn(),
+  };
+  
+  const mockUser  = {
+    id: 'testId',
+    name: 'test',
+    email: 'jeremy@gmail.com',
+    password: '1234567890',
+    role: Role.admin,
+  } as unknown as UserDocument;
+
+  const mockUpdateUserDto = {
+    id: 'updatedId',
+    name: 'updatedName',
+    email: 'updatedEmail',
+    role: Role.creator
+  } as unknown as UpdateUserDto;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UserController],
       providers: [
         {
-          provide: UserService,
+          provide: 'USER_SERVICE',
           useValue: mockUserService,
         },
       ],
     }).compile();
 
     controller = module.get<UserController>(UserController);
+    service = module.get<UserService>('USER_SERVICE');
     jest.clearAllMocks();
   });
 
-  describe('Admin CRUD operations', () => {
-    const mockRequest = { user: { role: 'admin' } };
-    const mockUser: MockCreateUserDto = {
-      id: 'testId',
-      name: 'test',
-      email: 'jeremy@gmail.com',
-      password: '1234567890',
-      role: Role.admin,
-    };
+  it('should be defined', () => {
+    expect(controller).toBeDefined();
+  });
 
-    it('should add a user', async () => {
-      const result = await controller.adminAddUser(mockUser, mockRequest);
-      expect(result.id).toEqual('someId');
-      expect(mockUserService.newUser).toHaveBeenCalledWith(mockUser);
+  it('service should be defined', () => {
+    expect(service).toBeDefined();
+  });
+
+  describe('getAllUsers', () => {
+    it('should call getAllUsers on the service and return a result', async () => {
+      jest.spyOn(service, 'getAllUsers').mockResolvedValue([mockUser]);
+      const result = await controller.getAllUsers();
+      expect(service.getAllUsers).toHaveBeenCalled();
+      expect(result).toEqual([mockUser]);
     });
+  });
 
-    it('should update a user', async () => {
-      const updatedName = 'updatedName';
-      mockUser.name = updatedName;
-
-      await controller.updateUser(
-        mockUser.id,
-        mockUser.name,
-        mockUser.email,
-        mockUser.role,
-      );
+  describe('getUserById', () => {
+    it('should call getUserById on the service and return a result', async () => {
+      jest.spyOn(service, 'getUserById').mockResolvedValue(mockUser);
+      const result = await controller.getUserById(mockUser.id);
+      expect(service.getUserById).toHaveBeenCalledWith(mockUser.id);
+      expect(result).toEqual(mockUser);
     });
+  });
 
-    it('should delete a user', async () => {
-      await controller.adminDeleteUser(mockUser.id, mockRequest);
-      expect(mockUserService.removeUser).toHaveBeenCalledWith(mockUser.id);
+  describe('getUserByEmail', () => {
+    it('should call getUserByEmail on the service and return a result', async () => {
+      jest.spyOn(service, 'getUserByEmail').mockResolvedValue(mockUser);
+      const result = await controller.getUserByEmail(mockUser.email);
+      expect(service.getUserByEmail).toHaveBeenCalledWith(mockUser.email);
+      expect(result).toEqual(mockUser);
+    });
+  });
+
+  // this should use a DTO
+  describe('updateUser', () => {
+    it('should call updateUser on the service', async () => {
+      jest.spyOn(service, 'updateUser').mockImplementation();
+      await controller.updateUser(mockUser.id, mockUpdateUserDto);
+      expect(service.updateUser).toHaveBeenCalledWith(mockUser.id, mockUpdateUserDto);
+    });
+  });
+
+  describe('adminDeleteUser', () => {
+    it('should call removeUser on the service', async () => {
+      jest.spyOn(service, 'removeUser').mockImplementation();
+      await controller.adminDeleteUser(mockUser.id);
+      expect(service.removeUser).toHaveBeenCalledWith(mockUser.id);
     });
   });
 });
