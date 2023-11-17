@@ -3,7 +3,7 @@ import {
   BadRequestException,
   HttpException,
   HttpStatus,
-  Injectable,
+  Injectable
 } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { UserDocument } from '../../schemas/user.model';
@@ -11,9 +11,7 @@ import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel('User') private userModel: Model<UserDocument>) {
-    // User defined in user.module.ts
-  }
+  constructor(@InjectModel('User') private userModel: Model<UserDocument>) { }
 
   // ----------------- Get all users ----------------- \\
   async getAllUsers(): Promise<any> {

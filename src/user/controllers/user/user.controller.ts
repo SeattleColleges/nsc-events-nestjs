@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   Patch,
   UseGuards,
@@ -17,7 +18,7 @@ import { UpdateUserDto } from '../../dto/update-user.dto';
 @Controller('users')
 @UseGuards(AuthGuard('jwt'))
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(@Inject('USER_SERVICE') private readonly userService: UserService) {}
 
   // ----------------- Get Users ----------------------------- \\
   @Get('')
@@ -28,7 +29,7 @@ export class UserController {
   // ----------------- Get User ------------------------------ \\
   @Get('find/:id')
   async getUserById(@Param('id') id: string) {
-    return this.userService.getUserById(id);
+    return await this.userService.getUserById(id);
   }
 
   // ----------------- Get User by Email --------------------- \\
