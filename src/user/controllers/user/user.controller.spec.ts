@@ -16,8 +16,8 @@ describe('UserController', () => {
     updateUser: jest.fn(),
     removeUser: jest.fn(),
   };
-  
-  const mockUser  = {
+
+  const mockUser = {
     id: 'testId',
     name: 'test',
     email: 'jeremy@gmail.com',
@@ -29,7 +29,7 @@ describe('UserController', () => {
     id: 'updatedId',
     name: 'updatedName',
     email: 'updatedEmail',
-    role: Role.creator
+    role: Role.creator,
   } as unknown as UpdateUserDto;
 
   beforeEach(async () => {
@@ -88,7 +88,10 @@ describe('UserController', () => {
     it('should call updateUser on the service', async () => {
       jest.spyOn(service, 'updateUser').mockImplementation();
       await controller.updateUser(mockUser.id, mockUpdateUserDto);
-      expect(service.updateUser).toHaveBeenCalledWith(mockUser.id, mockUpdateUserDto);
+      expect(service.updateUser).toHaveBeenCalledWith(
+        mockUser.id,
+        mockUpdateUserDto,
+      );
     });
   });
 

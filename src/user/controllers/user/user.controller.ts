@@ -18,7 +18,9 @@ import { UpdateUserDto } from '../../dto/update-user.dto';
 @Controller('users')
 @UseGuards(AuthGuard('jwt'))
 export class UserController {
-  constructor(@Inject('USER_SERVICE') private readonly userService: UserService) {}
+  constructor(
+    @Inject('USER_SERVICE') private readonly userService: UserService,
+  ) {}
 
   // ----------------- Get Users ----------------------------- \\
   @Get('')
