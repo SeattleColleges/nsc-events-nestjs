@@ -70,13 +70,23 @@ export class UserService {
 
   // ----------------- Update user ----------------- \\
   async updateUser(id: string, user: UserDocument) {
+    // we may want to check if id is a valid id, if you remove/add a character, it returns a 500 error
     if (user === null) {
       throw new BadRequestException(`Updated User not supplied`);
     }
-    return await this.userModel.findByIdAndUpdate(id, user, {
+    const updatedUser = await this.userModel.findByIdAndUpdate(id, user, {
       new: true,
       runValidators: true
     }).exec();
+    if (!updatedUser) {
+      throw new HttpException(`User with id ${id} not found`, HttpStatus.NOT_FOUND);
+    }
+    return {
+      id: updatedUser.id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      role: updatedUser.role,
+    } as UserDocument;
   }
 
   // ----------------- Delete user ----------------- \\
