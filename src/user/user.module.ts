@@ -10,8 +10,8 @@ import { UserSchema } from './schemas/user.model';
   providers: [
     {
       provide: 'USER_SERVICE',
-      useClass: UserService
-    }
+      useClass: UserService,
+    },
   ],
 })
 export class UserModule {}
