@@ -15,7 +15,6 @@ export class UserService {
     // User defined in user.module.ts
   }
 
-
   // ----------------- Get all users ----------------- \\
   async getAllUsers(): Promise<any> {
     //fix: Use serialization to mask password, so we don't have to transform the data
@@ -74,12 +73,17 @@ export class UserService {
     if (user === null) {
       throw new BadRequestException(`Updated User not supplied`);
     }
-    const updatedUser = await this.userModel.findByIdAndUpdate(id, user, {
-      new: true,
-      runValidators: true
-    }).exec();
+    const updatedUser = await this.userModel
+      .findByIdAndUpdate(id, user, {
+        new: true,
+        runValidators: true,
+      })
+      .exec();
     if (!updatedUser) {
-      throw new HttpException(`User with id ${id} not found`, HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        `User with id ${id} not found`,
+        HttpStatus.NOT_FOUND,
+      );
     }
     return {
       id: updatedUser.id,
