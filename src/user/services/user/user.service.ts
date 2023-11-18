@@ -1,43 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   BadRequestException,
-  ForbiddenException,
   HttpException,
   HttpStatus,
   Injectable,
-  NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
-import * as bcrypt from 'bcryptjs';
 import { Model } from 'mongoose';
-import { Role, UserDocument } from '../../schemas/user.model';
+import { UserDocument } from '../../schemas/user.model';
 import { InjectModel } from '@nestjs/mongoose';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
-import { log } from 'console';
 
 @Injectable()
 export class UserService {
   constructor(@InjectModel('User') private userModel: Model<UserDocument>) {
     // User defined in user.module.ts
-  }
-
-  // ----------------- Add user ----------------- \\
-  async newUser(createUserDto: CreateUserDto): Promise<string> {
-    const { name, email, password, role } = createUserDto;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new this.userModel({
-      name,
-      email,
-      password: hashedPassword,
-      role,
-    });
-    try {
-      const result = await newUser.save();
-      return result._id;
-    } catch (error) {
-      log(error);
-      return error;
-    }
   }
 
   // ----------------- Get all users ----------------- \\
@@ -84,30 +59,38 @@ export class UserService {
     if (!user) {
       throw new HttpException('User not found!', 404);
     }
-
-    return user;
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    } as UserDocument;
   }
 
   // ----------------- Update user ----------------- \\
-  async updateUser(id: string, name: string, email: string, role: Role) {
-    const updatedUser = await this.userModel.findById(id).exec();
+  async updateUser(id: string, user: UserDocument) {
+    // we may want to check if id is a valid id, if you remove/add a character, it returns a 500 error
+    if (user === null) {
+      throw new BadRequestException(`Updated User not supplied`);
+    }
+    const updatedUser = await this.userModel
+      .findByIdAndUpdate(id, user, {
+        new: true,
+        runValidators: true,
+      })
+      .exec();
     if (!updatedUser) {
-      throw new NotFoundException('User not found');
+      throw new HttpException(
+        `User with id ${id} not found`,
+        HttpStatus.NOT_FOUND,
+      );
     }
-
-    if (name) {
-      updatedUser.name = name;
-    }
-    if (email) {
-      updatedUser.email = email;
-    }
-    if (role) {
-      updatedUser.role = role;
-    }
-
-    const updated = await updatedUser.save();
-    console.log(updated);
-    return updated;
+    return {
+      id: updatedUser.id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      role: updatedUser.role,
+    } as UserDocument;
   }
 
   // ----------------- Delete user ----------------- \\
