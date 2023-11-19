@@ -79,7 +79,7 @@ export class ActivityController {
     const preOperationActivity = await this.activityService.getActivityById(id);
     if (req.user.role === Role.admin) {
       return this.activityService.deleteActivityById(id);
-    } 
+    }
     if (
       preOperationActivity.createdByUser.equals(req.user._id) &&
       req.user.role === Role.creator

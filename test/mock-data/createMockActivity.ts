@@ -30,7 +30,7 @@ const createMockActivity: CreateActivityDto = {
   },
   eventPrivacy: 'Public',
   eventAccessibility: 'Wheelchair accessible venue.',
-  isHidden: false
+  isHidden: false,
 };
 
 export default createMockActivity;
