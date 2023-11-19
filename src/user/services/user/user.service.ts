@@ -11,9 +11,7 @@ import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel('User') private userModel: Model<UserDocument>) {
-    // User defined in user.module.ts
-  }
+  constructor(@InjectModel('User') private userModel: Model<UserDocument>) {}
 
   // ----------------- Get all users ----------------- \\
   async getAllUsers(): Promise<any> {
@@ -51,7 +49,7 @@ export class UserService {
   async getUserByEmail(email: string): Promise<UserDocument> {
     let user: UserDocument;
     try {
-      user = await this.userModel.findOne({ email: email });
+      user = await this.userModel.findOne({ email: email }).exec();
       console.log(user);
     } catch (error) {
       throw new HttpException('User not found!', 404);
@@ -69,7 +67,8 @@ export class UserService {
 
   // ----------------- Update user ----------------- \\
   async updateUser(id: string, user: UserDocument) {
-    // we may want to check if id is a valid id, if you remove/add a character, it returns a 500 error
+    // we may want to check if id is a valid id
+    // if you remove/add a character, it returns a 500 error
     if (user === null) {
       throw new BadRequestException(`Updated User not supplied`);
     }
