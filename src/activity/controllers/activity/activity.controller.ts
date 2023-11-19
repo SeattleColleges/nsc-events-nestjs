@@ -76,8 +76,15 @@ export class ActivityController {
     @Param('id') id: string,
     @Req() req: any,
   ): Promise<Activity> {
-    if (req.user.role == Role.admin) {
+    const preOperationActivity = await this.activityService.getActivityById(id);
+    if (req.user.role === Role.admin) {
       return this.activityService.deleteActivityById(id);
+    } 
+    if (
+      preOperationActivity.createdByUser.equals(req.user._id) &&
+      req.user.role === Role.creator
+    ) {
+      return await this.activityService.deleteActivityById(id);
     } else {
       throw new UnauthorizedException();
     }
