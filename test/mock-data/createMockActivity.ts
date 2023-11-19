@@ -34,4 +34,3 @@ const createMockActivity: CreateActivityDto = {
 };
 
 export default createMockActivity;
-

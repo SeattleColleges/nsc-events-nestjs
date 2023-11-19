@@ -71,8 +71,8 @@ export class ActivityService {
 
   async deleteActivityById(id: string): Promise<Activity> {
     return await this.activityModel
-      .findByIdAndUpdate(id, { 
-        isHidden: true 
+      .findByIdAndUpdate(id, {
+        isHidden: true,
       })
       .exec();
   }
