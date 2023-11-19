@@ -1,7 +1,7 @@
 import { CreateActivityDto } from '../../src/activity/dto/create-activity.dto';
 
 const createMockActivity: CreateActivityDto = {
-  createdByUser: undefined, // client cannot enter ObjectId for User. validation enforced
+  createdByUser: undefined,
   eventTitle: 'Sample Event',
   eventDescription: 'This is a sample event description.',
   eventCategory: 'Tech',
@@ -16,12 +16,10 @@ const createMockActivity: CreateActivityDto = {
   eventCapacity: '100',
   eventCost: '$10',
   eventTags: ['Tech', 'Conference', 'Networking'],
-  eventSchedule:
-    '10:00 AM - Registration\n11:00 AM - Keynote\n12:00 PM - Lunch\n2:00 PM - Workshops\n4:00 PM - Closing Remarks',
+  eventSchedule: '10:00 AM - Registration\n11:00 AM - Keynote\n12:00 PM - Lunch\n2:00 PM - Workshops\n4:00 PM - Closing Remarks',
   eventSpeakers: ['John Doe', 'Jane Smith'],
   eventPrerequisites: 'None',
-  eventCancellationPolicy:
-    'Full refund if canceled at least 7 days before the event.',
+  eventCancellationPolicy: 'Full refund if canceled at least 7 days before the event.',
   eventContact: 'contact@example.com',
   eventSocialMedia: {
     facebook: 'https://www.facebook.com/sampleevent',
@@ -32,6 +30,7 @@ const createMockActivity: CreateActivityDto = {
   },
   eventPrivacy: 'Public',
   eventAccessibility: 'Wheelchair accessible venue.',
+  isHidden: false
 };
 
 export default createMockActivity;
