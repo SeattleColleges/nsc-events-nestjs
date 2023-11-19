@@ -67,7 +67,8 @@ export class UserService {
 
   // ----------------- Update user ----------------- \\
   async updateUser(id: string, user: UserDocument) {
-    // we may want to check if id is a valid id, if you remove/add a character, it returns a 500 error
+    // we may want to check if id is a valid id
+    // if you remove/add a character, it returns a 500 error
     if (user === null) {
       throw new BadRequestException(`Updated User not supplied`);
     }
