@@ -85,6 +85,9 @@ export class Activity {
 
   @Prop()
   eventAccessibility: string;
+
+  @Prop({ default: false })
+  isHidden: boolean;
 }
 
 export const ActivitySchema = SchemaFactory.createForClass(Activity);
