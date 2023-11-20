@@ -10,6 +10,7 @@ import {
   IsOptional,
   IsString,
   IsUrl,
+  IsBoolean,
 } from 'class-validator';
 import { IsTime } from '../../../custom-validators/is-time';
 import { IsSocialMedia } from '../../../custom-validators/is-social-media';
@@ -116,4 +117,8 @@ export class CreateActivityDto {
   @IsNotEmpty()
   @IsString()
   readonly eventAccessibility: string;
+
+  @IsOptional()
+  @IsBoolean()
+  readonly isHidden: boolean;
 }
