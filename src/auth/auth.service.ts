@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './schemas/userAuth.model';
@@ -6,6 +10,7 @@ import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { SignUpDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -56,5 +61,30 @@ export class AuthService {
     const token = this.jwtService.sign({ id: user._id, role: user.role });
 
     return { token };
+  }
+
+  // forgot password function
+  async forgotPassword(forgotPasswordDto: ForgotPasswordDto) {
+    const { email } = forgotPasswordDto;
+
+    // check if user exists
+    const user = await this.userModel.findOne({ email });
+
+    if (!user) {
+      throw new HttpException('User does not exist', 404);
+    }
+
+    // generate new Token
+    const newToken = this.jwtService.sign({
+      message: 'Reset password',
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    });
+
+    // we can send the token to the user's email
+    // for now, we will just log it to the console
+    return { newToken };
   }
 }
