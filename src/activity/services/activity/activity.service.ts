@@ -54,26 +54,62 @@ export class ActivityService {
     return activity;
   }
 
-  async createEvent(activity: Activity, creator: User): Promise<Activity> {
-    const data = Object.assign(activity, { createdByUser: creator._id });
-    return await this.activityModel.create(data);
+  async createEvent(activity: Activity, creator: User): Promise<{ activity: Activity, message: string}> {
+    // catching any potential errors during db operations and displaying message
+    try {
+      const data = Object.assign(activity, { createdByUser: creator._id });
+      const createdActivity = await this.activityModel.create(data);
+      return { activity: createdActivity, message: "Event created successfully." };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
-  async updateActivityById(id: string, activity: Activity): Promise<Activity> {
-    // TODO: return a bad request exception when item doesn't exist
-    return await this.activityModel
-      .findByIdAndUpdate(id, activity, {
-        new: true,
-        runValidators: true,
-      })
-      .exec();
+  async updateActivityById(id: string, activity: Activity): Promise<{ updatedActivity: Activity, message: string }> {
+    const isValidId = mongoose.isValidObjectId(id);
+
+    // if provided ID is invalid, throw BadRequestException exception
+    if (!isValidId) {
+      throw new BadRequestException('Invalid ID. Please enter correct id.');
+    }
+
+    const updatedActivity = await this.activityModel
+    .findByIdAndUpdate(id, activity, {
+      new: true,
+      runValidators: true,
+    })
+    .exec();
+    
+    // if no activity found with given ID, throw NotFoundException exception
+    if (!updatedActivity) {
+      throw new NotFoundException(`Activity with ID ${id} not found.`);
+    }
+
+    return { updatedActivity, message: "Activity updated successfully" };
+
   }
 
-  async deleteActivityById(id: string): Promise<Activity> {
-    return await this.activityModel
+  async deleteActivityById(id: string): Promise<{ deletedActivity: Activity, message: string }> {
+    const isValidId = mongoose.isValidObjectId(id);
+
+    // if provided ID is invalid, throw BadRequestException exception
+    if (!isValidId) {
+      throw new BadRequestException('Invalid ID. Please enter correct id.');
+    }
+
+    const activity = await this.activityModel.findById(id).exec();
+    
+    // if no activity found with given ID, throw NotFoundException exception
+    if (!activity) {
+      throw new NotFoundException(`Activity with ID ${id} not found.`)
+    }
+
+    const deletedActivity = await this.activityModel
       .findByIdAndUpdate(id, {
         isHidden: true,
       })
       .exec();
+
+      return { deletedActivity, message: "Activity deleted successfully." }
   }
 }
