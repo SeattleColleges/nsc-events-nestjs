@@ -59,7 +59,7 @@ export class ActivityService {
     try {
       const data = Object.assign(activity, { createdByUser: creator._id });
       const createdActivity = await this.activityModel.create(data);
-      return { activity: createdActivity, message: "Event created successfully." };
+      return { activity: createdActivity, message: "Activity created successfully." };
     } catch (error) {
       throw new BadRequestException(error.message);
     }
@@ -85,7 +85,7 @@ export class ActivityService {
       throw new NotFoundException(`Activity with ID ${id} not found.`);
     }
 
-    return { updatedActivity, message: "Activity updated successfully" };
+    return { updatedActivity, message: "Activity updated successfully." };
 
   }
 
