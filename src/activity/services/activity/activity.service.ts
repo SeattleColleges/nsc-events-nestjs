@@ -66,6 +66,7 @@ export class ActivityService {
   }
 
   async updateActivityById(id: string, activity: Activity): Promise<{ updatedActivity: Activity, message: string }> {
+
     const isValidId = mongoose.isValidObjectId(id);
 
     // if provided ID is invalid, throw BadRequestException exception
@@ -90,6 +91,7 @@ export class ActivityService {
   }
 
   async deleteActivityById(id: string): Promise<{ deletedActivity: Activity, message: string }> {
+
     const isValidId = mongoose.isValidObjectId(id);
 
     // if provided ID is invalid, throw BadRequestException exception
@@ -110,6 +112,6 @@ export class ActivityService {
       })
       .exec();
 
-      return { deletedActivity, message: "Activity deleted successfully." }
+    return { deletedActivity, message: "Activity deleted successfully." }
   }
 }
