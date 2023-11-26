@@ -59,7 +59,7 @@ export class ActivityService {
     try {
       const data = Object.assign(activity, { createdByUser: creator._id });
       const createdActivity = await this.activityModel.create(data);
-      return { activity: createdActivity, message: "Activity created successfully." };
+      return { activity: createdActivity, message: 'Activity created successfully.' };
     } catch (error) {
       throw new BadRequestException(error.message);
     }
@@ -86,7 +86,7 @@ export class ActivityService {
       throw new NotFoundException(`Activity with ID ${id} not found.`);
     }
 
-    return { updatedActivity, message: "Activity updated successfully." };
+    return { updatedActivity, message: 'Activity updated successfully.' };
 
   }
 
@@ -103,7 +103,7 @@ export class ActivityService {
     
     // if no activity found with given ID, throw NotFoundException exception
     if (!activity) {
-      throw new NotFoundException(`Activity with ID ${id} not found.`)
+      throw new NotFoundException(`Activity with ID ${id} not found.`);
     }
 
     const deletedActivity = await this.activityModel
@@ -111,7 +111,7 @@ export class ActivityService {
         isHidden: true,
       })
       .exec();
-
-    return { deletedActivity, message: "Activity deleted successfully." }
+      
+    return { deletedActivity, message: 'Activity deleted successfully.' };
   }
 }

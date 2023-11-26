@@ -37,7 +37,7 @@ export class ActivityController {
   async addEvent(
     @Body() activity: CreateActivityDto,
     @Req() req: any,
-  ): Promise<{activity: Activity, message: string }> {
+  ): Promise<{ activity: Activity, message: string }> {
     console.log(req.user);
     if (req.user.role != Role.user) {
       return await this.activityService.createEvent(activity, req.user);
