@@ -55,21 +55,26 @@ export class ActivityService {
   }
 
   async createEvent(
-    activity: Activity, creator: User ): 
-    Promise<{ activity: Activity, message: string }> {
+    activity: Activity, 
+    creator: User
+  ): Promise<{ activity: Activity; message: string }> {
     // catching any potential errors during db operations and displaying message
     try {
       const data = Object.assign(activity, { createdByUser: creator._id });
       const createdActivity = await this.activityModel.create(data);
-      return { activity: createdActivity, message: 'Activity created successfully.' };
+      return { 
+        activity: createdActivity, 
+        message: 'Activity created successfully.'
+      };
     } catch (error) {
       throw new BadRequestException(error.message);
     }
   }
 
   async updateActivityById(
-    id: string, activity: Activity ): 
-    Promise<{ updatedActivity: Activity, message: string }> {
+    id: string, 
+    activity: Activity
+  ): Promise<{ updatedActivity: Activity; message: string }> {
     const isValidId = mongoose.isValidObjectId(id);
     // if provided ID is invalid, throw BadRequestException exception
     if (!isValidId) {
@@ -85,11 +90,15 @@ export class ActivityService {
     if (!updatedActivity) {
       throw new NotFoundException(`Activity with ID ${id} not found.`);
     }
-    return { updatedActivity, message: 'Activity updated successfully.' };
+    return { 
+      updatedActivity, 
+      message: 'Activity updated successfully.'
+    };
   }
 
   async deleteActivityById(
-    id: string ): Promise<{ deletedActivity: Activity, message: string }> {
+    id: string
+  ): Promise<{ deletedActivity: Activity; message: string }> {
     const isValidId = mongoose.isValidObjectId(id);
     // if provided ID is invalid, throw BadRequestException exception
     if (!isValidId) {
@@ -101,11 +110,11 @@ export class ActivityService {
       throw new NotFoundException(`Activity with ID ${id} not found.`);
     }
     const deletedActivity = await this.activityModel
-    .findByIdAndUpdate(id, {
-        isHidden: true,
-      })
-      .exec();
-    return { deletedActivity, message: 'Activity deleted successfully.' };
+    .findByIdAndUpdate(id, { isHidden: true })
+    .exec();
+    return {
+      deletedActivity,
+      message: 'Activity deleted successfully.'
+    };
   }
-
 }
