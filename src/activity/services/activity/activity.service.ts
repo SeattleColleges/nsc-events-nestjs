@@ -56,7 +56,7 @@ export class ActivityService {
 
   async createEvent(
     activity: Activity,
-    creator: User
+    creator: User,
   ): Promise<{ activity: Activity; message: string }> {
     // catching any potential errors during db operations and displaying message
     try {
@@ -64,7 +64,7 @@ export class ActivityService {
       const createdActivity = await this.activityModel.create(data);
       return {
         activity: createdActivity,
-        message: 'Activity created successfully.'
+        message: 'Activity created successfully.',
       };
     } catch (error) {
       throw new BadRequestException(error.message);
@@ -73,7 +73,7 @@ export class ActivityService {
 
   async updateActivityById(
     id: string,
-    activity: Activity
+    activity: Activity,
   ): Promise<{ updatedActivity: Activity; message: string }> {
     const isValidId = mongoose.isValidObjectId(id);
     // if provided ID is invalid, throw BadRequestException exception
@@ -97,7 +97,7 @@ export class ActivityService {
   }
 
   async deleteActivityById(
-    id: string
+    id: string,
   ): Promise<{ deletedActivity: Activity; message: string }> {
     const isValidId = mongoose.isValidObjectId(id);
     // if provided ID is invalid, throw BadRequestException exception
@@ -114,7 +114,7 @@ export class ActivityService {
       .exec();
     return {
       deletedActivity,
-      message: 'Activity deleted successfully.'
+      message: 'Activity deleted successfully.',
     };
   }
 }
