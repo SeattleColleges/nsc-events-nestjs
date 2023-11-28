@@ -55,15 +55,15 @@ export class ActivityService {
   }
 
   async createEvent(
-    activity: Activity, 
+    activity: Activity,
     creator: User
   ): Promise<{ activity: Activity; message: string }> {
     // catching any potential errors during db operations and displaying message
     try {
       const data = Object.assign(activity, { createdByUser: creator._id });
       const createdActivity = await this.activityModel.create(data);
-      return { 
-        activity: createdActivity, 
+      return {
+        activity: createdActivity,
         message: 'Activity created successfully.'
       };
     } catch (error) {
@@ -72,7 +72,7 @@ export class ActivityService {
   }
 
   async updateActivityById(
-    id: string, 
+    id: string,
     activity: Activity
   ): Promise<{ updatedActivity: Activity; message: string }> {
     const isValidId = mongoose.isValidObjectId(id);
@@ -81,17 +81,17 @@ export class ActivityService {
       throw new BadRequestException('Invalid ID. Please enter correct id.');
     }
     const updatedActivity = await this.activityModel
-    .findByIdAndUpdate(id, activity, {
-      new: true,
-      runValidators: true,
-    })
-    .exec();
+      .findByIdAndUpdate(id, activity, {
+        new: true,
+        runValidators: true,
+      })
+      .exec();
     // if no activity found with given ID, throw NotFoundException exception
     if (!updatedActivity) {
       throw new NotFoundException(`Activity with ID ${id} not found.`);
     }
-    return { 
-      updatedActivity, 
+    return {
+      updatedActivity,
       message: 'Activity updated successfully.'
     };
   }
@@ -110,8 +110,8 @@ export class ActivityService {
       throw new NotFoundException(`Activity with ID ${id} not found.`);
     }
     const deletedActivity = await this.activityModel
-    .findByIdAndUpdate(id, { isHidden: true })
-    .exec();
+      .findByIdAndUpdate(id, { isHidden: true })
+      .exec();
     return {
       deletedActivity,
       message: 'Activity deleted successfully.'
