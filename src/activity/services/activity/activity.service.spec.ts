@@ -162,6 +162,7 @@ describe('ActivityService', () => {
       expect(model.findByIdAndUpdate).toHaveBeenCalledWith(
         mockActivityFromDB._id,
         { isHidden: true }
+        { new: true, runValidators: true }
       );
       expect(result).toEqual(mockActivityFromDB);
     });
