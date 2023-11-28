@@ -45,7 +45,7 @@ export class ActivityService {
   async getActivityById(id: string): Promise<Activity> {
     const isValidId = mongoose.isValidObjectId(id);
     if (!isValidId) {
-      throw new BadRequestException('Please enter correct id.');
+      throw new BadRequestException('Please enter correct id!');
     }
     const activity = await this.activityModel.findById(id).exec();
     if (!activity) {
@@ -72,7 +72,7 @@ export class ActivityService {
   async deleteActivityById(id: string): Promise<Activity> {
     const isValidId = mongoose.isValidObjectId(id);
     if (!isValidId) {
-      throw new BadRequestException('Invalid Id format');
+      throw new BadRequestException('Invalid Id format!');
     }
     const objectId = new Types.ObjectId(id);
     const deletedActivity = await this.activityModel

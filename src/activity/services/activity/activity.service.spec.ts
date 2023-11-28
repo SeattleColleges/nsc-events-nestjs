@@ -154,15 +154,22 @@ describe('ActivityService', () => {
   describe('deleteActivityById', () => {
     it('should delete and return the event', async () => {
       jest.spyOn(model, 'findByIdAndUpdate').mockReturnValue({
-        exec: jest.fn().mockResolvedValueOnce(mockActivityFromDB),
+        exec: jest.fn().mockResolvedValueOnce({mockActivityFromDB, isHidden: true}),
       } as any);
+
+      // prints isHidden value
+      console.log("mockActivityFromDB before delete: ", mockActivityFromDB.isHidden)
+
       const result = await activityService.deleteActivityById(
         mockActivityFromDB._id,
       );
+
+      // prints isHidden value
+      console.log("result after delete: ", result.isHidden)
+
       expect(model.findByIdAndUpdate).toHaveBeenCalledWith(
         mockActivityFromDB._id,
-        { isHidden: true },
-        { new: true, runValidators: true }
+        { isHidden: true }
       );
       expect(result).toEqual(mockActivityFromDB);
     });

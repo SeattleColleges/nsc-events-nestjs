@@ -34,6 +34,7 @@ const mockActivityFromDB = {
   createdAt: '2023-09-03T21:31:59.362Z',
   updatedAt: '2023-09-03T21:31:59.362Z',
   __v: 0,
+  isHidden: false,
 };
 
 export default mockActivityFromDB;
