@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import mongoose, { Model } from 'mongoose';
+import mongoose, { Model, Types } from 'mongoose';
 import { Activity } from '../../schemas/activity.schema';
 import { Query } from 'express-serve-static-core';
 import { User } from '../../../auth/schemas/userAuth.model';
@@ -70,10 +70,20 @@ export class ActivityService {
   }
 
   async deleteActivityById(id: string): Promise<Activity> {
-    return await this.activityModel
-      .findByIdAndUpdate(id, {
+    const isValidId = mongoose.isValidObjectId(id);
+    if (!isValidId) {
+      throw new BadRequestException('Invalid Id format');
+    }
+    const objectId = new Types.ObjectId(id);
+    const deletedActivity = await this.activityModel
+      .findByIdAndUpdate(objectId, {
         isHidden: true,
       })
       .exec();
+
+    if (!deletedActivity) {
+      throw new NotFoundException(`Activity ${id} not found`);
+    }
+    return deletedActivity;
   }
 }
