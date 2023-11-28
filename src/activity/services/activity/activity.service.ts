@@ -92,7 +92,7 @@ export class ActivityService {
     }
     return {
       updatedActivity,
-      message: 'Activity updated successfully.'
+      message: 'Activity updated successfully.',
     };
   }
 
