@@ -110,7 +110,7 @@ describe('ActivityService', () => {
 
   // TODO: refactor with user after doing auth Jest #1 vid timestamp 29:50
   describe('createEvent', () => {
-    it('should create and return an event', async () => {
+    it('should create and return an event with a success message', async () => {
       const newEvent = createMockActivity;
       jest
         .spyOn(model, 'create')
@@ -119,26 +119,30 @@ describe('ActivityService', () => {
       const result = (await activityService.createEvent(
         createMockActivity as CreateActivityDto,
         mockUser as User,
-      )) as unknown as Activity;
+      ));
 
-      expect(result).toEqual(newEvent);
+      expect(result.activity).toEqual(newEvent);
+      expect(result.message).toEqual("Activity created successfully.");
     });
   });
 
   describe('updateActivityById', () => {
-    it('should update and return an event', async () => {
+    it('should update and return an event with a success message', async () => {
       const updatedEvent = {
         ...createMockActivity,
         eventTitle: 'Original Title',
       };
+
       const activity = { eventTitle: 'Updated Title' };
       jest.spyOn(model, 'findByIdAndUpdate').mockReturnValue({
         exec: jest.fn().mockResolvedValueOnce(updatedEvent),
       } as any);
+
       const result = await activityService.updateActivityById(
         mockActivityFromDB._id,
         activity as any,
       );
+
       expect(model.findByIdAndUpdate).toHaveBeenCalledWith(
         mockActivityFromDB._id,
         activity,
@@ -147,31 +151,36 @@ describe('ActivityService', () => {
           runValidators: true,
         },
       );
-      expect(result.eventTitle).toEqual(updatedEvent.eventTitle);
+      expect(result.updatedActivity.eventTitle).toEqual(updatedEvent.eventTitle);
+      expect(result.message).toEqual("Activity updated successfully.");
     });
   });
 
   describe('deleteActivityById', () => {
-    it('should delete and return the event', async () => {
+    it('should delete and return the event with a success message', async () => {
+      
+      // mock findById to return a valid activity object
+      jest.spyOn(model, 'findById').mockReturnValue({
+        exec: jest.fn().mockResolvedValue(mockActivityFromDB),
+      } as any);
+
+
       jest.spyOn(model, 'findByIdAndUpdate').mockReturnValue({
         exec: jest.fn().mockResolvedValueOnce({mockActivityFromDB, isHidden: true}),
       } as any);
-
-      // prints isHidden value
-      console.log("mockActivityFromDB before delete: ", mockActivityFromDB.isHidden)
 
       const result = await activityService.deleteActivityById(
         mockActivityFromDB._id,
       );
 
-      // prints isHidden value
-      console.log("result after delete: ", result.isHidden)
-
+      expect(model.findById).toHaveBeenCalledWith(mockActivityFromDB._id);
       expect(model.findByIdAndUpdate).toHaveBeenCalledWith(
         mockActivityFromDB._id,
         { isHidden: true }
       );
-      expect(result).toEqual(mockActivityFromDB);
+
+      expect(result.deletedActivity).toEqual(mockActivityFromDB);
+      expect(result.message).toEqual("Activity deleted successfully.")
     });
   });
 });
