@@ -1,5 +1,6 @@
 import {
   HttpException,
+  HttpStatus,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -23,6 +24,16 @@ export class AuthService {
 
   async signUp(signUpDto: SignUpDto): Promise<{ token: string }> {
     const { name, email, password, role } = signUpDto;
+
+    if (await this.userModel.findOne({ email })) {
+      throw new HttpException(
+        {
+          status: HttpStatus.CONFLICT,
+          error: 'User with this email already exists',
+        },
+        HttpStatus.CONFLICT,
+      );
+    }
 
     console.log('name: ', name);
     console.log('email: ', email);
