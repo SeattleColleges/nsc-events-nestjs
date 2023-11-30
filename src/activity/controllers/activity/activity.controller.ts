@@ -37,7 +37,7 @@ export class ActivityController {
   async addEvent(
     @Body() activity: CreateActivityDto,
     @Req() req: any,
-  ): Promise<Activity> {
+  ): Promise<{ activity: Activity; message: string }> {
     console.log(req.user);
     if (req.user.role != Role.user) {
       return await this.activityService.createEvent(activity, req.user);
@@ -52,7 +52,7 @@ export class ActivityController {
     @Param('id') id: string,
     @Body() activity: UpdateActivityDto,
     @Req() req: any,
-  ): Promise<Activity> {
+  ): Promise<{ updatedActivity: Activity; message: string }> {
     // return activity to retrieve createdByUser property value
     const preOperationActivity = await this.activityService.getActivityById(id);
     // admin can make edits regardless
@@ -75,7 +75,7 @@ export class ActivityController {
   async deleteActivityById(
     @Param('id') id: string,
     @Req() req: any,
-  ): Promise<Activity> {
+  ): Promise<{ deletedActivity: Activity; message: string }> {
     const preOperationActivity = await this.activityService.getActivityById(id);
     if (req.user.role === Role.admin) {
       return this.activityService.deleteActivityById(id);
