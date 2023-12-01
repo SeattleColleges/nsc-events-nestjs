@@ -5,6 +5,12 @@ import mongoose from 'mongoose';
 export interface SocialMedia {
   [key: string]: string;
 }
+
+export interface Attendee {
+  firstName: string;
+  lastName: string;
+}
+
 @Schema({
   timestamps: true,
 })
@@ -85,6 +91,12 @@ export class Activity {
 
   @Prop()
   eventAccessibility: string;
+
+  @Prop({ default: 0 })
+  attendanceCount?: number;
+
+  @Prop({ type: [{ firstName: String, lastName: String }] })
+  attendees?: Attendee[];
 }
 
 export const ActivitySchema = SchemaFactory.createForClass(Activity);
