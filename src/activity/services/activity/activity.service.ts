@@ -8,6 +8,7 @@ import mongoose, { Model } from 'mongoose';
 import { Activity } from '../../schemas/activity.schema';
 import { Query } from 'express-serve-static-core';
 import { User } from '../../../auth/schemas/userAuth.model';
+import { AttendEventDto} from '../../dto/attend-event.dto';
 
 @Injectable()
 export class ActivityService {
@@ -69,6 +70,40 @@ export class ActivityService {
     } catch (error) {
       throw new BadRequestException(error.message);
     }
+  }
+  /*
+    @param: eventID
+    @return: activity
+  */
+  async attendEvent(
+    eventId: string,
+    attendee?: AttendEventDto,
+  ): Promise<Activity> {
+    // Check if the event ID is valid
+    const isValidId = mongoose.isValidObjectId(eventId);
+    if (!isValidId) {
+      throw new BadRequestException('Invalid event ID.');
+    }
+
+    // Retrieve the activity by ID and check if it exists
+    const activity = await this.activityModel.findById(eventId).exec();
+    if (!activity) {
+      throw new NotFoundException('Activity not found!');
+    }
+
+    // Increment the attendance count
+    activity.attendanceCount = (activity.attendanceCount || 0) + 1;
+
+    // If attendee details are provided, add them to the attendees array
+    const attendeeName = {
+      firstName: attendee.firstName,
+      lastName: attendee.lastName,
+    };
+    // Push the new attendee to the attendees array
+    activity.attendees.push(attendeeName);
+
+    await activity.save();
+    return activity;
   }
 
   async updateActivityById(
