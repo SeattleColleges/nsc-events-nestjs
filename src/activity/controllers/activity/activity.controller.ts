@@ -34,6 +34,7 @@ export class ActivityController {
 
   @Post('attend/:id')
   @UseGuards(AuthGuard())
+  // TODO: rate limit this so you can't spam this route
   async attendEvent(
     @Param('id') eventId: string,
     @Body() attendEventDto: AttendEventDto,
