@@ -18,7 +18,7 @@ import { UpdateActivityDto } from '../../dto/update-activity.dto';
 import { Query as ExpressQuery } from 'express-serve-static-core';
 import { AuthGuard } from '@nestjs/passport';
 import { Role } from '../../../auth/schemas/userAuth.model';
-
+import { AttendEventDto } from '../../dto/attend-event.dto';
 @Controller('events')
 export class ActivityController {
   constructor(private readonly activityService: ActivityService) {}
@@ -30,6 +30,16 @@ export class ActivityController {
   @Get('find/:id')
   async findActivityById(@Param('id') id: string): Promise<Activity> {
     return this.activityService.getActivityById(id);
+  }
+
+  @Post('attend/:id')
+  @UseGuards(AuthGuard())
+  // TODO: rate limit this so you can't spam this route
+  async attendEvent(
+    @Param('id') eventId: string,
+    @Body() attendEventDto: AttendEventDto,
+  ) {
+    return await this.activityService.attendEvent(eventId, attendEventDto);
   }
 
   @Post('new')
