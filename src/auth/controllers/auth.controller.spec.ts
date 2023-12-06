@@ -5,9 +5,6 @@ import { LoginDto } from '../dto/login.dto';
 import { SignUpDto } from '../dto/signup.dto';
 import { ForgotPasswordDto } from '../dto/forgot-password.dto';
 import { Role } from '../schemas/userAuth.model'; 
-import { JwtService } from '@nestjs/jwt';
-
-
 
 describe('AuthController', () => {
   let authController: AuthController;
