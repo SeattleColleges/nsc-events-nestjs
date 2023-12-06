@@ -9,7 +9,7 @@ export class AuthController {
   // private so it is only accessed within this class
   constructor(
     @Inject('AUTH_SERVICE') private readonly authService: AuthService,
-    ) {}
+  ) {}
 
   @Post('/signup')
   signUp(@Body() signUpDto: SignUpDto): Promise<{ token: string }> {

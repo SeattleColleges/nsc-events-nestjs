@@ -4,17 +4,17 @@ import { AuthService } from '../auth.service';
 import { LoginDto } from '../dto/login.dto';
 import { SignUpDto } from '../dto/signup.dto';
 import { ForgotPasswordDto } from '../dto/forgot-password.dto';
-import { Role } from '../schemas/userAuth.model'; 
+import { Role } from '../schemas/userAuth.model';
 
 describe('AuthController', () => {
   let authController: AuthController;
   let authService: AuthService;
 
-  const mockAuthService= {
+  const mockAuthService = {
     signUp: jest.fn(),
     login: jest.fn(),
-    forgotPassword: jest.fn()
-  }
+    forgotPassword: jest.fn(),
+  };
   const mockSignUpDto: SignUpDto = {
     name: 'Test User',
     email: 'testuser@example.com',
@@ -36,8 +36,8 @@ describe('AuthController', () => {
       controllers: [AuthController],
       providers: [
         {
-        provide: 'AUTH_SERVICE',
-        useValue:  mockAuthService,
+          provide: 'AUTH_SERVICE',
+          useValue: mockAuthService,
         },
       ],
     }).compile();
@@ -73,8 +73,9 @@ describe('AuthController', () => {
 
       jest.spyOn(authService, 'forgotPassword').mockResolvedValue(result);
 
-      expect(await authController.forgotPassword(mockForgotPasswordDto)).toBe(result);
+      expect(await authController.forgotPassword(mockForgotPasswordDto)).toBe(
+        result,
+      );
     });
   });
 });
-
