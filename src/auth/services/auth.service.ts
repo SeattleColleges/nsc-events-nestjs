@@ -98,5 +98,4 @@ export class AuthService {
     // for now, we will just log it to the console
     return { newToken };
   }
-
 }
