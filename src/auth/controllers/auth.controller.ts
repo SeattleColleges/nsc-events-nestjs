@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { AuthService } from '../auth.service';
 import { LoginDto } from '../dto/login.dto';
 import { SignUpDto } from '../dto/signup.dto';
@@ -7,7 +7,9 @@ import { ForgotPasswordDto } from '../dto/forgot-password.dto';
 @Controller('auth')
 export class AuthController {
   // private so it is only accessed within this class
-  constructor(private authService: AuthService) {}
+  constructor(
+    @Inject('AUTH_SERVICE') private readonly authService: AuthService,
+    ) {}
 
   @Post('/signup')
   signUp(@Body() signUpDto: SignUpDto): Promise<{ token: string }> {
