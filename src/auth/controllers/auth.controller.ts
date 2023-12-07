@@ -7,8 +7,7 @@ import { ForgotPasswordDto } from '../dto/forgot-password.dto';
 @Controller('auth')
 export class AuthController {
   // private so it is only accessed within this class
-  constructor(
-    @Inject('AUTH_SERVICE') private readonly authService: AuthService,
+  constructor(private readonly authService: AuthService,
   ) {}
 
   @Post('/signup')
