@@ -6,12 +6,12 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User } from './schemas/userAuth.model';
+import { User } from '../schemas/userAuth.model';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
-import { SignUpDto } from './dto/signup.dto';
-import { LoginDto } from './dto/login.dto';
-import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { SignUpDto } from '../dto/signup.dto';
+import { LoginDto } from '../dto/login.dto';
+import { ForgotPasswordDto } from '../dto/forgot-password.dto';
 
 @Injectable()
 export class AuthService {
