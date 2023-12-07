@@ -36,14 +36,14 @@ describe('AuthController', () => {
       controllers: [AuthController],
       providers: [
         {
-          provide: 'AUTH_SERVICE',
+          provide: AuthService,
           useValue: mockAuthService,
         },
       ],
     }).compile();
 
     authController = module.get<AuthController>(AuthController);
-    authService = module.get<AuthService>('AUTH_SERVICE');
+    authService = module.get<AuthService>(AuthService);
     jest.clearAllMocks();
   });
 
