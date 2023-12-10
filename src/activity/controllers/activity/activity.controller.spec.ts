@@ -5,6 +5,7 @@ import { Activity } from '../../../activity/schemas/activity.schema';
 import { Role, UserDocument } from '../../../user/schemas/user.model';
 import mongoose from 'mongoose';
 import { PassportModule } from '@nestjs/passport';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 
 describe('ActivityController', () => {
   let controller: ActivityController;
@@ -272,13 +273,56 @@ describe('ActivityController', () => {
 
   // finish testing function attendEvent
   describe('attendEvent', () => {
-    it('service should be defined', () => {
-      expect(service).toBeDefined();
+    it('should successfully update attend event attendance', async () => {
+      const eventId = new mongoose.Types.ObjectId().toString();
+      const mockAttendEvent = {
+        attendanceCount: 0,
+        attendee: {
+          firstName: 'John',
+          lastName: 'Doe',
+        }
+      };
+
+      const updatedActivity = {
+        ...mockActivity,
+        // Assuming attendance was incremented
+        attendanceCount: 1, 
+        attendees: [mockAttendEvent.attendee],
+      };
+
+      jest.spyOn(service, 'attendEvent').mockResolvedValue(updatedActivity);
+      const result = await controller.attendEvent(eventId, mockAttendEvent);
+      expect(result).toEqual(updatedActivity);
+      expect(service.attendEvent).toHaveBeenCalledWith(eventId, mockAttendEvent);
     });
 
+    it('should throw BadRequestException for invalid event ID', async () => {
+      const invalidEventId = 'invalid-id';
+      const mockAttendEvent = {};
+  
+      jest.spyOn(service, 'attendEvent').mockImplementation(() => {
+        throw new BadRequestException('Invalid event ID.');
+      });
+  
+      await expect(controller.attendEvent(invalidEventId, mockAttendEvent))
+        .rejects.toThrow(BadRequestException);
+    });
+
+    it('should throw NotFoundException for non-existing event', async () => {
+      const nonExistingEventId = new mongoose.Types.ObjectId().toString();
+      const mockAttendEvent = {};
+  
+      jest.spyOn(service, 'attendEvent').mockImplementation(() => {
+        throw new NotFoundException('Activity not found!');
+      });
+
+      await expect(controller.attendEvent(nonExistingEventId, mockAttendEvent))
+        .rejects.toThrow(NotFoundException);
+    });
   });
 
 
+  
   // finish testing function updateActivityById
   describe('updateActivityById', () => {
     it('service should be defined', () => {
