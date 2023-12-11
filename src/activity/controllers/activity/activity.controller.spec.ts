@@ -48,16 +48,18 @@ describe('ActivityController', () => {
     eventCapacity: '100',
     eventCost: '$10',
     eventTags: ['Tech', 'Conference', 'Networking'],
-    eventSchedule: '10AM - Registration\n11AM - Keynote\n12PM - Lunch\n2PM - Workshops\n4PM - Closing Remarks',
+    eventSchedule:
+      '10AM - Registration\n11AM - Keynote\n12PM - Lunch\n2PM - Workshops\n4PM - Closing Remarks',
     eventSpeakers: ['John Doe', 'Jane Smith'],
     eventPrerequisites: 'None',
-    eventCancellationPolicy: 'Full refund if canceled at least 7 days before the event.',
+    eventCancellationPolicy:
+      'Full refund if canceled at least 7 days before the event.',
     eventContact: 'club@email.com',
     eventSocialMedia: {
       facebook: 'https://www.facebook.com/sampleevent',
       twitter: 'https://twitter.com/sampleevent',
       instagram: 'https://www.instagram.com/sampleevent',
-      hashtag: '#SampleEvent2023'
+      hashtag: '#SampleEvent2023',
     },
     eventPrivacy: null,
     eventAccessibility: 'Wheelchair accessible venue.',
@@ -83,23 +85,24 @@ describe('ActivityController', () => {
     eventCapacity: '100',
     eventCost: '$10',
     eventTags: ['Tech', 'Conference', 'Networking'],
-    eventSchedule: '10AM - Registration\n11AM - Keynote\n12PM - Lunch\n2PM - Workshops\n4PM - Closing Remarks',
+    eventSchedule:
+      '10AM - Registration\n11AM - Keynote\n12PM - Lunch\n2PM - Workshops\n4PM - Closing Remarks',
     eventSpeakers: ['John Doe', 'Jane Smith'],
     eventPrerequisites: 'None',
-    eventCancellationPolicy: 'Full refund if canceled at least 7 days before the event.',
+    eventCancellationPolicy:
+      'Full refund if canceled at least 7 days before the event.',
     eventContact: 'club@email.com',
     eventSocialMedia: {
       facebook: 'https://www.facebook.com/sampleevent',
       twitter: 'https://twitter.com/sampleevent',
       instagram: 'https://www.instagram.com/sampleevent',
-      hashtag: '#SampleEvent2023'
+      hashtag: '#SampleEvent2023',
     },
     eventPrivacy: null,
     eventAccessibility: 'Wheelchair accessible venue updated.',
     isHidden: false,
   };
 
-  
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [PassportModule.register({ defaultStrategy: 'jwt' })],
@@ -116,13 +119,14 @@ describe('ActivityController', () => {
     jest.clearAllMocks();
   });
 
-
   describe('getAllActivities', () => {
     // testing succesfull fetches of activities
     it('should return an array of activiites', async () => {
       // setting up conditions for test
       const mockSingleActivity: Activity[] = [mockActivity];
-      jest.spyOn(service, 'getAllActivities').mockResolvedValue(mockSingleActivity);
+      jest
+        .spyOn(service, 'getAllActivities')
+        .mockResolvedValue(mockSingleActivity);
       const result = await controller.getAllActivities({});
       // verifying getAllActivities behaves as expected, (checking return value)
       expect(result).toEqual(mockSingleActivity);
@@ -131,7 +135,9 @@ describe('ActivityController', () => {
     // testing succesfull fetches of no activities
     it('should return an empty array if no activities are found', async () => {
       const mockEmptyActivities: Activity[] = [];
-      jest.spyOn(service, 'getAllActivities').mockResolvedValue(mockEmptyActivities);
+      jest
+        .spyOn(service, 'getAllActivities')
+        .mockResolvedValue(mockEmptyActivities);
       const result = await controller.getAllActivities({});
       expect(result).toEqual(mockEmptyActivities);
       expect(result).toHaveLength(0);
@@ -141,13 +147,15 @@ describe('ActivityController', () => {
     // testing for failure scenario
     it('should handle exceptions from the service', async () => {
       const errorMessage = 'Error fetching activities';
-      jest.spyOn(service, 'getAllActivities').mockRejectedValue(new Error(errorMessage));
-      await expect(controller.getAllActivities({}))
-        .rejects.toThrowError(errorMessage);
+      jest
+        .spyOn(service, 'getAllActivities')
+        .mockRejectedValue(new Error(errorMessage));
+      await expect(controller.getAllActivities({})).rejects.toThrowError(
+        errorMessage,
+      );
     });
   });
 
-  
   describe('getActivityById', () => {
     it('should return a single activity', async () => {
       const id = mockActivity._id;
@@ -167,7 +175,6 @@ describe('ActivityController', () => {
     });
   });
 
-  
   describe('createEvent', () => {
     it('should successfully create and return an event', async () => {
       const mockCreateEvent = {
@@ -186,16 +193,18 @@ describe('ActivityController', () => {
         eventCapacity: '100',
         eventCost: '$10',
         eventTags: ['Tech', 'Conference', 'Networking'],
-        eventSchedule: '10AM - Registration\n11AM - Keynote\n12PM - Lunch\n2PM - Workshops\n4PM - Closing Remarks',
+        eventSchedule:
+          '10AM - Registration\n11AM - Keynote\n12PM - Lunch\n2PM - Workshops\n4PM - Closing Remarks',
         eventSpeakers: ['John Doe', 'Jane Smith'],
         eventPrerequisites: 'None',
-        eventCancellationPolicy: 'Full refund if canceled at least 7 days before the event.',
+        eventCancellationPolicy:
+          'Full refund if canceled at least 7 days before the event.',
         eventContact: 'club@email.com',
         eventSocialMedia: {
           facebook: 'https://www.facebook.com/sampleevent',
           twitter: 'https://twitter.com/sampleevent',
           instagram: 'https://www.instagram.com/sampleevent',
-          hashtag: '#SampleEvent2023'
+          hashtag: '#SampleEvent2023',
         },
         eventPrivacy: null,
         eventAccessibility: 'Wheelchair accessible venue.',
@@ -233,29 +242,33 @@ describe('ActivityController', () => {
         eventCapacity: '100',
         eventCost: '$10',
         eventTags: ['Tech', 'Conference', 'Networking'],
-        eventSchedule: '10AM - Registration\n11AM - Keynote\n12PM - Lunch\n2PM - Workshops\n4PM - Closing Remarks',
+        eventSchedule:
+          '10AM - Registration\n11AM - Keynote\n12PM - Lunch\n2PM - Workshops\n4PM - Closing Remarks',
         eventSpeakers: ['John Doe', 'Jane Smith'],
         eventPrerequisites: 'None',
-        eventCancellationPolicy: 'Full refund if canceled at least 7 days before the event.',
+        eventCancellationPolicy:
+          'Full refund if canceled at least 7 days before the event.',
         eventContact: 'club@email.com',
         eventSocialMedia: {
           facebook: 'https://www.facebook.com/sampleevent',
           twitter: 'https://twitter.com/sampleevent',
           instagram: 'https://www.instagram.com/sampleevent',
-          hashtag: '#SampleEvent2023'
+          hashtag: '#SampleEvent2023',
         },
         eventPrivacy: null,
         eventAccessibility: 'Wheelchair accessible venue.',
         isHidden: false,
       };
       const errorMessage = 'Error occurred while creating event';
-      jest.spyOn(service, 'createEvent').mockRejectedValue(new Error(errorMessage));
-      await expect(controller.addEvent(mockCreateEvent, { user: mockUser }))
-        .rejects.toThrowError(errorMessage);
+      jest
+        .spyOn(service, 'createEvent')
+        .mockRejectedValue(new Error(errorMessage));
+      await expect(
+        controller.addEvent(mockCreateEvent, { user: mockUser }),
+      ).rejects.toThrowError(errorMessage);
     });
     // todo: add a test case for a invalid or missing field entry
   });
-
 
   describe('attendEvent', () => {
     it('should successfully update attend event attendance', async () => {
@@ -288,8 +301,9 @@ describe('ActivityController', () => {
       jest.spyOn(service, 'attendEvent').mockImplementation(() => {
         throw new BadRequestException('Invalid event ID.');
       });
-      await expect(controller.attendEvent(invalidEventId, mockAttendEvent))
-        .rejects.toThrow(BadRequestException);
+      await expect(
+        controller.attendEvent(invalidEventId, mockAttendEvent),
+      ).rejects.toThrow(BadRequestException);
     });
 
     it('should throw NotFoundException for non-existing event', async () => {
@@ -298,11 +312,11 @@ describe('ActivityController', () => {
       jest.spyOn(service, 'attendEvent').mockImplementation(() => {
         throw new NotFoundException('Activity not found!');
       });
-      await expect(controller.attendEvent(nonExistingEventId, mockAttendEvent))
-        .rejects.toThrow(NotFoundException);
+      await expect(
+        controller.attendEvent(nonExistingEventId, mockAttendEvent),
+      ).rejects.toThrow(NotFoundException);
     });
   });
-
 
   describe('updateActivityById', () => {
     it('should successfully update an activity', async () => {
@@ -311,7 +325,9 @@ describe('ActivityController', () => {
         updatedActivity: mockUpdateActivity,
         message: 'Activity updated successfully.',
       };
-      jest.spyOn(service, 'updateActivityById').mockResolvedValue(updatedActivityResponse);
+      jest
+        .spyOn(service, 'updateActivityById')
+        .mockResolvedValue(updatedActivityResponse);
       const result = await controller.updateActivityById(
         id,
         mockUpdateActivity,
@@ -329,10 +345,13 @@ describe('ActivityController', () => {
       jest.spyOn(service, 'updateActivityById').mockImplementation(() => {
         throw new BadRequestException('Invalid ID. Please enter correct id.');
       });
-      await expect(controller.updateActivityById(invalidId, mockUpdateActivity, { user: mockUser },))
-        .rejects.toThrow(BadRequestException);
+      await expect(
+        controller.updateActivityById(invalidId, mockUpdateActivity, {
+          user: mockUser,
+        }),
+      ).rejects.toThrow(BadRequestException);
     });
-  
+
     it('should throw NotFoundException for non-existing activity', async () => {
       const nonExistingId = new mongoose.Types.ObjectId().toString();
       jest.spyOn(service, 'updateActivityById').mockImplementation(() => {
@@ -340,11 +359,14 @@ describe('ActivityController', () => {
           `Activity with ID ${nonExistingId} not found.`,
         );
       });
-      await expect(controller.updateActivityById(nonExistingId, mockUpdateActivity, { user: mockUser },))
-        .rejects.toThrow(NotFoundException);
+      await expect(
+        controller.updateActivityById(nonExistingId, mockUpdateActivity, {
+          user: mockUser,
+        }),
+      ).rejects.toThrow(NotFoundException);
     });
   });
-  
+
   describe('deleteActivityById', () => {
     it('should successfully delete an activity', async () => {
       const id = mockActivity._id;
@@ -352,7 +374,9 @@ describe('ActivityController', () => {
         deletedActivity: mockActivity,
         message: 'Activity deleted successfully.',
       };
-      jest.spyOn(service, 'deleteActivityById').mockResolvedValue(deleteResponse);
+      jest
+        .spyOn(service, 'deleteActivityById')
+        .mockResolvedValue(deleteResponse);
       const result = await controller.deleteActivityById(id, {
         user: mockUser,
       });
@@ -365,8 +389,9 @@ describe('ActivityController', () => {
       jest.spyOn(service, 'deleteActivityById').mockImplementation(() => {
         throw new BadRequestException('Invalid ID. Please enter correct id.');
       });
-      await expect(controller.deleteActivityById(invalidId, { user: mockUser }))
-        .rejects.toThrow(BadRequestException);
+      await expect(
+        controller.deleteActivityById(invalidId, { user: mockUser }),
+      ).rejects.toThrow(BadRequestException);
     });
 
     it('should throw NotFoundException for non-existing activity', async () => {
@@ -376,9 +401,9 @@ describe('ActivityController', () => {
           `Activity with ID ${nonExistingId} not found.`,
         );
       });
-      await expect(controller.deleteActivityById(nonExistingId, { user: mockUser }))
-        .rejects.toThrow(NotFoundException);
+      await expect(
+        controller.deleteActivityById(nonExistingId, { user: mockUser }),
+      ).rejects.toThrow(NotFoundException);
     });
   });
-
 });
