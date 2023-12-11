@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ActivityController } from "./activity.controller";
+import { ActivityController } from './activity.controller';
 import { ActivityService } from '../../../activity/services/activity/activity.service';
 import { Activity } from '../../../activity/schemas/activity.schema';
 import { Role, UserDocument } from '../../../user/schemas/user.model';
@@ -31,17 +31,14 @@ describe('ActivityController', () => {
 
   const mockActivity = {
     // mock activity ID
-    _id: new mongoose.Types.ObjectId().toString(), 
+    _id: new mongoose.Types.ObjectId().toString(),
     // mock User ID
-    createdByUser: mockUser._id, 
+    createdByUser: mockUser._id,
     eventTitle: 'Sample Event',
     eventDescription: 'description',
     eventCategory: 'Tech',
-    // using a Date object
-    eventDate: new Date('2023-08-15'), 
-    // needs to be time 12 hour format
+    eventDate: new Date('2023-08-15'),
     eventStartTime: '10:00 AM',
-    // needs to be time 12 hour format
     eventEndTime: '1:00 PM',
     eventLocation: '123 Main Street, City',
     eventCoverPhoto: 'https://ourCloudStorage.com/sample-event.photo.png',
@@ -57,10 +54,10 @@ describe('ActivityController', () => {
     eventCancellationPolicy: 'Full refund if canceled at least 7 days before the event.',
     eventContact: 'club@email.com',
     eventSocialMedia: {
-        facebook: 'https://www.facebook.com/sampleevent',
-        twitter: 'https://twitter.com/sampleevent',
-        instagram: 'https://www.instagram.com/sampleevent',
-        hashtag: '#SampleEvent2023'
+      facebook: 'https://www.facebook.com/sampleevent',
+      twitter: 'https://twitter.com/sampleevent',
+      instagram: 'https://www.instagram.com/sampleevent',
+      hashtag: '#SampleEvent2023'
     },
     eventPrivacy: null,
     eventAccessibility: 'Wheelchair accessible venue.',
@@ -69,17 +66,14 @@ describe('ActivityController', () => {
 
   const mockUpdateActivity = {
     // mock activity ID
-    _id: new mongoose.Types.ObjectId().toString(), 
+    _id: new mongoose.Types.ObjectId().toString(),
     // Mock User ID
-    createdByUser: mockUser._id, 
+    createdByUser: mockUser._id,
     eventTitle: 'Sample Event Updated',
     eventDescription: 'description updated',
     eventCategory: 'Tech',
-    // using a Date object
-    eventDate: new Date('2023-08-15'), 
-    // needs to be time 12 hour format
+    eventDate: new Date('2023-08-15'),
     eventStartTime: '10:00 AM',
-    // needs to be time 12 hour format
     eventEndTime: '1:00 PM',
     eventLocation: '123 Main Street, City',
     eventCoverPhoto: 'https://ourCloudStorage.com/sample-event.photo.png',
@@ -95,20 +89,19 @@ describe('ActivityController', () => {
     eventCancellationPolicy: 'Full refund if canceled at least 7 days before the event.',
     eventContact: 'club@email.com',
     eventSocialMedia: {
-        facebook: 'https://www.facebook.com/sampleevent',
-        twitter: 'https://twitter.com/sampleevent',
-        instagram: 'https://www.instagram.com/sampleevent',
-        hashtag: '#SampleEvent2023'
+      facebook: 'https://www.facebook.com/sampleevent',
+      twitter: 'https://twitter.com/sampleevent',
+      instagram: 'https://www.instagram.com/sampleevent',
+      hashtag: '#SampleEvent2023'
     },
     eventPrivacy: null,
     eventAccessibility: 'Wheelchair accessible venue updated.',
     isHidden: false,
   };
-  
 
+  
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      // 
       imports: [PassportModule.register({ defaultStrategy: 'jwt' })],
       controllers: [ActivityController],
       providers: [
@@ -118,7 +111,6 @@ describe('ActivityController', () => {
         },
       ],
     }).compile();
-
     controller = module.get<ActivityController>(ActivityController);
     service = module.get<ActivityService>(ActivityService);
     jest.clearAllMocks();
@@ -154,13 +146,12 @@ describe('ActivityController', () => {
     });
   });
 
+  
   describe('getActivityById', () => {
     it('should return a single activity', async () => {
       const id = mockActivity._id;
       jest.spyOn(service, 'getActivityById').mockResolvedValue(mockActivity);
-
       const result = await controller.findActivityById(id);
-
       expect(result).toEqual(mockActivity);
       expect(service.getActivityById).toHaveBeenCalledWith(id);
     });
@@ -169,23 +160,21 @@ describe('ActivityController', () => {
       // generating a new mock id
       const id = new mongoose.Types.ObjectId().toString();
       jest.spyOn(service, 'getActivityById').mockResolvedValue(null);
-
       const result = await controller.findActivityById(id);
-
       expect(result).toBeNull();
       expect(service.getActivityById).toHaveBeenCalledWith(id);
     });
   });
 
+  
   describe('createEvent', () => {
     it('should successfully create and return an event', async () => {
-
       const mockCreateEvent = {
-        createdByUser: mockUser._id, 
+        createdByUser: mockUser._id,
         eventTitle: 'Sample Event',
         eventDescription: 'description',
         eventCategory: 'Tech',
-        eventDate: new Date('2023-08-15'), 
+        eventDate: new Date('2023-08-15'),
         eventStartTime: '10:00 AM',
         eventEndTime: '1:00 PM',
         eventLocation: '123 Main Street, City',
@@ -202,21 +191,19 @@ describe('ActivityController', () => {
         eventCancellationPolicy: 'Full refund if canceled at least 7 days before the event.',
         eventContact: 'club@email.com',
         eventSocialMedia: {
-            facebook: 'https://www.facebook.com/sampleevent',
-            twitter: 'https://twitter.com/sampleevent',
-            instagram: 'https://www.instagram.com/sampleevent',
-            hashtag: '#SampleEvent2023'
+          facebook: 'https://www.facebook.com/sampleevent',
+          twitter: 'https://twitter.com/sampleevent',
+          instagram: 'https://www.instagram.com/sampleevent',
+          hashtag: '#SampleEvent2023'
         },
         eventPrivacy: null,
         eventAccessibility: 'Wheelchair accessible venue.',
         isHidden: false,
       };
-
       const expectedResponse = {
         activity: mockCreateEvent, 
         message: 'Activity created successfully.'
       }
-
       jest.spyOn(service, 'createEvent').mockResolvedValue(expectedResponse);
       const result = await controller.addEvent(mockCreateEvent, { user: mockUser });
       expect(result).toEqual(expectedResponse);
@@ -225,11 +212,11 @@ describe('ActivityController', () => {
 
     it('should handle exceptions from the service', async () => {
       const mockCreateEvent = {
-        createdByUser: mockUser._id, 
+        createdByUser: mockUser._id,
         eventTitle: 'Sample Event',
         eventDescription: 'description',
         eventCategory: 'Tech',
-        eventDate: new Date('2023-08-15'), 
+        eventDate: new Date('2023-08-15'),
         eventStartTime: '10:00 AM',
         eventEndTime: '1:00 PM',
         eventLocation: '123 Main Street, City',
@@ -246,10 +233,10 @@ describe('ActivityController', () => {
         eventCancellationPolicy: 'Full refund if canceled at least 7 days before the event.',
         eventContact: 'club@email.com',
         eventSocialMedia: {
-            facebook: 'https://www.facebook.com/sampleevent',
-            twitter: 'https://twitter.com/sampleevent',
-            instagram: 'https://www.instagram.com/sampleevent',
-            hashtag: '#SampleEvent2023'
+          facebook: 'https://www.facebook.com/sampleevent',
+          twitter: 'https://twitter.com/sampleevent',
+          instagram: 'https://www.instagram.com/sampleevent',
+          hashtag: '#SampleEvent2023'
         },
         eventPrivacy: null,
         eventAccessibility: 'Wheelchair accessible venue.',
@@ -259,7 +246,6 @@ describe('ActivityController', () => {
       jest.spyOn(service, 'createEvent').mockRejectedValue(new Error(errorMessage));
       await expect(controller.addEvent(mockCreateEvent, { user: mockUser })).rejects.toThrowError(errorMessage);
     })
-
     // todo: add a test case for a invalid or missing field entry 
   })
 
@@ -274,14 +260,12 @@ describe('ActivityController', () => {
           lastName: 'Doe',
         }
       };
-
       const updatedActivity = {
         ...mockActivity,
         // Assuming attendance was incremented
         attendanceCount: 1, 
         attendees: [mockAttendEvent.attendee],
       };
-
       jest.spyOn(service, 'attendEvent').mockResolvedValue(updatedActivity);
       const result = await controller.attendEvent(eventId, mockAttendEvent);
       expect(result).toEqual(updatedActivity);
@@ -291,11 +275,9 @@ describe('ActivityController', () => {
     it('should throw BadRequestException for invalid event ID', async () => {
       const invalidEventId = 'invalid-id';
       const mockAttendEvent = {};
-  
       jest.spyOn(service, 'attendEvent').mockImplementation(() => {
         throw new BadRequestException('Invalid event ID.');
       });
-  
       await expect(controller.attendEvent(invalidEventId, mockAttendEvent))
         .rejects.toThrow(BadRequestException);
     });
@@ -303,19 +285,15 @@ describe('ActivityController', () => {
     it('should throw NotFoundException for non-existing event', async () => {
       const nonExistingEventId = new mongoose.Types.ObjectId().toString();
       const mockAttendEvent = {};
-  
       jest.spyOn(service, 'attendEvent').mockImplementation(() => {
         throw new NotFoundException('Activity not found!');
       });
-
       await expect(controller.attendEvent(nonExistingEventId, mockAttendEvent))
         .rejects.toThrow(NotFoundException);
     });
   });
 
 
-  
-  // finish testing function updateActivityById
   describe('updateActivityById', () => {
     it('should successfully update an activity', async () => {
       const id = mockActivity._id;
@@ -323,11 +301,8 @@ describe('ActivityController', () => {
         updatedActivity: mockUpdateActivity,
         message: 'Activity updated successfully.',
       };
-
       jest.spyOn(service, 'updateActivityById').mockResolvedValue(updatedActivityResponse);
-
       const result = await controller.updateActivityById(id, mockUpdateActivity, { user: mockUser });
-
       expect(result).toEqual(updatedActivityResponse);
       expect(service.updateActivityById).toHaveBeenCalledWith(id, mockUpdateActivity);
     });
@@ -337,7 +312,6 @@ describe('ActivityController', () => {
       jest.spyOn(service, 'updateActivityById').mockImplementation(() => {
         throw new BadRequestException('Invalid ID. Please enter correct id.');
       });
-  
       await expect(controller.updateActivityById(invalidId, mockUpdateActivity, { user: mockUser }))
         .rejects.toThrow(BadRequestException);
     });
@@ -347,15 +321,13 @@ describe('ActivityController', () => {
       jest.spyOn(service, 'updateActivityById').mockImplementation(() => {
         throw new NotFoundException(`Activity with ID ${nonExistingId} not found.`);
       });
-  
       await expect(controller.updateActivityById(nonExistingId, mockUpdateActivity, { user: mockUser }))
         .rejects.toThrow(NotFoundException);
     });
 
   });
-    
+
   
-  // finish testing function deleteActivityById
   describe('deleteActivityById', () => {
     it('should successfully delete an activity', async () => {
       const id = mockActivity._id;
@@ -363,11 +335,8 @@ describe('ActivityController', () => {
         deletedActivity: mockActivity,
         message: 'Activity deleted successfully.',
       };
-  
       jest.spyOn(service, 'deleteActivityById').mockResolvedValue(deleteResponse);
-  
       const result = await controller.deleteActivityById(id, { user: mockUser });
-  
       expect(result).toEqual(deleteResponse);
       expect(service.deleteActivityById).toHaveBeenCalledWith(id);
     });
@@ -377,7 +346,6 @@ describe('ActivityController', () => {
       jest.spyOn(service, 'deleteActivityById').mockImplementation(() => {
         throw new BadRequestException('Invalid ID. Please enter correct id.');
       });
-  
       await expect(controller.deleteActivityById(invalidId, { user: mockUser }))
         .rejects.toThrow(BadRequestException);
     });
@@ -387,11 +355,9 @@ describe('ActivityController', () => {
       jest.spyOn(service, 'deleteActivityById').mockImplementation(() => {
         throw new NotFoundException(`Activity with ID ${nonExistingId} not found.`);
       });
-  
       await expect(controller.deleteActivityById(nonExistingId, { user: mockUser }))
         .rejects.toThrow(NotFoundException);
     });
-
   });
 
-})
+});
