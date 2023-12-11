@@ -104,7 +104,7 @@ describe('ActivityController', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [PassportModule.register({ defaultStrategy: 'jwt' })],
       controllers: [ActivityController],
-      providers:[
+      providers: [
         {
           provide: ActivityService,
           useValue: mockActivityService,
@@ -209,12 +209,12 @@ describe('ActivityController', () => {
       };
       jest.spyOn(service, 'createEvent').mockResolvedValue(expectedResponse);
       const result = await controller.addEvent(mockCreateEvent, {
-        user: mockUser
+        user: mockUser,
       });
       expect(result).toEqual(expectedResponse);
       expect(service.createEvent).toHaveBeenCalledWith(
-        mockCreateEvent, 
-        mockUser
+        mockCreateEvent,
+        mockUser,
       );
     });
 
@@ -282,7 +282,7 @@ describe('ActivityController', () => {
       expect(result).toEqual(updatedActivity);
       expect(service.attendEvent).toHaveBeenCalledWith(
         eventId,
-        mockAttendEvent
+        mockAttendEvent,
       );
     });
 
@@ -322,12 +322,12 @@ describe('ActivityController', () => {
       const result = await controller.updateActivityById(
         id,
         mockUpdateActivity,
-        { user: mockUser }
+        { user: mockUser, }
       );
       expect(result).toEqual(updatedActivityResponse);
       expect(service.updateActivityById).toHaveBeenCalledWith(
         id,
-        mockUpdateActivity
+        mockUpdateActivity,
       );
     });
 
@@ -345,7 +345,7 @@ describe('ActivityController', () => {
       const nonExistingId = new mongoose.Types.ObjectId().toString();
       jest.spyOn(service, 'updateActivityById').mockImplementation(() => {
         throw new NotFoundException(
-          `Activity with ID ${nonExistingId} not found.`
+          `Activity with ID ${nonExistingId} not found.`,
         );
       });
       await expect(
@@ -365,7 +365,7 @@ describe('ActivityController', () => {
       jest
         .spyOn(service, 'deleteActivityById').mockResolvedValue(deleteResponse);
       const result = await controller.deleteActivityById(id, {
-        user: mockUser
+        user: mockUser,
       });
       expect(result).toEqual(deleteResponse);
       expect(service.deleteActivityById).toHaveBeenCalledWith(id);
@@ -385,7 +385,7 @@ describe('ActivityController', () => {
       const nonExistingId = new mongoose.Types.ObjectId().toString();
       jest.spyOn(service, 'deleteActivityById').mockImplementation(() => {
         throw new NotFoundException(
-          `Activity with ID ${nonExistingId} not found.`
+          `Activity with ID ${nonExistingId} not found.`,
         );
       });
       await expect(
