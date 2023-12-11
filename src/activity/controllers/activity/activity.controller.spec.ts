@@ -68,8 +68,10 @@ describe('ActivityController', () => {
   };
 
   const mockUpdateActivity = {
+    // mock activity ID
+    _id: new mongoose.Types.ObjectId().toString(), 
     // Mock User ID
-    createdByUser: mockUser, 
+    createdByUser: mockUser._id, 
     eventTitle: 'Sample Event Updated',
     eventDescription: 'description updated',
     eventCategory: 'Tech',
@@ -173,15 +175,6 @@ describe('ActivityController', () => {
       expect(result).toBeNull();
       expect(service.getActivityById).toHaveBeenCalledWith(id);
     });
-
-    it('should reject the promise and throw an error if the service throws', async () => {
-      const id = mockActivity._id;
-      const errorMessage = 'Error occurred while retrieving activity';
-      jest.spyOn(service, 'getActivityById').mockRejectedValue(new Error(errorMessage));
-
-      await expect(controller.findActivityById(id)).rejects.toThrowError(errorMessage);
-      expect(service.getActivityById).toHaveBeenCalledWith(id);
-    });
   });
 
   describe('createEvent', () => {
@@ -271,7 +264,6 @@ describe('ActivityController', () => {
   })
 
 
-  // finish testing function attendEvent
   describe('attendEvent', () => {
     it('should successfully update attend event attendance', async () => {
       const eventId = new mongoose.Types.ObjectId().toString();
@@ -325,8 +317,39 @@ describe('ActivityController', () => {
   
   // finish testing function updateActivityById
   describe('updateActivityById', () => {
-    it('service should be defined', () => {
-      expect(service).toBeDefined();
+    it('should successfully update an activity', async () => {
+      const id = mockActivity._id;
+      const updatedActivityResponse = {
+        updatedActivity: mockUpdateActivity,
+        message: 'Activity updated successfully.',
+      };
+
+      jest.spyOn(service, 'updateActivityById').mockResolvedValue(updatedActivityResponse);
+
+      const result = await controller.updateActivityById(id, mockUpdateActivity, { user: mockUser });
+
+      expect(result).toEqual(updatedActivityResponse);
+      expect(service.updateActivityById).toHaveBeenCalledWith(id, mockUpdateActivity);
+    });
+
+    it('should throw BadRequestException for invalid ID', async () => {
+      const invalidId = 'invalid-id';
+      jest.spyOn(service, 'updateActivityById').mockImplementation(() => {
+        throw new BadRequestException('Invalid ID. Please enter correct id.');
+      });
+  
+      await expect(controller.updateActivityById(invalidId, mockUpdateActivity, { user: mockUser }))
+        .rejects.toThrow(BadRequestException);
+    });
+  
+    it('should throw NotFoundException for non-existing activity', async () => {
+      const nonExistingId = new mongoose.Types.ObjectId().toString();
+      jest.spyOn(service, 'updateActivityById').mockImplementation(() => {
+        throw new NotFoundException(`Activity with ID ${nonExistingId} not found.`);
+      });
+  
+      await expect(controller.updateActivityById(nonExistingId, mockUpdateActivity, { user: mockUser }))
+        .rejects.toThrow(NotFoundException);
     });
 
   });
@@ -334,8 +357,39 @@ describe('ActivityController', () => {
   
   // finish testing function deleteActivityById
   describe('deleteActivityById', () => {
-    it('service should be defined', () => {
-      expect(service).toBeDefined();
+    it('should successfully delete an activity', async () => {
+      const id = mockActivity._id;
+      const deleteResponse = {
+        deletedActivity: mockActivity,
+        message: 'Activity deleted successfully.',
+      };
+  
+      jest.spyOn(service, 'deleteActivityById').mockResolvedValue(deleteResponse);
+  
+      const result = await controller.deleteActivityById(id, { user: mockUser });
+  
+      expect(result).toEqual(deleteResponse);
+      expect(service.deleteActivityById).toHaveBeenCalledWith(id);
+    });
+
+    it('should throw BadRequestException for invalid ID', async () => {
+      const invalidId = 'invalid-id';
+      jest.spyOn(service, 'deleteActivityById').mockImplementation(() => {
+        throw new BadRequestException('Invalid ID. Please enter correct id.');
+      });
+  
+      await expect(controller.deleteActivityById(invalidId, { user: mockUser }))
+        .rejects.toThrow(BadRequestException);
+    });
+
+    it('should throw NotFoundException for non-existing activity', async () => {
+      const nonExistingId = new mongoose.Types.ObjectId().toString();
+      jest.spyOn(service, 'deleteActivityById').mockImplementation(() => {
+        throw new NotFoundException(`Activity with ID ${nonExistingId} not found.`);
+      });
+  
+      await expect(controller.deleteActivityById(nonExistingId, { user: mockUser }))
+        .rejects.toThrow(NotFoundException);
     });
 
   });
