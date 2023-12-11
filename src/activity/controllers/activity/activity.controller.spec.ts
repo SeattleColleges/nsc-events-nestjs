@@ -57,7 +57,7 @@ describe('ActivityController', () => {
       facebook: 'https://www.facebook.com/sampleevent',
       twitter: 'https://twitter.com/sampleevent',
       instagram: 'https://www.instagram.com/sampleevent',
-      hashtag:'#SampleEvent2023'
+      hashtag: '#SampleEvent2023'
     },
     eventPrivacy: null,
     eventAccessibility: 'Wheelchair accessible venue.',
@@ -92,7 +92,7 @@ describe('ActivityController', () => {
       facebook: 'https://www.facebook.com/sampleevent',
       twitter: 'https://twitter.com/sampleevent',
       instagram: 'https://www.instagram.com/sampleevent',
-      hashtag:'#SampleEvent2023'
+      hashtag: '#SampleEvent2023'
     },
     eventPrivacy: null,
     eventAccessibility: 'Wheelchair accessible venue updated.',
@@ -122,8 +122,7 @@ describe('ActivityController', () => {
     it('should return an array of activiites', async () => {
       // setting up conditions for test
       const mockSingleActivity: Activity[] = [mockActivity];
-      jest
-        .spyOn(service, 'getAllActivities').mockResolvedValue(mockSingleActivity);
+      jest.spyOn(service, 'getAllActivities').mockResolvedValue(mockSingleActivity);
       const result = await controller.getAllActivities({});
       // verifying getAllActivities behaves as expected, (checking return value)
       expect(result).toEqual(mockSingleActivity);
@@ -132,8 +131,7 @@ describe('ActivityController', () => {
     // testing succesfull fetches of no activities
     it('should return an empty array if no activities are found', async () => {
       const mockEmptyActivities: Activity[] = [];
-      jest
-        .spyOn(service, 'getAllActivities').mockResolvedValue(mockEmptyActivities);
+      jest.spyOn(service, 'getAllActivities').mockResolvedValue(mockEmptyActivities);
       const result = await controller.getAllActivities({});
       expect(result).toEqual(mockEmptyActivities);
       expect(result).toHaveLength(0);
@@ -143,9 +141,9 @@ describe('ActivityController', () => {
     // testing for failure scenario
     it('should handle exceptions from the service', async () => {
       const errorMessage = 'Error fetching activities';
-      jest
-        .spyOn(service, 'getAllActivities').mockRejectedValue(new Error(errorMessage));
-      await expect(controller.getAllActivities({})).rejects.toThrowError(errorMessage);
+      jest.spyOn(service, 'getAllActivities').mockRejectedValue(new Error(errorMessage));
+      await expect(controller.getAllActivities({}))
+        .rejects.toThrowError(errorMessage);
     });
   });
 
@@ -197,7 +195,7 @@ describe('ActivityController', () => {
           facebook: 'https://www.facebook.com/sampleevent',
           twitter: 'https://twitter.com/sampleevent',
           instagram: 'https://www.instagram.com/sampleevent',
-          hashtag:'#SampleEvent2023'
+          hashtag: '#SampleEvent2023'
         },
         eventPrivacy: null,
         eventAccessibility: 'Wheelchair accessible venue.',
@@ -244,17 +242,16 @@ describe('ActivityController', () => {
           facebook: 'https://www.facebook.com/sampleevent',
           twitter: 'https://twitter.com/sampleevent',
           instagram: 'https://www.instagram.com/sampleevent',
-          hashtag:'#SampleEvent2023'
+          hashtag: '#SampleEvent2023'
         },
         eventPrivacy: null,
         eventAccessibility: 'Wheelchair accessible venue.',
         isHidden: false,
       };
       const errorMessage = 'Error occurred while creating event';
-      jest
-        .spyOn(service, 'createEvent').mockRejectedValue(new Error(errorMessage));
-      await expect(
-        controller.addEvent(mockCreateEvent, { user: mockUser })).rejects.toThrowError(errorMessage);
+      jest.spyOn(service, 'createEvent').mockRejectedValue(new Error(errorMessage));
+      await expect(controller.addEvent(mockCreateEvent, { user: mockUser }))
+        .rejects.toThrowError(errorMessage);
     });
     // todo: add a test case for a invalid or missing field entry
   });
@@ -276,8 +273,7 @@ describe('ActivityController', () => {
         attendanceCount: 1,
         attendees: [mockAttendEvent.attendee],
       };
-      jest
-        .spyOn(service, 'attendEvent').mockResolvedValue(updatedActivity);
+      jest.spyOn(service, 'attendEvent').mockResolvedValue(updatedActivity);
       const result = await controller.attendEvent(eventId, mockAttendEvent);
       expect(result).toEqual(updatedActivity);
       expect(service.attendEvent).toHaveBeenCalledWith(
@@ -292,8 +288,7 @@ describe('ActivityController', () => {
       jest.spyOn(service, 'attendEvent').mockImplementation(() => {
         throw new BadRequestException('Invalid event ID.');
       });
-      await expect(
-        controller.attendEvent(invalidEventId, mockAttendEvent))
+      await expect(controller.attendEvent(invalidEventId, mockAttendEvent))
         .rejects.toThrow(BadRequestException);
     });
 
@@ -303,8 +298,7 @@ describe('ActivityController', () => {
       jest.spyOn(service, 'attendEvent').mockImplementation(() => {
         throw new NotFoundException('Activity not found!');
       });
-      await expect(
-        controller.attendEvent(nonExistingEventId, mockAttendEvent))
+      await expect(controller.attendEvent(nonExistingEventId, mockAttendEvent))
         .rejects.toThrow(NotFoundException);
     });
   });
@@ -317,12 +311,11 @@ describe('ActivityController', () => {
         updatedActivity: mockUpdateActivity,
         message: 'Activity updated successfully.',
       };
-      jest
-        .spyOn(service, 'updateActivityById').mockResolvedValue(updatedActivityResponse);
+      jest.spyOn(service, 'updateActivityById').mockResolvedValue(updatedActivityResponse);
       const result = await controller.updateActivityById(
         id,
         mockUpdateActivity,
-        { user: mockUser, }
+        { user: mockUser },
       );
       expect(result).toEqual(updatedActivityResponse);
       expect(service.updateActivityById).toHaveBeenCalledWith(
@@ -336,8 +329,7 @@ describe('ActivityController', () => {
       jest.spyOn(service, 'updateActivityById').mockImplementation(() => {
         throw new BadRequestException('Invalid ID. Please enter correct id.');
       });
-      await expect(
-        controller.updateActivityById(invalidId, mockUpdateActivity, { user: mockUser }))
+      await expect(controller.updateActivityById(invalidId, mockUpdateActivity, { user: mockUser },))
         .rejects.toThrow(BadRequestException);
     });
   
@@ -348,12 +340,10 @@ describe('ActivityController', () => {
           `Activity with ID ${nonExistingId} not found.`,
         );
       });
-      await expect(
-        controller.updateActivityById(nonExistingId, mockUpdateActivity, { user: mockUser }))
+      await expect(controller.updateActivityById(nonExistingId, mockUpdateActivity, { user: mockUser },))
         .rejects.toThrow(NotFoundException);
     });
   });
-
   
   describe('deleteActivityById', () => {
     it('should successfully delete an activity', async () => {
@@ -362,8 +352,7 @@ describe('ActivityController', () => {
         deletedActivity: mockActivity,
         message: 'Activity deleted successfully.',
       };
-      jest
-        .spyOn(service, 'deleteActivityById').mockResolvedValue(deleteResponse);
+      jest.spyOn(service, 'deleteActivityById').mockResolvedValue(deleteResponse);
       const result = await controller.deleteActivityById(id, {
         user: mockUser,
       });
@@ -376,8 +365,7 @@ describe('ActivityController', () => {
       jest.spyOn(service, 'deleteActivityById').mockImplementation(() => {
         throw new BadRequestException('Invalid ID. Please enter correct id.');
       });
-      await expect(
-        controller.deleteActivityById(invalidId, { user: mockUser }))
+      await expect(controller.deleteActivityById(invalidId, { user: mockUser }))
         .rejects.toThrow(BadRequestException);
     });
 
@@ -388,8 +376,7 @@ describe('ActivityController', () => {
           `Activity with ID ${nonExistingId} not found.`,
         );
       });
-      await expect(
-        controller.deleteActivityById(nonExistingId, { user: mockUser }))
+      await expect(controller.deleteActivityById(nonExistingId, { user: mockUser }))
         .rejects.toThrow(NotFoundException);
     });
   });
