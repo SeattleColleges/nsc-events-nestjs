@@ -28,7 +28,7 @@ export class CreateActivityDto {
   @IsString()
   readonly eventDescription: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString() //TODO: lead dev talk to PO and possibly turn this into enum to give admin more fine-grained control
   readonly eventCategory: string;
 
@@ -66,7 +66,6 @@ export class CreateActivityDto {
   readonly eventCapacity: string;
 
   @IsOptional()
-  @IsNotEmpty()
   @IsString()
   readonly eventCost: string;
 
