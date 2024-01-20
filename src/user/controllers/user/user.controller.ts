@@ -13,14 +13,18 @@ import { UserService } from '../../services/user/user.service';
 import { UserDocument } from '../../schemas/user.model';
 import { AuthGuard } from '@nestjs/passport';
 import { UpdateUserDto } from '../../dto/update-user.dto';
+import { Roles } from '../../../auth/roles.decorator';
+import { RoleGuard } from '../../../auth/role.guard';
 
 // ================== User admin routes ======================== \\
+
 @Controller('users')
-@UseGuards(AuthGuard('jwt'))
 export class UserController {
   constructor(
     @Inject('USER_SERVICE') private readonly userService: UserService,
   ) {}
+  @Roles('admin')
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
 
   // ----------------- Get Users ----------------------------- \\
   @Get('')
