@@ -4,7 +4,11 @@ import { Role } from '../schemas/userAuth.model';
 export class SignUpDto {
   @IsNotEmpty()
   @IsString()
-  readonly name: string;
+  readonly firstName: string;
+
+  @IsNotEmpty()
+  @IsString()
+  readonly lastName: string;
 
   @IsNotEmpty()
   @IsEmail({}, { message: 'Please enter correct email' })

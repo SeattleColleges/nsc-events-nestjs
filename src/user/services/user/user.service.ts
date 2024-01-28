@@ -19,7 +19,8 @@ export class UserService {
     const users: UserDocument[] = await this.userModel.find().exec();
     return users.map((user) => ({
       id: user.id,
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       role: user.role,
     }));
@@ -39,8 +40,8 @@ export class UserService {
     }
     return {
       id: user.id,
-      name: user.name,
-      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
       role: user.role,
     } as UserDocument;
   }
@@ -59,7 +60,8 @@ export class UserService {
     }
     return {
       id: user.id,
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       role: user.role,
     } as UserDocument;
@@ -86,7 +88,8 @@ export class UserService {
     }
     return {
       id: updatedUser.id,
-      name: updatedUser.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: updatedUser.email,
       role: updatedUser.role,
     } as UserDocument;
