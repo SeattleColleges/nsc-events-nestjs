@@ -16,7 +16,8 @@ describe('AuthController', () => {
     forgotPassword: jest.fn(),
   };
   const mockSignUpDto: SignUpDto = {
-    name: 'Test User',
+    firstName: 'Test',
+    lastName: 'User',
     email: 'testuser@example.com',
     password: 'testpassword123',
     role: Role.user,
