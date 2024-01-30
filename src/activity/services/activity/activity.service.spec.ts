@@ -23,7 +23,8 @@ describe('ActivityService', () => {
 
   const mockUser = {
     _id: '64f6b79583e4cdccda1a02b2',
-    name: 'BC Ko',
+    firstName: 'BC',
+    lastName: 'KO',
     email: 'bc@gmail.com',
   };
 

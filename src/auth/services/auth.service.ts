@@ -23,7 +23,7 @@ export class AuthService {
   ) {}
 
   async signUp(signUpDto: SignUpDto): Promise<{ token: string }> {
-    const { name, email, password, role } = signUpDto;
+    const { firstName, lastName, email, password, role } = signUpDto;
 
     if (await this.userModel.findOne({ email })) {
       throw new HttpException(
@@ -35,19 +35,24 @@ export class AuthService {
       );
     }
 
-    console.log('name: ', name);
+    console.log('firstName: ', firstName);
+    console.log('lastName: ', lastName);
     console.log('email: ', email);
     console.log('password: ', password);
     const hashedPassword = await bcrypt.hash(password, 10);
     console.log('hashedPassword: ', hashedPassword);
     const user = await this.userModel.create({
-      name,
+      firstName,
+      lastName,
       email,
       password: hashedPassword,
       role,
     });
 
-    const token = this.jwtService.sign({ id: user._id, role: user.role });
+    const token = this.jwtService.sign({
+      id: user._id,
+      role: user.role,
+    });
 
     return { token };
   }
@@ -69,7 +74,11 @@ export class AuthService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
-    const token = this.jwtService.sign({ id: user._id, role: user.role });
+    const token = this.jwtService.sign({
+      id: user._id,
+      role: user.role,
+      firstName: user.firstName,
+    });
 
     return { token };
   }
@@ -89,7 +98,8 @@ export class AuthService {
     const newToken = this.jwtService.sign({
       message: 'Reset password',
       id: user._id,
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       role: user.role,
     });

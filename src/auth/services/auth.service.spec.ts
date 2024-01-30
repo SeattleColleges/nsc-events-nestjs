@@ -26,7 +26,8 @@ describe('AuthService', () => {
 
   const mockUser = {
     _id: '61c0ccf11d7bf83d153d7c06',
-    name: 'Test User',
+    firstName: 'Test',
+    lastName: 'User',
     email: 'testuser@gmail.com',
   };
 
@@ -59,7 +60,8 @@ describe('AuthService', () => {
 
   describe('signUp', () => {
     const signUpDto: SignUpDto = {
-      name: 'Test User',
+      firstName: 'Test',
+      lastName: 'User',
       email: 'testuser@example.com',
       password: 'testpassword123',
       role: Role.user,

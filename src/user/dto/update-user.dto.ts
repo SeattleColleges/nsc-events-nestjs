@@ -4,7 +4,11 @@ import { Role } from '../schemas/user.model';
 export class UpdateUserDto {
   @IsOptional()
   @IsString()
-  readonly name: string;
+  readonly firstName: string;
+
+  @IsOptional()
+  @IsString()
+  readonly lastName: string;
 
   @IsOptional()
   @IsEmpty({ message: 'Cannot update email here' })
