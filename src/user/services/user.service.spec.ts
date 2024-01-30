@@ -19,8 +19,7 @@ describe('UserService', () => {
 
   const mockUser = {
     id: 'idString',
-    firstName: 'firstNameString',
-    lastName: 'lastNameString',
+    name: 'nameString',
     email: 'emailString',
     role: Role.admin,
   };
@@ -112,8 +111,7 @@ describe('UserService', () => {
     it('should call findByIdAndUpdate on the model and return a result', async () => {
       const updatedUser = {
         ...mockUser,
-        firstName: 'Updated First Name',
-        lastName: 'Updated Last Name',
+        name: 'Updated Name',
       } as UserDocument;
       jest.spyOn(model, 'findByIdAndUpdate').mockImplementation(
         () =>

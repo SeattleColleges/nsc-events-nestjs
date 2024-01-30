@@ -23,8 +23,7 @@ describe('ActivityController', () => {
   const mockUser = {
     // mock user ID
     _id: new mongoose.Types.ObjectId().toString(),
-    firstName: 'test',
-    lastName: 'test',
+    name: 'test',
     email: 'test@gmail.com',
     password: '1234567890',
     role: Role.admin,
