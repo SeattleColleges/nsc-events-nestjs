@@ -4,7 +4,8 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 export interface UserDocument extends Document {
   id: string;
   email: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   password: string;
   role: Role;
 }
@@ -19,7 +20,10 @@ export enum Role {
 })
 export class U extends Document {
   @Prop()
-  name: string;
+  firstName: string;
+
+  @Prop()
+  lastName: string;
 
   @Prop({ unique: [true, 'Duplicate email entered'] })
   email: string;

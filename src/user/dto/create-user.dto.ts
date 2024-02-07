@@ -22,7 +22,13 @@ export class CreateUserDto {
   @IsString()
   @IsAlpha()
   @MinLength(2, { message: 'Name must be longer than 2 letters.' })
-  name: string;
+  firstName: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @IsAlpha()
+  @MinLength(2, { message: 'Name must be longer than 2 letters.' })
+  lastName: string;
 
   @IsNotEmpty()
   @IsString()

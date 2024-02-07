@@ -12,7 +12,10 @@ export enum Role {
 })
 export class User extends Document {
   @Prop()
-  name: string;
+  firstName: string;
+
+  @Prop()
+  lastName: string;
 
   @Prop({ unique: [true, 'Duplicate email entered'] })
   email: string;
