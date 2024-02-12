@@ -69,8 +69,8 @@ describe('AuthController', () => {
   });
 
   describe('forgotPassword', () => {
-    it('should return a new token', async () => {
-      const result = { newToken: 'your-test-token' };
+    it('should return a successful message', async () => {
+      const result = { message: 'Reset passsword link sent to your email' };
 
       jest.spyOn(authService, 'forgotPassword').mockResolvedValue(result);
 
