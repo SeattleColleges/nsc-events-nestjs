@@ -1,5 +1,8 @@
-name: SSH and Sudo Test
+# This is a simple test to check if the SSH key is working and if the user has sudo access
+# The SSH key is stored in the secrets of the repository and is used to connect to the remote server
 
+name: SSH and Sudo Test
+run-name: SSH and Sudo Test
 on: [workflow_dispatch]
 
 jobs:
