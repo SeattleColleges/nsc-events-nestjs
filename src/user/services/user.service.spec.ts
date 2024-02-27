@@ -21,6 +21,7 @@ describe('UserService', () => {
     id: 'idString',
     firstName: 'firstNameString',
     lastName: 'lastNameString',
+    pronouns: 'pronounsString',
     email: 'emailString',
     role: Role.admin,
   };

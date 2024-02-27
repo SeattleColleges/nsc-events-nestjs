@@ -11,6 +11,10 @@ export class UpdateUserDto {
   readonly lastName: string;
 
   @IsOptional()
+  @IsString()
+  readonly pronouns: string;
+
+  @IsOptional()
   @IsEmpty({ message: 'Cannot update email here' })
   readonly email: string;
 
