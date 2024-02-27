@@ -18,6 +18,7 @@ describe('AuthController', () => {
   const mockSignUpDto: SignUpDto = {
     firstName: 'Test',
     lastName: 'User',
+    pronouns: 'they/them',
     email: 'testuser@example.com',
     password: 'testpassword123',
     role: Role.user,

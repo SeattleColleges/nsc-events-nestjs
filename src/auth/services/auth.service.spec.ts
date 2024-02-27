@@ -30,6 +30,7 @@ describe('AuthService', () => {
     _id: '61c0ccf11d7bf83d153d7c06',
     firstName: 'Test',
     lastName: 'User',
+    pronouns: 'they/them',
     email: 'testuser@gmail.com',
   };
 
@@ -64,6 +65,7 @@ describe('AuthService', () => {
     const signUpDto: SignUpDto = {
       firstName: 'Test',
       lastName: 'User',
+      pronouns: 'they/them',
       email: 'testuser@example.com',
       password: 'testpassword123',
       role: Role.user,

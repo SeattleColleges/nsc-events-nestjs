@@ -32,6 +32,12 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   @IsString()
+  @IsAlpha()
+  @MinLength(2, { message: 'Pronouns must be longer than 2 letters.' })
+  pronouns: string;
+
+  @IsNotEmpty()
+  @IsString()
   @MinLength(8, { message: 'Password must contain 8 characters or more.' })
   password: string;
 

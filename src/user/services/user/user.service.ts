@@ -21,6 +21,7 @@ export class UserService {
       id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
+      pronouns: user.pronouns,
       email: user.email,
       role: user.role,
     }));
@@ -42,6 +43,7 @@ export class UserService {
       id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
+      pronouns: user.pronouns,
       email: user.email,
       role: user.role,
     } as UserDocument;
@@ -63,6 +65,7 @@ export class UserService {
       id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
+      pronouns: user.pronouns,
       email: user.email,
       role: user.role,
     } as UserDocument;
@@ -91,6 +94,7 @@ export class UserService {
       id: updatedUser.id,
       firstName: user.firstName,
       lastName: user.lastName,
+      pronouns: user.pronouns,
       email: updatedUser.email,
       role: updatedUser.role,
     } as UserDocument;
