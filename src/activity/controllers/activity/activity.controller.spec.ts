@@ -25,6 +25,7 @@ describe('ActivityController', () => {
     _id: new mongoose.Types.ObjectId().toString(),
     firstName: 'test',
     lastName: 'test',
+    pronouns: 'they/them',
     email: 'test@gmail.com',
     password: '1234567890',
     role: Role.admin,

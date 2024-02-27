@@ -25,6 +25,7 @@ describe('ActivityService', () => {
     _id: '64f6b79583e4cdccda1a02b2',
     firstName: 'BC',
     lastName: 'KO',
+    pronouns: 'he/him',
     email: 'bc@gmail.com',
   };
 

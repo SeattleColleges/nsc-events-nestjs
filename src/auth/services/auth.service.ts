@@ -24,7 +24,7 @@ export class AuthService {
   ) {}
 
   async signUp(signUpDto: SignUpDto): Promise<{ token: string }> {
-    const { firstName, lastName, email, password, role } = signUpDto;
+    const { firstName, lastName, pronouns, email, password, role } = signUpDto;
 
     if (await this.userModel.findOne({ email })) {
       throw new HttpException(
@@ -38,6 +38,7 @@ export class AuthService {
 
     console.log('firstName: ', firstName);
     console.log('lastName: ', lastName);
+    console.log('pronouns: ', pronouns);
     console.log('email: ', email);
     console.log('password: ', password);
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -45,6 +46,7 @@ export class AuthService {
     const user = await this.userModel.create({
       firstName,
       lastName,
+      pronouns,
       email,
       password: hashedPassword,
       role,
