@@ -6,6 +6,7 @@ export interface UserDocument extends Document {
   email: string;
   firstName: string;
   lastName: string;
+  pronouns: string;
   password: string;
   role: Role;
 }
@@ -24,6 +25,9 @@ export class U extends Document {
 
   @Prop()
   lastName: string;
+
+  @Prop()
+  pronouns: string;
 
   @Prop({ unique: [true, 'Duplicate email entered'] })
   email: string;
