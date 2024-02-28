@@ -8,7 +8,7 @@ on: [workflow_dispatch]
 jobs:
   ssh-test:
     runs-on: ubuntu-latest
-    environment: development
+    environment: test_env
 
     steps:
       - name: Checkout repository
