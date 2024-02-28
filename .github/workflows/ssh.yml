@@ -1,23 +1,23 @@
 # This is a simple test to check if the SSH key is working and if the user has sudo access
 # The SSH key is stored in the secrets of the repository and is used to connect to the remote server
 
-name: SSH and Sudo Test
+name: SSH Access Test Version 2.3
 run-name: SSH and Sudo Test
 on: [workflow_dispatch]
 
 jobs:
   ssh-test:
     runs-on: ubuntu-latest
-    steps:
-      - name: Install SSH key
-        env:
-          SSH_KEY: ${{ secrets.SSH_KEY }}
-        run: |
-          mkdir -p ~/.ssh
-          echo "$SSH_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan 35.86.119.51 >> ~/.ssh/known_hosts
+    environment: development
 
-      - name: Test SSH and sudo
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install SSH Key
         run: |
-          ssh -i ~/.ssh/id_rsa deployuser@35.86.119.51 "whoami"
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.SSH_KEY  }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+      - name: Test SSH Connection and Execute whoami
+        run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa deployuser@35.86.119.51 whoami
