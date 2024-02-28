@@ -23,7 +23,7 @@ jobs:
       run: |
         ssh -o StrictHostKeyChecking=no deployuser@35.86.119.51 << 'EOF'
           # Ensure you're in the correct directory
-          cd /nestServer
+          cd ~/nestServer
 
           # Fetch the latest changes
           git pull origin main
