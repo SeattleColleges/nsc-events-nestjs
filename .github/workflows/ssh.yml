@@ -1,23 +1,37 @@
 # This is a simple test to check if the SSH key is working and if the user has sudo access
 # The SSH key is stored in the secrets of the repository and is used to connect to the remote server
 
-name: SSH Access Test Version 2.3
+name: Deployment Test 2.8
 run-name: SSH and Sudo Test
 on: [workflow_dispatch]
 
 jobs:
-  ssh-test:
+  deploy:
     runs-on: ubuntu-latest
-    environment: test_env
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Install SSH Key
-        run: |
-          mkdir -p ~/.ssh/
-          echo "${{ secrets.SSH_KEY  }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-      - name: Test SSH Connection and Execute whoami
-        run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa deployuser@35.86.119.51 whoami
+    - name: Setup SSH for Deployment
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_KEY }}
+
+    - name: Execute Deployment Commands
+      run: |
+        ssh -o StrictHostKeyChecking=no deployuser@35.86.119.51 << 'EOF'
+          # Cd into server dir
+          cd nestServer/
+
+          # Pull the latest changes from the main branch
+          git pull origin main
+
+          # Install dependencies
+          npm install
+
+          # Build the project
+          npm run build
+
+          # Restart the application using PM2
+          pm2 restart nscEventsNestServer
+        EOF
