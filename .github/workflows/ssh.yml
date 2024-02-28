@@ -22,6 +22,8 @@ jobs:
     - name: Execute Deployment Commands
       run: |
         ssh -o StrictHostKeyChecking=no deployuser@35.86.119.51 << 'EOF'
+          source ~/.profile || true
+          source ~/.bashrc || true
           # Ensure you're in the correct directory
           cd ~/nestServer
 
