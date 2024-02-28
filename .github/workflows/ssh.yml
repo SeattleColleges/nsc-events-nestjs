@@ -26,16 +26,15 @@ jobs:
           source ~/.bashrc || true
           # Ensure you're in the correct directory
           cd ~/nestServer
-
           # Fetch the latest changes
           git pull origin main
-
-          # Install any new dependencies
-          /usr/local/bin/npm install
-
+          # Activate the Node.js version managed by nvm
+          source ~/.nvm/nvm.sh
+          nvm use v18.19.1
+          # Install any new dependencies using npm from nvm
+          npm install
           # Build the project
           npm run build
-
           # Restart the application with PM2
           pm2 restart nscEventsNestServer
         EOF
