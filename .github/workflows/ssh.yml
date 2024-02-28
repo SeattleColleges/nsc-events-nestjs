@@ -1,7 +1,4 @@
-# This is a more complex test 
-# The SSH key is stored in the secrets of the repository and is used to connect to the remote server
-
-name: Deploy Application to Production
+name: Deploy test 3.91
 on:
   push:
     branches:
