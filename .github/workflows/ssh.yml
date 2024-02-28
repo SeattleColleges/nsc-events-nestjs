@@ -20,4 +20,4 @@ jobs:
 
       - name: Test SSH and sudo
         run: |
-          ssh -i ~/.ssh/id_rsa deployuser@35.86.119.51 "sudo whoami"
+          ssh -i ~/.ssh/id_rsa deployuser@35.86.119.51 "whoami"
