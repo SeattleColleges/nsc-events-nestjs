@@ -1,23 +1,40 @@
-# This is a simple test to check if the SSH key is working and if the user has sudo access
-# The SSH key is stored in the secrets of the repository and is used to connect to the remote server
-
-name: SSH and Sudo Test
-run-name: SSH and Sudo Test
+name: Deploy test 3.91
 on: [workflow_dispatch]
+ # push:
+  #  branches:
+   #   - main
 
 jobs:
-  ssh-test:
+  deploy:
     runs-on: ubuntu-latest
-    steps:
-      - name: Install SSH key
-        env:
-          SSH_KEY: ${{ secrets.SSH_KEY }}
-        run: |
-          mkdir -p ~/.ssh
-          echo "$SSH_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan 35.86.119.51 >> ~/.ssh/known_hosts
+    environment: test_env
 
-      - name: Test SSH and sudo
-        run: |
-          ssh -i ~/.ssh/id_rsa deployuser@35.86.119.51 "whoami"
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install SSH Key
+      run: |
+        mkdir -p ~/.ssh/
+        echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+
+    - name: Execute Deployment Commands
+      run: |
+        ssh -o StrictHostKeyChecking=no deployuser@54.186.121.210 << 'EOF'
+          source ~/.profile || true
+          source ~/.bashrc || true
+          # Ensure you're in the correct directory
+          cd ~/nestServer
+          # Fetch the latest changes
+          git pull origin main
+          # Activate the Node.js version managed by nvm
+          source ~/.nvm/nvm.sh
+          nvm use v18.19.1
+          # Install any new dependencies using npm from nvm
+          npm install
+          # Build the project
+          npm run build
+          # Restart the application with PM2
+          pm2 restart nscEventsNestServer
+        EOF
