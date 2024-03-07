@@ -67,6 +67,11 @@ export class UpdateActivityDto {
 
   @IsOptional()
   @IsNotEmpty()
+  @IsUrl()
+  readonly eventMeetingURL: string;
+
+  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   readonly eventRegistration: string;
 
@@ -129,6 +134,11 @@ export class UpdateActivityDto {
   @IsNotEmpty()
   @IsString()
   readonly eventAccessibility: string;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsString()
+  readonly eventNote: string;
 
   @IsOptional()
   @IsBoolean()

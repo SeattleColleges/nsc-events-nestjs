@@ -52,6 +52,9 @@ export class Activity {
   eventWebsite: string;
 
   @Prop()
+  eventMeetingURL: string;
+
+  @Prop()
   eventRegistration: string;
 
   @Prop()
@@ -96,6 +99,9 @@ export class Activity {
 
   @Prop()
   eventAccessibility: string;
+
+  @Prop()
+  eventNote: string;
 
   @Prop({ default: false })
   isHidden: boolean;
