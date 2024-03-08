@@ -9,6 +9,7 @@ const createMockActivity: CreateActivityDto = {
   eventStartTime: '10:00 AM',
   eventEndTime: '4:00 PM',
   eventLocation: '123 Main Street, City',
+  eventMeetingURL: 'https://zoom.us/sample-url',
   eventCoverPhoto: 'https://example.com/event-cover.jpg',
   eventHost: 'Sample Organization',
   eventWebsite: 'https://example.com/sample-event',
@@ -32,6 +33,7 @@ const createMockActivity: CreateActivityDto = {
   },
   eventPrivacy: 'Public',
   eventAccessibility: 'Wheelchair accessible venue.',
+  eventNote: 'This is a sample note.',
   isHidden: false,
 };
 
