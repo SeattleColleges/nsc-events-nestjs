@@ -54,10 +54,6 @@ export class CreateActivityDto {
   readonly eventHost: string;
 
   @IsOptional()
-  @IsUrl() // TODO: look into options to ensure it has a https prefix
-  readonly eventWebsite: string;
-
-  @IsOptional()
   @IsUrl()
   readonly eventMeetingURL: string;
 
@@ -68,10 +64,6 @@ export class CreateActivityDto {
   @IsNotEmpty()
   @IsNumberString()
   readonly eventCapacity: string;
-
-  @IsOptional()
-  @IsString()
-  readonly eventCost: string;
 
   @IsArray()
   @ArrayNotEmpty()

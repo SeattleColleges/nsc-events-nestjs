@@ -49,9 +49,6 @@ export class Activity {
   eventHost: string;
 
   @Prop()
-  eventWebsite: string;
-
-  @Prop()
   eventMeetingURL: string;
 
   @Prop()
@@ -59,9 +56,6 @@ export class Activity {
 
   @Prop()
   eventCapacity: string;
-
-  @Prop()
-  eventCost: string;
 
   @Prop()
   eventTags: string[];
