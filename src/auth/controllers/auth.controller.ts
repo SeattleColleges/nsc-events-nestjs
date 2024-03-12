@@ -32,8 +32,11 @@ export class AuthController {
   // change password route
   @UseGuards(AuthGuard('jwt'))
   @Post('/change-password')
-  async changePassword(@Req() req, @Body() changePasswordDto: ChangePasswordDto): Promise<{ message: string }> {
-    const userId = req.user._id; 
+  async changePassword(
+    @Req() req,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ): Promise<{ message: string }> {
+    const userId = req.user._id;
     return this.authService.changePassword(userId, changePasswordDto);
   }
 }

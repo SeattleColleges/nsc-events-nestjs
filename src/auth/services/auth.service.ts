@@ -116,7 +116,7 @@ export class AuthService {
     mailService.setApiKey(process.env.SENDGRID_API_KEY);
 
     const msg = {
-      to: email, 
+      to: email,
       from: process.env.SENDER_EMAIL,
       subject: 'Reset Password',
       html: `<p>Your new password is <strong>${newPassword}</strong>. <br> Please change your password after logging in</p>`,
@@ -135,8 +135,9 @@ export class AuthService {
   }
 
   // change password function
-  async changePassword(userId : String ,changePasswordDto: ChangePasswordDto) {
-    const { currentPassword, newPassword, newPasswordConfirm } = changePasswordDto;
+  async changePassword(userId: String, changePasswordDto: ChangePasswordDto) {
+    const { currentPassword, newPassword, newPasswordConfirm } =
+      changePasswordDto;
 
     // Fetch the user by ID
     const user = await this.userModel.findById(userId);
@@ -148,16 +149,18 @@ export class AuthService {
     // Verify current password matches although it's already validate on the front-end
     const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch) {
-      throw new HttpException('Current password is incorrect.', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Current password is incorrect.',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
-     // Update user password with the new hashed password
+    // Update user password with the new hashed password
     const hashedNewPassword = await bcrypt.hash(newPassword, 10);
     await this.userModel.updateOne(
       { _id: userId }, // filter to identify user
-      { $set: { password: hashedNewPassword } } // use $set to update password
+      { $set: { password: hashedNewPassword } }, // use $set to update password
     );
-
 
     return { message: 'Password changed successfully' };
   }
