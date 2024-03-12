@@ -116,7 +116,7 @@ export class AuthService {
     mailService.setApiKey(process.env.SENDGRID_API_KEY);
 
     const msg = {
-      to: email, 
+      to: email,  // For testing purposes, replace with your email to see the email
       from: process.env.SENDER_EMAIL,
       subject: 'Reset Password',
       html: `<p>Your new password is <strong>${newPassword}</strong>. <br> Please change your password after logging in</p>`,
