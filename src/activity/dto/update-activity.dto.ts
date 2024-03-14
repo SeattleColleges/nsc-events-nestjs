@@ -62,8 +62,9 @@ export class UpdateActivityDto {
   readonly eventHost: string;
 
   @IsOptional()
-  @IsUrl() // TODO: look into options to ensure it has a https prefix
-  readonly eventWebsite: string;
+  @IsNotEmpty()
+  @IsUrl()
+  readonly eventMeetingURL: string;
 
   @IsOptional()
   @IsNotEmpty()
@@ -73,11 +74,6 @@ export class UpdateActivityDto {
   @IsOptional()
   @IsNumberString()
   readonly eventCapacity: string;
-
-  @IsOptional()
-  @IsNotEmpty()
-  @IsString()
-  readonly eventCost: string;
 
   @IsOptional()
   @IsArray()
@@ -129,6 +125,11 @@ export class UpdateActivityDto {
   @IsNotEmpty()
   @IsString()
   readonly eventAccessibility: string;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsString()
+  readonly eventNote: string;
 
   @IsOptional()
   @IsBoolean()
