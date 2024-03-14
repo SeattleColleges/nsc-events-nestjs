@@ -49,16 +49,13 @@ export class Activity {
   eventHost: string;
 
   @Prop()
-  eventWebsite: string;
+  eventMeetingURL: string;
 
   @Prop()
   eventRegistration: string;
 
   @Prop()
   eventCapacity: string;
-
-  @Prop()
-  eventCost: string;
 
   @Prop()
   eventTags: string[];
@@ -96,6 +93,9 @@ export class Activity {
 
   @Prop()
   eventAccessibility: string;
+
+  @Prop()
+  eventNote: string;
 
   @Prop({ default: false })
   isHidden: boolean;
