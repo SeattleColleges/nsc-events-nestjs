@@ -43,12 +43,11 @@ describe('ActivityController', () => {
     eventStartTime: '10:00 AM',
     eventEndTime: '1:00 PM',
     eventLocation: '123 Main Street, City',
+    eventMeetingURL: 'https://zoom.us/sample-url',
     eventCoverPhoto: 'https://ourCloudStorage.com/sample-event.photo.png',
     eventHost: 'Sample Organization',
-    eventWebsite: 'https://example.com/sample-event',
     eventRegistration: 'Register at https://example.com/registration',
     eventCapacity: '100',
-    eventCost: '$10',
     eventTags: ['Tech', 'Conference', 'Networking'],
     eventSchedule:
       '10AM - Registration\n11AM - Keynote\n12PM - Lunch\n2PM - Workshops\n4PM - Closing Remarks',
@@ -65,6 +64,7 @@ describe('ActivityController', () => {
     },
     eventPrivacy: null,
     eventAccessibility: 'Wheelchair accessible venue.',
+    eventNote: 'This is a sample note.',
     isHidden: false,
   };
 
@@ -80,12 +80,11 @@ describe('ActivityController', () => {
     eventStartTime: '10:00 AM',
     eventEndTime: '1:00 PM',
     eventLocation: '123 Main Street, City',
+    eventMeetingURL: 'https://zoom.us/sample-url',
     eventCoverPhoto: 'https://ourCloudStorage.com/sample-event.photo.png',
     eventHost: 'Sample Organization',
-    eventWebsite: 'https://example.com/sample-event',
     eventRegistration: 'Register at https://example.com/registration',
     eventCapacity: '100',
-    eventCost: '$10',
     eventTags: ['Tech', 'Conference', 'Networking'],
     eventSchedule:
       '10AM - Registration\n11AM - Keynote\n12PM - Lunch\n2PM - Workshops\n4PM - Closing Remarks',
@@ -102,6 +101,7 @@ describe('ActivityController', () => {
     },
     eventPrivacy: null,
     eventAccessibility: 'Wheelchair accessible venue updated.',
+    eventNote: 'This is a sample note.',
     isHidden: false,
   };
 
@@ -188,12 +188,11 @@ describe('ActivityController', () => {
         eventStartTime: '10:00 AM',
         eventEndTime: '1:00 PM',
         eventLocation: '123 Main Street, City',
+        eventMeetingURL: 'https://zoom.us/sample-url',
         eventCoverPhoto: 'https://ourCloudStorage.com/sample-event.photo.png',
         eventHost: 'Sample Organization',
-        eventWebsite: 'https://example.com/sample-event',
         eventRegistration: 'Register at https://example.com/registration',
         eventCapacity: '100',
-        eventCost: '$10',
         eventTags: ['Tech', 'Conference', 'Networking'],
         eventSchedule:
           '10AM - Registration\n11AM - Keynote\n12PM - Lunch\n2PM - Workshops\n4PM - Closing Remarks',
@@ -210,6 +209,7 @@ describe('ActivityController', () => {
         },
         eventPrivacy: null,
         eventAccessibility: 'Wheelchair accessible venue.',
+        eventNote: 'This is a sample note.',
         isHidden: false,
       };
       const expectedResponse = {
@@ -237,12 +237,11 @@ describe('ActivityController', () => {
         eventStartTime: '10:00 AM',
         eventEndTime: '1:00 PM',
         eventLocation: '123 Main Street, City',
+        eventMeetingURL: 'https://zoom.us/sample-url',
         eventCoverPhoto: 'https://ourCloudStorage.com/sample-event.photo.png',
         eventHost: 'Sample Organization',
-        eventWebsite: 'https://example.com/sample-event',
         eventRegistration: 'Register at https://example.com/registration',
         eventCapacity: '100',
-        eventCost: '$10',
         eventTags: ['Tech', 'Conference', 'Networking'],
         eventSchedule:
           '10AM - Registration\n11AM - Keynote\n12PM - Lunch\n2PM - Workshops\n4PM - Closing Remarks',
@@ -259,6 +258,7 @@ describe('ActivityController', () => {
         },
         eventPrivacy: null,
         eventAccessibility: 'Wheelchair accessible venue.',
+        eventNote: 'This is a sample note.',
         isHidden: false,
       };
       const errorMessage = 'Error occurred while creating event';
