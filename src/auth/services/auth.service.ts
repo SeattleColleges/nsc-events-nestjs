@@ -135,9 +135,8 @@ export class AuthService {
   }
 
   // change password function
-  async changePassword(userId: String, changePasswordDto: ChangePasswordDto) {
-    const { currentPassword, newPassword, newPasswordConfirm } =
-      changePasswordDto;
+  async changePassword(userId: string, changePasswordDto: ChangePasswordDto) {
+    const { currentPassword, newPassword } = changePasswordDto;
 
     // Fetch the user by ID
     const user = await this.userModel.findById(userId);
