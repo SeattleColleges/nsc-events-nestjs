@@ -99,4 +99,25 @@ export class ActivityController {
       throw new UnauthorizedException();
     }
   }
+
+  @Post('archive/:id')
+  @UseGuards(AuthGuard())
+  async archiveActivityById(
+    @Param('id') id: string,
+    @Req() req: any,
+  ): Promise<{ archivedActivity: Activity; message: string }> {
+    const preOperationActivity: Activity =
+      await this.activityService.getActivityById(id);
+    if (req.user.role === Role.admin) {
+      return this.activityService.archiveActivityById(id);
+    }
+    if (
+      preOperationActivity.createdByUser.equals(req.user._id) &&
+      req.user.role === Role.creator
+    ) {
+      return await this.activityService.archiveActivityById(id);
+    } else {
+      throw new UnauthorizedException();
+    }
+  }
 }
