@@ -100,7 +100,7 @@ export class ActivityController {
     }
   }
 
-  @Post('archive/:id')
+  @Put('archive/:id')
   @UseGuards(AuthGuard())
   async archiveActivityById(
     @Param('id') id: string,
