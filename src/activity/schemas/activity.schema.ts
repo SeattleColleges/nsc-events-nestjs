@@ -99,6 +99,9 @@ export class Activity {
 
   @Prop({ default: false })
   isHidden: boolean;
+
+  @Prop({ default: false })
+  isArchived: boolean;
 }
 
 export const ActivitySchema = SchemaFactory.createForClass(Activity);

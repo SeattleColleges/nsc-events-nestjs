@@ -154,4 +154,26 @@ export class ActivityService {
       message: 'Activity deleted successfully.',
     };
   }
+
+  async archiveActivityById(
+    id: string,
+  ): Promise<{ archivedActivity: Activity; message: string }> {
+    const isValidId = mongoose.isValidObjectId(id);
+    // if provided ID is invalid, throw BadRequestException exception
+    if (!isValidId) {
+      throw new BadRequestException('Invalid ID. Please enter correct id.');
+    }
+    const activity = await this.activityModel.findById(id).exec();
+    // if no activity found with given ID, throw NotFoundException exception
+    if (!activity) {
+      throw new NotFoundException(`Activity with ID ${id} not found.`);
+    }
+    const archivedActivity = await this.activityModel
+      .findByIdAndUpdate(id, { isArchived: true })
+      .exec();
+    return {
+      archivedActivity,
+      message: 'Activity archived successfully.',
+    };
+  }
 }
