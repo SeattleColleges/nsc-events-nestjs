@@ -66,6 +66,7 @@ describe('ActivityController', () => {
     eventAccessibility: 'Wheelchair accessible venue.',
     eventNote: 'This is a sample note.',
     isHidden: false,
+    isArchived: false,
   };
 
   const mockUpdateActivity = {
@@ -103,6 +104,7 @@ describe('ActivityController', () => {
     eventAccessibility: 'Wheelchair accessible venue updated.',
     eventNote: 'This is a sample note.',
     isHidden: false,
+    isArchived: false,
   };
 
   beforeEach(async () => {
@@ -211,6 +213,7 @@ describe('ActivityController', () => {
         eventAccessibility: 'Wheelchair accessible venue.',
         eventNote: 'This is a sample note.',
         isHidden: false,
+        isArchived: false,
       };
       const expectedResponse = {
         activity: mockCreateEvent,
@@ -260,6 +263,7 @@ describe('ActivityController', () => {
         eventAccessibility: 'Wheelchair accessible venue.',
         eventNote: 'This is a sample note.',
         isHidden: false,
+        isArchived: false,
       };
       const errorMessage = 'Error occurred while creating event';
       jest

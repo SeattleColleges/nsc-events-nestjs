@@ -134,4 +134,8 @@ export class UpdateActivityDto {
   @IsOptional()
   @IsBoolean()
   readonly isHidden: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  readonly isArchived: boolean;
 }

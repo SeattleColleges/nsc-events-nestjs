@@ -120,4 +120,8 @@ export class CreateActivityDto {
   @IsOptional()
   @IsBoolean()
   readonly isHidden: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  readonly isArchived: boolean;
 }

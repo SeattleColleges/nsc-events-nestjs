@@ -33,6 +33,7 @@ const createMockActivity: CreateActivityDto = {
   eventAccessibility: 'Wheelchair accessible venue.',
   eventNote: 'This is a sample note.',
   isHidden: false,
+  isArchived: false,
 };
 
 export default createMockActivity;
