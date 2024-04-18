@@ -59,6 +59,22 @@ describe('AuthController', () => {
     });
   });
 
+  describe('signUp', () => {
+    it('should throw an error for existing email address', async () => {
+      const errorMessage = 'Email address already exists';
+  
+      jest.spyOn(authService, 'signUp').mockRejectedValue(new Error(errorMessage));
+  
+      try {
+        await authController.signUp(mockSignUpDto);
+      } catch (error) {
+        expect(error.message).toBe(errorMessage);
+      }
+    });
+  });
+  
+  
+
   describe('login', () => {
     it('should return a token', async () => {
       const result = { token: 'your-test-token' };
@@ -68,6 +84,21 @@ describe('AuthController', () => {
       expect(await authController.login(mockLoginDto)).toBe(result);
     });
   });
+
+  describe('login', () => {
+    it('should return an error for invalid credentials', async () => {
+      const errorMessage = 'Invalid email or password';
+  
+      jest.spyOn(authService, 'login').mockResolvedValue(null);
+  
+      try {
+        await authController.login(mockLoginDto);
+      } catch (error) {
+        expect(error.message).toBe(errorMessage);
+      }
+    });
+  });
+  
 
   describe('forgotPassword', () => {
     it('should return a successful message', async () => {
@@ -80,4 +111,7 @@ describe('AuthController', () => {
       );
     });
   });
+
+
 });
+//TODO Change Password
