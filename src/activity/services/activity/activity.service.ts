@@ -55,6 +55,20 @@ export class ActivityService {
     return activity;
   }
 
+  async getActivitiesByUserId(userId: string): Promise<Activity[]> {
+    const isValidId = mongoose.isValidObjectId(userId);
+    if (!isValidId) {
+      throw new BadRequestException('Please enter correct user id.');
+    }
+
+    try {
+      const activities = this.activityModel.find({ 'createdByUser': userId }).exec();
+      return activities
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
   async createEvent(
     activity: Activity,
     creator: User,
