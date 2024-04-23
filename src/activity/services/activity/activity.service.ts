@@ -62,7 +62,7 @@ export class ActivityService {
     }
 
     try {
-      const activities = this.activityModel.find({ createdByUser : userId }).exec();
+      const activities = this.activityModel.find({ createdByUser: userId }).exec();
       return activities;
     } catch (error) {
       throw new BadRequestException(error.message);
