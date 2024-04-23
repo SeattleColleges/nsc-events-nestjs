@@ -31,10 +31,9 @@ export class ActivityController {
   async findActivityById(@Param('id') id: string): Promise<Activity> {
     return this.activityService.getActivityById(id);
   }
-  
   // request all events created by a specific user
   @Get('user/:userId')
-  async getActivitiesByUserId(@Param('userId') userId: string): Promise<Activity[]> {
+  async getActivitiesByUserId(@Param('userId') userId: string,): Promise<Activity[]> {
     return this.activityService.getActivitiesByUserId(userId);
   }
 
