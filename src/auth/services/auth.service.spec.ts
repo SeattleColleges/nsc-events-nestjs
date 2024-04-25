@@ -134,6 +134,53 @@ describe('AuthService', () => {
       );
     });
   });
+<<<<<<< HEAD
+=======
+
+  describe('forgotPassword', () => {
+    const forgotPasswordDto: ForgotPasswordDto = {
+      email: 'testuser@example.com',
+    };
+    it('should reset password and send email with new password', async () => {
+      const newPassword = 'newPassword123';
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      const mockedUser = { email: forgotPasswordDto.email };
+
+      jest.spyOn(model, 'findOne').mockResolvedValueOnce(mockedUser);
+      jest
+        .spyOn<any, string>(bcrypt, 'hash')
+        .mockResolvedValueOnce(hashedPassword);
+      jest.spyOn(model, 'updateOne').mockReturnValueOnce({} as any);
+      mockAuthModel.updateOne = jest.fn().mockResolvedValueOnce({} as any);
+
+      const mailServiceMock = jest.fn();
+      mailServiceMock.mockReturnValueOnce(Promise.resolve());
+      jest
+        .spyOn(MailService.prototype, 'send')
+        .mockImplementation(mailServiceMock);
+
+      const result = await authService.forgotPassword(forgotPasswordDto);
+
+      expect(result.message).toBe('Password reset successfully');
+      expect(mailServiceMock).toHaveBeenCalled();
+    });
+
+    it('should throw a 404 error if user does not exist', async () => {
+      const forgotPasswordDto: ForgotPasswordDto = {
+        email: 'nonexistentuser@example.com',
+      };
+
+      jest.spyOn(model, 'findOne').mockResolvedValueOnce(null);
+
+      await expect(
+        authService.forgotPassword(forgotPasswordDto),
+      ).rejects.toThrowError(
+        new HttpException('User does not exist', HttpStatus.NOT_FOUND),
+      );
+    });
+  });
+  //TODO Change Password test
+>>>>>>> c64b5f5f6ab34701045b6bc97522e7d3bb3b442f
 });
 
 
