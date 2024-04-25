@@ -64,7 +64,6 @@ describe('AuthController', () => {
       const errorMessage = 'Email address already exists';
   
       jest.spyOn(authService, 'signUp').mockRejectedValue(new Error(errorMessage));
-  
       try {
         await authController.signUp(mockSignUpDto);
       } catch (error) {
@@ -88,7 +87,7 @@ describe('AuthController', () => {
       const errorMessage = 'Invalid email or password';
   
       jest.spyOn(authService, 'login').mockResolvedValue(null);
-  
+
       try {
         await authController.login(mockLoginDto);
       } catch (error) {
@@ -96,7 +95,6 @@ describe('AuthController', () => {
       }
     });
   });
-  
   describe('forgotPassword', () => {
     it('should return a successful message', async () => {
       const result = { message: 'Reset passsword link sent to your email' };
@@ -109,4 +107,3 @@ describe('AuthController', () => {
     });
   });
 });
-

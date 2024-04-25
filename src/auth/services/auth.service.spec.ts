@@ -124,7 +124,6 @@ describe('AuthService', () => {
         UnauthorizedException,
       );
     });
-    
     it('should throw invalid password error', async () => {
       jest.spyOn(model, 'findOne').mockResolvedValueOnce(mockUser);
       jest.spyOn<any, string>(bcrypt, 'compare').mockResolvedValueOnce(false);
@@ -178,7 +177,3 @@ describe('AuthService', () => {
     });
   });
 });
-
-
-
-
