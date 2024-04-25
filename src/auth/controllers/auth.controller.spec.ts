@@ -72,8 +72,6 @@ describe('AuthController', () => {
       }
     });
   });
-  
-  
 
   describe('login', () => {
     it('should return a token', async () => {
@@ -98,8 +96,21 @@ describe('AuthController', () => {
       }
     });
   });
-  
 
+  describe('forgotPassword', () => {
+    it('should throw an error for non-existing email address', async () => {
+      const errorMessage = 'Email address not found';
+  
+      jest.spyOn(authService, 'forgotPassword').mockRejectedValue(new Error(errorMessage));
+  
+      try {
+        await authController.forgotPassword(mockForgotPasswordDto);
+      } catch (error) {
+        expect(error.message).toBe(errorMessage);
+      }
+    });
+  });  
+  
   describe('forgotPassword', () => {
     it('should return a successful message', async () => {
       const result = { message: 'Reset passsword link sent to your email' };
@@ -111,7 +122,4 @@ describe('AuthController', () => {
       );
     });
   });
-
-
 });
-//TODO Change Password
