@@ -124,7 +124,7 @@ describe('AuthService', () => {
         UnauthorizedException,
       );
     });
-
+    
     it('should throw invalid password error', async () => {
       jest.spyOn(model, 'findOne').mockResolvedValueOnce(mockUser);
       jest.spyOn<any, string>(bcrypt, 'compare').mockResolvedValueOnce(false);
@@ -134,8 +134,6 @@ describe('AuthService', () => {
       );
     });
   });
-<<<<<<< HEAD
-=======
 
   describe('forgotPassword', () => {
     const forgotPasswordDto: ForgotPasswordDto = {
@@ -179,8 +177,6 @@ describe('AuthService', () => {
       );
     });
   });
-  //TODO Change Password test
->>>>>>> c64b5f5f6ab34701045b6bc97522e7d3bb3b442f
 });
 
 
