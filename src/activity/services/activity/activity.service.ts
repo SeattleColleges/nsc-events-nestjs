@@ -20,8 +20,8 @@ export class ActivityService {
   }
 
   async getAllActivities(
-      query: Query,
-      numEvents: number = 5
+    query: Query,
+    numEvents: number = 5
   ): Promise<Activity[]> {
     // pagination options
     const resPerPage = numEvents;
