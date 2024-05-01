@@ -19,10 +19,7 @@ export class ActivityService {
     // activity defined in activity.module.ts
   }
 
-  async getAllActivities(
-    query: Query,
-    numEvents = 5,
-  ): Promise<Activity[]> {
+  async getAllActivities(query: Query, numEvents = 5): Promise<Activity[]> {
     // pagination options
     const resPerPage = numEvents;
     const currentPage: number = Number(query.page) || 1;
