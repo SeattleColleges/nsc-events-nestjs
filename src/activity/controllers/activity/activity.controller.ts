@@ -23,14 +23,9 @@ import { AttendEventDto } from '../../dto/attend-event.dto';
 export class ActivityController {
   constructor(private readonly activityService: ActivityService) {}
   @Get('')
-  async getAllActivities(@Query() query: ExpressQuery): Promise<Activity[]> {
-    return await this.activityService.getAllActivities(query);
-  }
-
-  @Get(':numEvents')
   async getNumActivities(
     @Query() query: ExpressQuery,
-    @Param('numEvents') numEvents: number,
+    @Query('numEvents') numEvents: number,
   ): Promise<Activity[]> {
     return await this.activityService.getAllActivities(query, numEvents);
   }
