@@ -27,6 +27,13 @@ export class ActivityController {
     return await this.activityService.getAllActivities(query);
   }
 
+  @Get('')
+  async getNumActivities(
+    @Query() query: ExpressQuery,
+    @Query('numEvents') numEvents: number,
+  ): Promise<Activity[]> {
+    return await this.activityService.getAllActivities(query, numEvents);
+  }
   @Get('find/:id')
   async findActivityById(@Param('id') id: string): Promise<Activity> {
     return this.activityService.getActivityById(id);
