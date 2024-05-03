@@ -25,7 +25,7 @@ export class ActivityController {
   @Get('')
   async getAllActivities(
     @Query() query: ExpressQuery,
-    @Query('numEvents') numEvents: number,
+    @Query('numEvents') numEvents?: number,
   ): Promise<Activity[]> {
     return await this.activityService.getAllActivities(query, numEvents);
   }
