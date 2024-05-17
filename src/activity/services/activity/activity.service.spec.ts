@@ -49,15 +49,17 @@ describe('ActivityService', () => {
       jest.spyOn(model, 'find').mockImplementation(
         () =>
           ({
-            limit: () => ({
-              skip: () => ({
-                // find always returns this value in the scope of this it block
-                exec: jest.fn().mockResolvedValue([mockActivityFromDB]),
+            sort: () => ({
+              limit: () => ({
+                skip: () => ({
+                  // find always returns this value in the scope of this it block
+                  exec: jest.fn().mockResolvedValue([mockActivityFromDB]),
+                }),
               }),
-            }),
+            })
           }) as any,
       );
-      const result = await activityService.getAllActivities(query);
+      const result = await activityService.getAllActivities(query, 5);
       expect(model.find).toHaveBeenCalledWith({
         eventTags: {
           // using regex to look if any entries contain the text

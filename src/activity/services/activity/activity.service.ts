@@ -39,6 +39,7 @@ export class ActivityService {
       : {};
     return await this.activityModel
       .find({ ...tag })
+      .sort({ eventDate: 1 })
       .limit(resPerPage)
       .skip(skip)
       .exec();
