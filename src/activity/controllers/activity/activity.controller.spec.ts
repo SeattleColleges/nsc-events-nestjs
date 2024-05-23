@@ -145,7 +145,7 @@ describe('ActivityController', () => {
       const result = await controller.getAllActivities({});
       expect(result).toEqual(mockEmptyActivities);
       expect(result).toHaveLength(0);
-      expect(service.getAllActivities).toHaveBeenCalledWith({}, undefined);
+      expect(service.getAllActivities).toHaveBeenCalledWith({});
     });
 
     // testing for failure scenario

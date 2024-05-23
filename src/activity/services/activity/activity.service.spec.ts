@@ -59,7 +59,7 @@ describe('ActivityService', () => {
             })
           }) as any,
       );
-      const result = await activityService.getAllActivities(query, 5);
+      const result = await activityService.getAllActivities(query);
       expect(model.find).toHaveBeenCalledWith({
         eventTags: {
           // using regex to look if any entries contain the text
