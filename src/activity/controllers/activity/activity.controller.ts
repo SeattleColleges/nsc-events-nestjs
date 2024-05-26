@@ -36,8 +36,9 @@ export class ActivityController {
   @Get('user/:userId')
   async getActivitiesByUserId(
     @Param('userId') userId: string,
+    @Query() query: ExpressQuery,
   ): Promise<Activity[]> {
-    return this.activityService.getActivitiesByUserId(userId);
+    return this.activityService.getActivitiesByUserId(query, userId);
   }
 
   @Post('attend/:id')
