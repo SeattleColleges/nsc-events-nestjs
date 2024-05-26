@@ -69,15 +69,24 @@ export class ActivityService {
     return activity;
   }
 
-  async getActivitiesByUserId(userId: string): Promise<Activity[]> {
+  async getActivitiesByUserId(query: Query, userId: string): Promise<Activity[]> {
     const isValidId = mongoose.isValidObjectId(userId);
     if (!isValidId) {
       throw new BadRequestException('Please enter correct user id.');
     }
 
     try {
+      // pagination options
+      const resPerPage = Number(query.numEvents) || 5;
+      const currentPage: number = Number(query.page) || 1;
+
+      // skips the number of results according to page number and number of results per page
+      const skip = resPerPage * (currentPage - 1);
       const activities = this.activityModel
         .find({ createdByUser: userId })
+        .sort({ eventDate: 1, _id: 1 })
+        .limit(resPerPage)
+        .skip(skip)
         .exec();
       return activities;
     } catch (error) {
