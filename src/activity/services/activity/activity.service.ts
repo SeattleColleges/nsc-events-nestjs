@@ -39,16 +39,9 @@ export class ActivityService {
       : {};
     const filter: any = {
       ...tag,
+      isArchived: query.isArchived || false,
+      isHidden: query.isHidden || false
     };
-    if (query.isArchived !== undefined || query.isHidden !== undefined) {
-      filter.$or = [];
-      if (query.isArchived !== undefined) {
-        filter.$or.push({ isArchived: query.isArchived });
-      }
-      if (query.isHidden !== undefined) {
-        filter.$or.push({ isHidden: query.isHidden });
-      }
-    }
     return await this.activityModel
       .find({...filter})
       .sort({ eventDate: 1, _id: 1 })
