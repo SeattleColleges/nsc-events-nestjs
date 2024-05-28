@@ -66,6 +66,8 @@ describe('ActivityService', () => {
           $regex: 'tech',
           $options: 'i', // case insensitive
         },
+        isArchived: false,
+        isHidden: false
       });
       expect(result).toEqual([mockActivityFromDB]);
     });
