@@ -19,9 +19,9 @@ export class ActivityService {
     // activity defined in activity.module.ts
   }
 
-  async getAllActivities(query: Query, numEvents = 5): Promise<Activity[]> {
+  async getAllActivities(query: Query): Promise<Activity[]> {
     // pagination options
-    const resPerPage = numEvents;
+    const resPerPage = Number(query.numEvents) || 5;
     const currentPage: number = Number(query.page) || 1;
 
     // skips the number of results according to page number and number of results per page
@@ -37,9 +37,14 @@ export class ActivityService {
           },
         }
       : {};
+    const filter: any = {
+      ...tag,
+      isArchived: query.isArchived || false,
+      isHidden: query.isHidden || false
+    };
     return await this.activityModel
-      .find({ ...tag })
-      .sort({ eventDate: 1 })
+      .find({...filter})
+      .sort({ eventDate: 1, _id: 1 })
       .limit(resPerPage)
       .skip(skip)
       .exec();
