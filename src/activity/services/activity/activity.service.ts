@@ -83,7 +83,7 @@ export class ActivityService {
       // skips the number of results according to page number and number of results per page
       const skip = resPerPage * (currentPage - 1);
       const activities = this.activityModel
-        .find({ createdByUser: userId })
+        .find({ createdByUser: userId, isArchived: false, isHidden: false })
         .sort({ eventDate: 1, _id: 1 })
         .limit(resPerPage)
         .skip(skip)
