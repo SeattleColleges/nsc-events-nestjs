@@ -17,7 +17,7 @@ logging.basicConfig(filename='rwsheet.log', level=logging.INFO)
 
 # GET request to GitHub API
 response = requests.get(
-    f'https://api.github.com/repos/SeattleColleges/belindas-closet-nextjs/issues/{ISSUE_NUM}',
+    f'https://api.github.com/repos/SeattleColleges/nsc-events-nestjs/issues/{ISSUE_NUM}',
                         headers={'Authorization': GITHUB_ACCESS_TOKEN, 
                                  'Content-Type': 'application/vnd.github+json',
                                  'X-GitHub-Api-Version': '2022-11-28'})
