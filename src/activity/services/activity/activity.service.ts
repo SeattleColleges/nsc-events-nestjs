@@ -40,10 +40,10 @@ export class ActivityService {
     const filter: any = {
       ...tag,
       isArchived: query.isArchived || false,
-      isHidden: query.isHidden || false
+      isHidden: query.isHidden || false,
     };
     return await this.activityModel
-      .find({...filter})
+      .find({ ...filter })
       .sort({ eventDate: 1, _id: 1 })
       .limit(resPerPage)
       .skip(skip)
@@ -62,7 +62,10 @@ export class ActivityService {
     return activity;
   }
 
-  async getActivitiesByUserId(query: Query, userId: string): Promise<Activity[]> {
+  async getActivitiesByUserId(
+    query: Query,
+    userId: string,
+  ): Promise<Activity[]> {
     const isValidId = mongoose.isValidObjectId(userId);
     if (!isValidId) {
       throw new BadRequestException('Please enter correct user id.');
@@ -74,11 +77,11 @@ export class ActivityService {
       // skips the number of results according to page number and number of results per page
       const skip = resPerPage * (currentPage - 1);
       const activities = this.activityModel
-          .find({ createdByUser: userId, isArchived: false, isHidden: false })
-          .sort({ eventDate: 1, _id: 1 })
-          .limit(resPerPage)
-          .skip(skip)
-          .exec();
+        .find({ createdByUser: userId, isArchived: false, isHidden: false })
+        .sort({ eventDate: 1, _id: 1 })
+        .limit(resPerPage)
+        .skip(skip)
+        .exec();
       return activities;
     } catch (error) {
       throw new BadRequestException(error.message);
@@ -198,9 +201,19 @@ export class ActivityService {
     if (!activity) {
       throw new NotFoundException(`Activity with ID ${id} not found.`);
     }
-    const archivedActivity = await this.activityModel
-      .findByIdAndUpdate(id, { isArchived: true })
-      .exec();
+     // Fetch the current value of isArchived
+     const currentIsArchived = activity.isArchived;
+     // Toggle the value of isArchived
+     const newIsArchived = !currentIsArchived;
+ 
+     // Update the document with the new value of isArchived
+     const archivedActivity = await this.activityModel
+         .findByIdAndUpdate(
+             id,
+             { $set: { isArchived: newIsArchived } }, // Set the new value of isArchived
+             { new: true },
+         )
+         .exec();
     return {
       archivedActivity,
       message: 'Activity archived successfully.',
