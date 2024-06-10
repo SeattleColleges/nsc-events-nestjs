@@ -9,6 +9,7 @@ import { Activity } from '../../schemas/activity.schema';
 import { Query } from 'express-serve-static-core';
 import { User } from '../../../auth/schemas/userAuth.model';
 import { AttendEventDto } from '../../dto/attend-event.dto';
+import { format } from 'date-fns';
 
 @Injectable()
 export class ActivityService {
@@ -47,7 +48,11 @@ export class ActivityService {
     const now = new Date();
     await this.activityModel
       .updateMany(
-        { isArchived: false, eventDate: { $lt: now } },
+        {
+          isArchived: false,
+          eventDate: { $lt: now },
+          eventEndTime: { $lte: format(now, 'hh:mma') },
+        },
         { $set: { isArchived: true } },
       )
       .exec()
