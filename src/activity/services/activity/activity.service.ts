@@ -50,7 +50,8 @@ export class ActivityService {
         { isArchived: false, eventDate: { $lt: now } },
         { $set: { isArchived: true } },
       )
-      .exec();
+      .exec()
+      .then();
 
     return await this.activityModel
       .find({...filter})
