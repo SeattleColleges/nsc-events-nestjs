@@ -42,6 +42,16 @@ export class ActivityService {
       isArchived: query.isArchived || false,
       isHidden: query.isHidden || false
     };
+
+    // Auto archive the old events
+    const now = new Date();
+    await this.activityModel
+      .updateMany(
+        { isArchived: false, eventDate: { $lt: now } },
+        { $set: { isArchived: true } },
+      )
+      .exec();
+
     return await this.activityModel
       .find({...filter})
       .sort({ eventDate: 1, _id: 1 })
