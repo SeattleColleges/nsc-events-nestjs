@@ -46,17 +46,14 @@ export class ActivityService {
 
     // Auto archive the old events
     const now = new Date();
-    await this.activityModel
-      .updateMany(
-        {
-          isArchived: false,
-          eventDate: { $lt: now },
-          eventEndTime: { $lte: format(now, 'hh:mma') },
-        },
-        { $set: { isArchived: true } },
-      )
-      .exec()
-      .then();
+    await this.activityModel.updateMany(
+      {
+        isArchived: false,
+        eventDate: { $lt: now },
+        eventEndTime: { $lte: format(now, 'hh:mma') },
+      },
+      { $set: { isArchived: true } },
+    );
 
     return await this.activityModel
       .find({ ...filter })
