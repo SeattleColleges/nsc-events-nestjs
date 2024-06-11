@@ -48,9 +48,15 @@ export class ActivityService {
     const now = new Date();
     await this.activityModel.updateMany(
       {
-        isArchived: false,
-        eventDate: { $lt: now },
-        eventEndTime: { $lte: format(now, 'hh:mma') },
+        $or: [
+          { eventDate: { $lt: format(now, 'yyyy-MM-dd') } },
+          {
+            $and: [
+              { eventDate: { $eq: format(now, 'yyyy-MM-dd') } },
+              { eventEndTime: { $lte: format(now, 'hh:mma') } },
+            ],
+          },
+        ],
       },
       { $set: { isArchived: true } },
     );
