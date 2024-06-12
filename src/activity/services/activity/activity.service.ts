@@ -9,6 +9,7 @@ import { Activity } from '../../schemas/activity.schema';
 import { Query } from 'express-serve-static-core';
 import { User } from '../../../auth/schemas/userAuth.model';
 import { AttendEventDto } from '../../dto/attend-event.dto';
+import { format } from 'date-fns';
 
 @Injectable()
 export class ActivityService {
@@ -42,6 +43,24 @@ export class ActivityService {
       isArchived: query.isArchived || false,
       isHidden: query.isHidden || false,
     };
+
+    // Auto archive the old events
+    const now = new Date();
+    await this.activityModel.updateMany(
+      {
+        $or: [
+          { eventDate: { $lt: format(now, 'yyyy-MM-dd') } },
+          {
+            $and: [
+              { eventDate: { $eq: format(now, 'yyyy-MM-dd') } },
+              { eventEndTime: { $lte: format(now, 'hh:mma') } },
+            ],
+          },
+        ],
+      },
+      { $set: { isArchived: true } },
+    );
+
     return await this.activityModel
       .find({ ...filter })
       .sort({ eventDate: 1, _id: 1 })

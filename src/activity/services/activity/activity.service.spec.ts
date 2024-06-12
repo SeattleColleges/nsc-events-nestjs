@@ -19,6 +19,7 @@ describe('ActivityService', () => {
     findById: jest.fn(),
     findByIdAndUpdate: jest.fn(),
     findByIdAndDelete: jest.fn(),
+    updateMany: jest.fn(),
   };
 
   const mockUser = {
