@@ -30,7 +30,7 @@ export class ActivityService {
     const tagsArray = query.tags && typeof query.tags === 'string' ? query.tags.split(',') : [];
     const tags = tagsArray.length > 0
         ? {
-          $or: tagsArray.map(tag => ({
+          $and: tagsArray.map(tag => ({
             eventTags: {
               $regex: tag,
               $options: 'i', // case insensitive
