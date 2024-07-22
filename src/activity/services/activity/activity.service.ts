@@ -27,23 +27,22 @@ export class ActivityService {
 
     // skips the number of results according to page number and number of results per page
     const skip = resPerPage * (currentPage - 1);
-    // TODO: add ability to query by host/club
-    // search by event tags
-    const tag = query.tag
-      ? {
-          eventTags: {
-            // using regex to look if any entries contain the text
-            $regex: query.tag,
-            $options: 'i', // case insensitive
-          },
+    const tagsArray = query.tags && typeof query.tags === 'string' ? query.tags.split(',') : [];
+    const tags = tagsArray.length > 0
+        ? {
+          $and: tagsArray.map(tag => ({
+            eventTags: {
+              $regex: tag,
+              $options: 'i', // case insensitive
+            },
+          })),
         }
-      : {};
+        : {};
     const filter: any = {
-      ...tag,
+      ...tags,
       isArchived: query.isArchived || false,
       isHidden: query.isHidden || false,
     };
-
     // Auto archive the old events
     const now = new Date();
     await this.activityModel.updateMany(
