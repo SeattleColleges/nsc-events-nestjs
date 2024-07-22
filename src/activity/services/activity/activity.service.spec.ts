@@ -46,7 +46,7 @@ describe('ActivityService', () => {
   });
   describe('getAllActivities', () => {
     it('should return an array of events', async () => {
-      const query = { page: '1', tag: 'tech' };
+      const query = { page: '1', tags: 'tech' };
       jest.spyOn(model, 'find').mockImplementation(
         () =>
           ({
@@ -62,11 +62,13 @@ describe('ActivityService', () => {
       );
       const result = await activityService.getAllActivities(query);
       expect(model.find).toHaveBeenCalledWith({
-        eventTags: {
+        $and: [{
+          eventTags: {
           // using regex to look if any entries contain the text
-          $regex: 'tech',
-          $options: 'i', // case insensitive
-        },
+            $regex: 'tech',
+            $options: 'i', // case insensitive
+          },
+        }],
         isArchived: false,
         isHidden: false
       });
