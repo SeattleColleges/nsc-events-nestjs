@@ -131,7 +131,6 @@ export class UpdateActivityDto {
   readonly eventAccessibility: string;
 
   @IsOptional()
-  @IsNotEmpty()
   @IsString()
   readonly eventNote: string;
 
