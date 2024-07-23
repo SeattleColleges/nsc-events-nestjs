@@ -46,6 +46,9 @@ export class Activity {
   eventCoverPhoto: string;
 
   @Prop()
+  eventDocument: string;
+
+  @Prop()
   eventHost: string;
 
   @Prop()

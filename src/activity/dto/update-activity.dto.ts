@@ -57,6 +57,10 @@ export class UpdateActivityDto {
   readonly eventCoverPhoto: string;
 
   @IsOptional()
+  @IsUrl()
+  readonly eventDocument: string;
+
+  @IsOptional()
   @IsNotEmpty()
   @IsString()
   readonly eventHost: string;

@@ -49,6 +49,10 @@ export class CreateActivityDto {
   @IsUrl() // TODO: look into options to ensure it has a https prefix
   readonly eventCoverPhoto: string;
 
+  @IsOptional()
+  @IsUrl()
+  readonly eventDocument: string;
+
   @IsNotEmpty()
   @IsString()
   readonly eventHost: string;
