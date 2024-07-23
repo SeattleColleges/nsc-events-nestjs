@@ -11,6 +11,7 @@ const createMockActivity: CreateActivityDto = {
   eventLocation: '123 Main Street, City',
   eventMeetingURL: 'https://zoom.us/sample-url',
   eventCoverPhoto: 'https://example.com/event-cover.jpg',
+  eventDocument: 'https://example.com/event-document.pdf',
   eventHost: 'Sample Organization',
   eventRegistration: 'Register at https://example.com/registration',
   eventCapacity: '100',
