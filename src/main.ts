@@ -10,6 +10,6 @@ async function bootstrap() {
   // TODO: set env variable here
     origin: 'http://localhost:3001', // the frontend (next.js) server
   }*/);
-  await app.listen(process.env.PORT);
+  await app.listen(process.env.PORT||3001);
 }
 bootstrap();
