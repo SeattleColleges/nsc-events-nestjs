@@ -55,7 +55,7 @@ describe('UserService', () => {
         () =>
           ({
             exec: jest.fn().mockResolvedValue([mockUser]),
-          }) as any,
+          } as any),
       );
       const result = await service.getAllUsers();
       expect(model.find).toHaveBeenCalled();
@@ -69,7 +69,7 @@ describe('UserService', () => {
         () =>
           ({
             exec: jest.fn().mockResolvedValue(mockUser),
-          }) as any,
+          } as any),
       );
       const result = await service.getUserById(mockUser.id);
       expect(model.findById).toHaveBeenCalledWith(mockUser.id);
@@ -92,7 +92,7 @@ describe('UserService', () => {
         () =>
           ({
             exec: jest.fn().mockResolvedValue(mockUser),
-          }) as any,
+          } as any),
       );
       const result = await service.getUserByEmail(mockUser.email);
       expect(model.findOne).toHaveBeenCalledWith({ email: mockUser.email });
@@ -120,7 +120,7 @@ describe('UserService', () => {
         () =>
           ({
             exec: jest.fn().mockResolvedValue(updatedUser),
-          }) as any,
+          } as any),
       );
       const result = await service.updateUser(mockUser.id, updatedUser);
       expect(model.findByIdAndUpdate).toHaveBeenCalledWith(
@@ -146,7 +146,7 @@ describe('UserService', () => {
         () =>
           ({
             exec: jest.fn().mockResolvedValue(mockUser),
-          }) as any,
+          } as any),
       );
       await service.removeUser(mockUser.id);
       expect(model.findByIdAndDelete).toHaveBeenCalledWith(mockUser.id);
