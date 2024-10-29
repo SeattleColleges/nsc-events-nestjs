@@ -27,16 +27,18 @@ export class ActivityService {
 
     // skips the number of results according to page number and number of results per page
     const skip = resPerPage * (currentPage - 1);
-    const tagsArray = query.tags && typeof query.tags === 'string' ? query.tags.split(',') : [];
-    const tags = tagsArray.length > 0
+    const tagsArray =
+      query.tags && typeof query.tags === 'string' ? query.tags.split(',') : [];
+    const tags =
+      tagsArray.length > 0
         ? {
-          $and: tagsArray.map(tag => ({
-            eventTags: {
-              $regex: tag,
-              $options: 'i', // case insensitive
-            },
-          })),
-        }
+            $and: tagsArray.map((tag) => ({
+              eventTags: {
+                $regex: tag,
+                $options: 'i', // case insensitive
+              },
+            })),
+          }
         : {};
     const filter: any = {
       ...tags,
@@ -219,19 +221,19 @@ export class ActivityService {
     if (!activity) {
       throw new NotFoundException(`Activity with ID ${id} not found.`);
     }
-     // Fetch the current value of isArchived
-     const currentIsArchived = activity.isArchived;
-     // Toggle the value of isArchived
-     const newIsArchived = !currentIsArchived;
- 
-     // Update the document with the new value of isArchived
-     const archivedActivity = await this.activityModel
-         .findByIdAndUpdate(
-             id,
-             { $set: { isArchived: newIsArchived } }, // Set the new value of isArchived
-             { new: true },
-         )
-         .exec();
+    // Fetch the current value of isArchived
+    const currentIsArchived = activity.isArchived;
+    // Toggle the value of isArchived
+    const newIsArchived = !currentIsArchived;
+
+    // Update the document with the new value of isArchived
+    const archivedActivity = await this.activityModel
+      .findByIdAndUpdate(
+        id,
+        { $set: { isArchived: newIsArchived } }, // Set the new value of isArchived
+        { new: true },
+      )
+      .exec();
     return {
       archivedActivity,
       message: 'Activity archived successfully.',
