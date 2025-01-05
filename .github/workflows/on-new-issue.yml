@@ -1,19 +1,35 @@
-name: send-issue-smartsheet
+name: Auto-assign and send to Smartsheet
 run-name: ${{ github.actor }} created an issue
+
 on:
   issues:
-    types: [opened] # TODO: Create on: issues: [edited] to connect to Smartsheet PUT request to update issues when edited
+    types: [opened]
 
 env:
   SMART_ACCESS_TOKEN: ${{ secrets.SMARTSHEET_ACCESS_TOKEN }}
   GH_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
   ISSUE_NUM: ${{ vars.ISSUE_NUM }}
 
+permissions:
+  issues: write
+
 jobs:
-  fetch-and-store:
+  auto-assign-and-store:
     runs-on: ubuntu-latest
 
     steps:
+      # Auto-assign the issue
+      - name: Auto-assign Issue
+        uses: pozil/auto-assign-issue@v1
+        with:
+          repo-token: ${{ secrets.AUTO_ASSIGN_ISSUE_TOKEN }}
+          assignees: ${{ github.actor }}
+
+      # Wait for assignment to complete
+      - name: Wait for assignment to complete
+        run: sleep 5
+
+      # Increment issue number
       - name: Increment
         id: increment_issue_num
         uses: action-pack/increment@v2
@@ -21,14 +37,17 @@ jobs:
           name: 'ISSUE_NUM'
           token: ${{ secrets.GH_ACCESS_TOKEN }}
 
-      - name: Checkout # checks out repository
+      # Checkout the repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python # sets up python for runner to prepare for script
+      # Set up Python environment
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
+      # Install dependencies
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -36,6 +55,7 @@ jobs:
           pip install smartsheet-python-sdk
           pip install python-dotenv
 
-      - name: Fetch Data and Write to Sheet # runs script that makes API call and writes to a Smartsheet
+      # Fetch data and write to Smartsheet
+      - name: Fetch Data and Write to Smartsheet
         run: |
           python post-issue-smartsheet.py
