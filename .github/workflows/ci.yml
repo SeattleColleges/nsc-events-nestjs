@@ -55,14 +55,14 @@ jobs:
 
       # https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts
       - name: Archive Next.js build
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: nest.js-build
           path: dist/
           retention-days: 14
 
       - name: Archive code coverage results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: code-coverage-report
           path: docs/coverage/index.html
