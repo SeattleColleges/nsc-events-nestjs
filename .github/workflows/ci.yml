@@ -3,7 +3,7 @@
 # Builds production build title next.js-build and uploads as artifact.
 # Workflow runs on ubuntu-latest and uses matrix build for Node version.
 
-name: CI (
+name: Continuous Integration
 run-name: Node.js CI
 on:
   workflow_call: # required when creating a reusable workflow
@@ -55,14 +55,14 @@ jobs:
 
       # https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts
       - name: Archive Next.js build
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: nest.js-build
           path: dist/
           retention-days: 14
 
       - name: Archive code coverage results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: code-coverage-report
           path: docs/coverage/index.html
