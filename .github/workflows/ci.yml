@@ -3,7 +3,7 @@
 # Builds production build title next.js-build and uploads as artifact.
 # Workflow runs on ubuntu-latest and uses matrix build for Node version.
 
-name: CI (
+name: Continuous Integration
 run-name: Node.js CI
 on:
   workflow_call: # required when creating a reusable workflow
