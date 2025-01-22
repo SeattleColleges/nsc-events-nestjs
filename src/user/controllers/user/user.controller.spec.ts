@@ -10,7 +10,7 @@ describe('UserController', () => {
 
   const mockUserService = {
     newUser: jest.fn(),
-    // getAllUsers: jest.fn(),
+    getAllUsers: jest.fn(),
     getUserById: jest.fn(),
     getUserByEmail: jest.fn(),
     updateUser: jest.fn(),
@@ -56,14 +56,14 @@ describe('UserController', () => {
     expect(service).toBeDefined();
   });
 
-  // describe('getAllUsers', () => {
-  //   it('should call getAllUsers on the service and return a result', async () => {
-  //     jest.spyOn(service, 'getAllUsers').mockResolvedValue([mockUser]);
-  //     const result = await controller.getAllUsers();
-  //     expect(service.getAllUsers).toHaveBeenCalled();
-  //     expect(result).toEqual([mockUser]);
-  //   });
-  // });
+  describe('getAllUsers', () => {
+    it('should call getAllUsers on the service and return a result', async () => {
+      jest.spyOn(service, 'getAllUsers').mockResolvedValue([mockUser]);
+      const result = await controller.getAllUsers();
+      expect(service.getAllUsers).toHaveBeenCalled();
+      expect(result).toEqual([mockUser]);
+    });
+  });
 
   describe('getUserById', () => {
     it('should call getUserById on the service and return a result', async () => {

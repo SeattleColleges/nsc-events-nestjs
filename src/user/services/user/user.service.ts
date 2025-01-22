@@ -13,6 +13,20 @@ import { InjectModel } from '@nestjs/mongoose';
 export class UserService {
   constructor(@InjectModel('User') private userModel: Model<UserDocument>) {}
 
+  // ----------------- Get all users ----------------- \\
+  async getAllUsers(): Promise<any> {
+    //fix: Use serialization to mask password, so we don't have to transform the data
+    const users: UserDocument[] = await this.userModel.find().exec();
+    return users.map((user) => ({
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      pronouns: user.pronouns,
+      email: user.email,
+      role: user.role,
+    }));
+  }
+
   searchUsers(options: any) {
     return this.userModel.find(options);
   }
