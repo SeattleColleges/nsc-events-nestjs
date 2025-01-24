@@ -33,9 +33,7 @@ export class UserController {
   // @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Get('')
   async getAllUsers() {
-    const users = await this.userService.getAllUsers();
-
-    return users;
+    return await this.userService.getAllUsers();
   }
 
   // @Roles('admin')

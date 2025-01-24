@@ -10,7 +10,17 @@ describe('UserController', () => {
 
   const mockUserService = {
     newUser: jest.fn(),
-    getAllUsers: jest.fn(),
+    getAllUsers: jest.fn().mockResolvedValue([
+      // Mocking the return value of getAllUsers
+      {
+        id: 'testId',
+        firstName: 'Test',
+        lastName: 'User',
+        pronouns: 'they/them',
+        email: 'test@example.com',
+        role: Role.admin,
+      },
+    ]),
     searchUsers: jest.fn().mockReturnValue({
       exec: jest.fn().mockResolvedValue([
         {
@@ -69,9 +79,14 @@ describe('UserController', () => {
   });
 
   describe('getAllUsers', () => {
-    it('should call searchUsers on the service and return a result', async () => {
+    it('should call getAllUsers on the service and return a result', async () => {
+      // Call the controller's getAllUsers method
       const result = await controller.getAllUsers();
-      expect(service.searchUsers).toHaveBeenCalledWith({});
+
+      // Ensure the service's getAllUsers method was called
+      expect(service.getAllUsers).toHaveBeenCalled();
+
+      // Ensure the result is the mocked response
       expect(result).toEqual([
         {
           id: 'testId',
