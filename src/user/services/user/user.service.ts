@@ -75,7 +75,9 @@ export class UserService {
 
     try {
       // Apply filters and sorting
-      const usersQuery = this.userModel.find(options).sort({ role: sortOrder });
+      const usersQuery = this.userModel
+        .find(options)
+        .sort({ firstName: sortOrder, role: sortOrder });
 
       // Pagination
       const limit = 9;
