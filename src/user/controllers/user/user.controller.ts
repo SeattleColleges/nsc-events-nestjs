@@ -33,16 +33,9 @@ export class UserController {
   // @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Get('')
   async getAllUsers() {
-    const users = await this.userService.searchUsers({}).exec();
+    const users = await this.userService.getAllUsers();
 
-    return users.map((user) => ({
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      pronouns: user.pronouns,
-      email: user.email,
-      role: user.role,
-    }));
+    return users;
   }
 
   // @Roles('admin')
@@ -50,69 +43,31 @@ export class UserController {
   @Get('search')
   async searchUsers(@Req() req: Request) {
     // Destructure query parameters with defaults
-    const { firstName = '', lastName = '', email = '', page, sort } = req.query;
-    console.log('Search Users:', req.query);
+    const {
+      firstName = '',
+      lastName = '',
+      email = '',
+      page,
+      sort,
+    } = req.query as {
+      firstName?: string;
+      lastName?: string;
+      email?: string;
+      page?: number;
+      sort?: string;
+    };
 
-    // Parse page and sort
-    const currentPage = parseInt(page as string) || 1;
-    const sortOrder = sort === 'asc' ? 1 : -1;
+    console.log('Request received:', req.query, req.ip);
 
-    // Build query conditions
-    const queryConditions: any[] = [];
-    if (firstName)
-      queryConditions.push({
-        firstName: { $regex: firstName.toString(), $options: 'i' },
-      });
-    if (lastName)
-      queryConditions.push({
-        lastName: { $regex: lastName.toString(), $options: 'i' },
-      });
-    if (email)
-      queryConditions.push({
-        email: { $regex: email.toString(), $options: 'i' },
-      });
+    const filters: {
+      firstName: string;
+      lastName: string;
+      email: string;
+      page: number;
+      sort: string;
+    } = { firstName, lastName, email, page, sort };
 
-    // Combine conditions with AND operator
-    const options = queryConditions.length > 0 ? { $and: queryConditions } : {};
-
-    try {
-      // Apply filters and sorting
-      const usersQuery = this.userService
-        .searchUsers(options)
-        .sort({ role: sortOrder });
-
-      // Pagination
-      const limit = 9;
-      const skip = (currentPage - 1) * limit;
-
-      const data = await usersQuery.skip(skip).limit(limit).exec();
-
-      // Total user count for the given query
-      const total = await this.userService.countUsers(options);
-
-      // Format response data
-      const serializedData = data.map((user) => ({
-        id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        pronouns: user.pronouns,
-        email: user.email,
-        role: user.role,
-      }));
-
-      return {
-        data: serializedData,
-        page: currentPage,
-        total,
-        pages: Math.ceil(total / limit),
-      };
-    } catch (error) {
-      console.error('Error searching users:', error);
-      throw new HttpException(
-        'Error retrieving users',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    return this.userService.searchUsers(filters);
   }
 
   // ----------------- Get User ------------------------------ \\

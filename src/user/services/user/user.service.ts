@@ -4,10 +4,12 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  Req,
 } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { UserDocument } from '../../schemas/user.model';
 import { InjectModel } from '@nestjs/mongoose';
+import { Request } from 'express';
 
 @Injectable()
 export class UserService {
@@ -27,12 +29,86 @@ export class UserService {
     }));
   }
 
-  searchUsers(options: any) {
-    return this.userModel.find(options);
-  }
+  async searchUsers(filters: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    page: number;
+    sort: string;
+  }): Promise<{
+    data: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      pronouns: string;
+      email: string;
+      role: string;
+    }[];
+    page: number;
+    total: number;
+    pages: number;
+  }> {
+    // Destructure query parameters with defaults
+    const { firstName, lastName, email, page, sort } = filters;
 
-  countUsers(options: any) {
-    return this.userModel.count(options).exec();
+    // Parse page and sort
+    const currentPage = page || 1;
+    const sortOrder = sort === 'asc' ? 1 : -1;
+
+    // Build query conditions
+    const queryConditions: any[] = [];
+    if (firstName)
+      queryConditions.push({
+        firstName: { $regex: firstName.toString(), $options: 'i' },
+      });
+    if (lastName)
+      queryConditions.push({
+        lastName: { $regex: lastName.toString(), $options: 'i' },
+      });
+    if (email)
+      queryConditions.push({
+        email: { $regex: email.toString(), $options: 'i' },
+      });
+
+    // Combine conditions with AND operator
+    const options = queryConditions.length > 0 ? { $and: queryConditions } : {};
+
+    try {
+      // Apply filters and sorting
+      const usersQuery = this.userModel.find(options).sort({ role: sortOrder });
+
+      // Pagination
+      const limit = 9;
+      const skip = (currentPage - 1) * limit;
+
+      const data = await usersQuery.skip(skip).limit(limit).exec();
+
+      // Total user count for the given query
+      const total = await this.userModel.count(options);
+
+      // Format response data
+      const serializedData = data.map((user) => ({
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        pronouns: user.pronouns,
+        email: user.email,
+        role: user.role,
+      }));
+
+      return {
+        data: serializedData,
+        page: 1,
+        total,
+        pages: Math.ceil(total / limit),
+      };
+    } catch (error) {
+      console.error('Error searching users:', error);
+      throw new HttpException(
+        'Error retrieving users',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   // ----------------- Get user by id ----------------- \\
