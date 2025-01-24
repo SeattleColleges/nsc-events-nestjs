@@ -100,7 +100,7 @@ export class UserService {
 
       return {
         data: serializedData,
-        page: 1,
+        page: currentPage,
         total,
         pages: Math.ceil(total / limit),
       };
