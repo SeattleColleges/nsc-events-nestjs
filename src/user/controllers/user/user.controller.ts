@@ -4,9 +4,12 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Inject,
   Param,
   Patch,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from '../../services/user/user.service';
@@ -15,6 +18,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { UpdateUserDto } from '../../dto/update-user.dto';
 import { Roles } from '../../../auth/roles.decorator';
 import { RoleGuard } from '../../../auth/role.guard';
+import { Request } from 'express';
 
 // ================== User admin routes ======================== \\
 
@@ -23,13 +27,45 @@ export class UserController {
   constructor(
     @Inject('USER_SERVICE') private readonly userService: UserService,
   ) {}
-  @Roles('admin')
-  @UseGuards(AuthGuard('jwt'), RoleGuard)
 
   // ----------------- Get Users ----------------------------- \\
+  // @Roles('admin')
+  // @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Get('')
   async getAllUsers() {
     return await this.userService.getAllUsers();
+  }
+
+  // @Roles('admin')
+  // @UseGuards(AuthGuard('jwt'), RoleGuard)
+  @Get('search')
+  async searchUsers(@Req() req: Request) {
+    // Destructure query parameters with defaults
+    const {
+      firstName = '',
+      lastName = '',
+      email = '',
+      page,
+      sort,
+    } = req.query as {
+      firstName?: string;
+      lastName?: string;
+      email?: string;
+      page?: number;
+      sort?: string;
+    };
+
+    console.log('Request received:', req.query, req.ip);
+
+    const filters: {
+      firstName: string;
+      lastName: string;
+      email: string;
+      page: number;
+      sort: string;
+    } = { firstName, lastName, email, page, sort };
+
+    return this.userService.searchUsers(filters);
   }
 
   // ----------------- Get User ------------------------------ \\

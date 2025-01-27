@@ -10,7 +10,29 @@ describe('UserController', () => {
 
   const mockUserService = {
     newUser: jest.fn(),
-    getAllUsers: jest.fn(),
+    getAllUsers: jest.fn().mockResolvedValue([
+      // Mocking the return value of getAllUsers
+      {
+        id: 'testId',
+        firstName: 'Test',
+        lastName: 'User',
+        pronouns: 'they/them',
+        email: 'test@example.com',
+        role: Role.admin,
+      },
+    ]),
+    searchUsers: jest.fn().mockReturnValue({
+      exec: jest.fn().mockResolvedValue([
+        {
+          id: 'testId',
+          firstName: 'Test',
+          lastName: 'User',
+          pronouns: 'they/them',
+          email: 'test@example.com',
+          role: Role.admin,
+        },
+      ]),
+    }),
     getUserById: jest.fn(),
     getUserByEmail: jest.fn(),
     updateUser: jest.fn(),
@@ -58,10 +80,23 @@ describe('UserController', () => {
 
   describe('getAllUsers', () => {
     it('should call getAllUsers on the service and return a result', async () => {
-      jest.spyOn(service, 'getAllUsers').mockResolvedValue([mockUser]);
+      // Call the controller's getAllUsers method
       const result = await controller.getAllUsers();
+
+      // Ensure the service's getAllUsers method was called
       expect(service.getAllUsers).toHaveBeenCalled();
-      expect(result).toEqual([mockUser]);
+
+      // Ensure the result is the mocked response
+      expect(result).toEqual([
+        {
+          id: 'testId',
+          firstName: 'Test',
+          lastName: 'User',
+          pronouns: 'they/them',
+          email: 'test@example.com',
+          role: Role.admin,
+        },
+      ]);
     });
   });
 
