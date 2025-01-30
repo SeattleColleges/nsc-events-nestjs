@@ -29,15 +29,15 @@ export class UserController {
   ) {}
 
   // ----------------- Get Users ----------------------------- \\
-  // @Roles('admin')
-  // @UseGuards(AuthGuard('jwt'), RoleGuard)
+  @Roles('admin')
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Get('')
   async getAllUsers() {
     return await this.userService.getAllUsers();
   }
 
-  // @Roles('admin')
-  // @UseGuards(AuthGuard('jwt'), RoleGuard)
+  @Roles('admin')
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Get('search')
   async searchUsers(@Req() req: Request) {
     // Destructure query parameters with defaults
