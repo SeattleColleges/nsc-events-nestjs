@@ -34,7 +34,7 @@ export class UserService {
     lastName: string;
     email: string;
     page: number;
-    sort: string;
+    role: string;
   }): Promise<{
     data: {
       id: string;
@@ -49,11 +49,10 @@ export class UserService {
     pages: number;
   }> {
     // Destructure query parameters with defaults
-    const { firstName, lastName, email, page, sort } = filters;
+    const { firstName, lastName, email, page, role } = filters;
 
     // Parse page and sort
     const currentPage = page || 1;
-    const sortOrder = sort === 'asc' ? 1 : -1;
 
     // Build query conditions
     const queryConditions: any[] = [];
@@ -70,6 +69,12 @@ export class UserService {
         email: { $regex: email.toString(), $options: 'i' },
       });
 
+    // Add role filtering (No regex needed, since role is a fixed string)
+    if (role)
+      queryConditions.push({
+        role: role.toString(),
+      });
+
     // Combine conditions with AND operator
     const options = queryConditions.length > 0 ? { $and: queryConditions } : {};
 
@@ -77,7 +82,7 @@ export class UserService {
       // Apply filters and sorting
       const usersQuery = this.userModel
         .find(options)
-        .sort({ firstName: sortOrder, role: sortOrder });
+        .sort({ lastName: 'asc' });
 
       // Pagination
       const limit = 9;

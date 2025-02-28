@@ -29,15 +29,15 @@ export class UserController {
   ) {}
 
   // ----------------- Get Users ----------------------------- \\
-  @Roles('admin')
-  @UseGuards(AuthGuard('jwt'), RoleGuard)
+  // @Roles('admin')
+  // @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Get('')
   async getAllUsers() {
     return await this.userService.getAllUsers();
   }
 
-  @Roles('admin')
-  @UseGuards(AuthGuard('jwt'), RoleGuard)
+  // @Roles('admin')
+  // @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Get('search')
   async searchUsers(@Req() req: Request) {
     // Destructure query parameters with defaults
@@ -45,25 +45,25 @@ export class UserController {
       firstName = '',
       lastName = '',
       email = '',
+      role = '',
       page,
-      sort,
     } = req.query as {
       firstName?: string;
       lastName?: string;
       email?: string;
+      role?: string;
       page?: number;
-      sort?: string;
     };
 
-    console.log('Request received:', req.query, req.ip);
+    console.log('Search Users Request Received:', req.query);
 
     const filters: {
       firstName: string;
       lastName: string;
       email: string;
+      role: string;
       page: number;
-      sort: string;
-    } = { firstName, lastName, email, page, sort };
+    } = { firstName, lastName, email, role, page };
 
     return this.userService.searchUsers(filters);
   }
