@@ -13,7 +13,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from '../../services/user/user.service';
-import { UserDocument } from '../../schemas/user.model';
+import { UserDocument, UserSearchFilters } from '../../schemas/user.model';
 import { AuthGuard } from '@nestjs/passport';
 import { UpdateUserDto } from '../../dto/update-user.dto';
 import { Roles } from '../../../auth/roles.decorator';
@@ -29,40 +29,16 @@ export class UserController {
   ) {}
 
   // ----------------- Get Users ----------------------------- \\
-  
+
   @Get('')
   async getAllUsers() {
     return await this.userService.getAllUsers();
   }
 
-  
   @Get('search')
   async searchUsers(@Req() req: Request) {
-    // Destructure query parameters with defaults
-    const {
-      firstName = '',
-      lastName = '',
-      email = '',
-      role = '',
-      page,
-    } = req.query as {
-      firstName?: string;
-      lastName?: string;
-      email?: string;
-      role?: string;
-      page?: number;
-    };
-
     console.log('Search Users Request Received:', req.query);
-
-    const filters: {
-      firstName: string;
-      lastName: string;
-      email: string;
-      role: string;
-      page: number;
-    } = { firstName, lastName, email, role, page };
-
+    const filters: UserSearchFilters = req.query;
     return this.userService.searchUsers(filters);
   }
 

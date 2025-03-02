@@ -7,7 +7,11 @@ import {
   Req,
 } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { UserDocument } from '../../schemas/user.model';
+import {
+  UserDocument,
+  UserSearchData,
+  UserSearchFilters,
+} from '../../schemas/user.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Request } from 'express';
 
@@ -29,25 +33,7 @@ export class UserService {
     }));
   }
 
-  async searchUsers(filters: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    page: number;
-    role: string;
-  }): Promise<{
-    data: {
-      id: string;
-      firstName: string;
-      lastName: string;
-      pronouns: string;
-      email: string;
-      role: string;
-    }[];
-    page: number;
-    total: number;
-    pages: number;
-  }> {
+  async searchUsers(filters: UserSearchFilters): Promise<UserSearchData> {
     // Destructure query parameters with defaults
     const { firstName, lastName, email, page, role } = filters;
 
@@ -80,9 +66,7 @@ export class UserService {
 
     try {
       // Apply filters and sorting
-      const usersQuery = this.userModel
-        .find(options)
-        .sort({ lastName: 'asc' }); // Sort by last name in ascending order
+      const usersQuery = this.userModel.find(options).sort({ lastName: 'asc' }); // Sort by last name in ascending order
 
       // Pagination
       const limit = 9;
