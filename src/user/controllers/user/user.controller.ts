@@ -29,12 +29,12 @@ export class UserController {
   ) {}
 
   // ----------------- Get Users ----------------------------- \\
-
   @Get('')
   async getAllUsers() {
     return await this.userService.getAllUsers();
   }
 
+  // -------------------- Search Users ----------------------- \\
   @Get('search')
   async searchUsers(@Req() req: Request) {
     console.log('Search Users Request Received:', req.query);

@@ -33,6 +33,7 @@ export class UserService {
     }));
   }
 
+  // ----------------- Search Users ----------------------------- \\
   async searchUsers(filters: UserSearchFilters): Promise<UserSearchData> {
     // Destructure query parameters with defaults
     const { firstName, lastName, email, page, role } = filters;
