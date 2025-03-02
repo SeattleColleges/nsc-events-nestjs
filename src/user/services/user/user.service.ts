@@ -82,7 +82,7 @@ export class UserService {
       // Apply filters and sorting
       const usersQuery = this.userModel
         .find(options)
-        .sort({ lastName: 'asc' });
+        .sort({ lastName: 'asc' }); // Sort by last name in ascending order
 
       // Pagination
       const limit = 9;
