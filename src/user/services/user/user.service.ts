@@ -52,7 +52,7 @@ export class UserService {
     const { firstName, lastName, email, page, role } = filters;
 
     // Parse page and sort
-    const currentPage = page || 1;
+    const currentPage = Number(page) || 1;
 
     // Build query conditions
     const queryConditions: any[] = [];
