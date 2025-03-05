@@ -7,7 +7,11 @@ import {
   Req,
 } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { UserDocument } from '../../schemas/user.model';
+import {
+  UserDocument,
+  UserSearchData,
+  UserSearchFilters,
+} from '../../schemas/user.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Request } from 'express';
 
@@ -29,31 +33,13 @@ export class UserService {
     }));
   }
 
-  async searchUsers(filters: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    page: number;
-    sort: string;
-  }): Promise<{
-    data: {
-      id: string;
-      firstName: string;
-      lastName: string;
-      pronouns: string;
-      email: string;
-      role: string;
-    }[];
-    page: number;
-    total: number;
-    pages: number;
-  }> {
+  // ----------------- Search Users ----------------------------- \\
+  async searchUsers(filters: UserSearchFilters): Promise<UserSearchData> {
     // Destructure query parameters with defaults
-    const { firstName, lastName, email, page, sort } = filters;
+    const { firstName, lastName, email, page, role } = filters;
 
     // Parse page and sort
-    const currentPage = page || 1;
-    const sortOrder = sort === 'asc' ? 1 : -1;
+    const currentPage = Number(page) || 1;
 
     // Build query conditions
     const queryConditions: any[] = [];
@@ -70,14 +56,18 @@ export class UserService {
         email: { $regex: email.toString(), $options: 'i' },
       });
 
+    // Add role filtering (No regex needed, since role is a fixed string)
+    if (role)
+      queryConditions.push({
+        role: role.toString(),
+      });
+
     // Combine conditions with AND operator
     const options = queryConditions.length > 0 ? { $and: queryConditions } : {};
 
     try {
       // Apply filters and sorting
-      const usersQuery = this.userModel
-        .find(options)
-        .sort({ firstName: sortOrder, role: sortOrder });
+      const usersQuery = this.userModel.find(options).sort({ lastName: 'asc' }); // Sort by last name in ascending order
 
       // Pagination
       const limit = 9;
