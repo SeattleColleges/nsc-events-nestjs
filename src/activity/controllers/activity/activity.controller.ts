@@ -130,6 +130,47 @@ export class ActivityController {
 
   // Attachments Routes:
 
+  // Add Cover Image to a specific event
+  @Put(':id/cover-image')
+  @UseGuards(AuthGuard())
+  async addCoverImage(
+    @Param('id') id: string,
+    @Body() fileData: { fileUrl: string },
+    @Req() req: any,
+  ): Promise<{ updatedActivity: Activity; message: string }> {
+    const activity = await this.activityService.getActivityById(id);
+    // Authorization check
+    if (
+      req.user.role === Role.admin ||
+      (activity.createdByUser.equals(req.user._id) &&
+        req.user.role === Role.creator)
+    ) {
+      return await this.activityService.addCoverImage(id, fileData);
+    } else {
+      throw new UnauthorizedException();
+    }
+  }
+
+  // Remove Cover Image from a specific event
+  @Delete(':id/cover-image')
+  @UseGuards(AuthGuard())
+  async removeCoverImage(
+    @Param('id') id: string,
+    @Req() req: any,
+  ): Promise<{ updatedActivity: Activity; message: string }> {
+    const activity = await this.activityService.getActivityById(id);
+    // Authorization check
+    if (
+      req.user.role === Role.admin ||
+      (activity.createdByUser.equals(req.user._id) &&
+        req.user.role === Role.creator)
+    ) {
+      return await this.activityService.removeCoverImage(id);
+    } else {
+      throw new UnauthorizedException();
+    }
+  }
+
   // Add an attachment to a specific event
   @Put(':id/attachments')
   @UseGuards(AuthGuard())
