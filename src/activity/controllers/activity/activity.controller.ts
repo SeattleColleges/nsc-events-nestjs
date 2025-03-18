@@ -19,9 +19,13 @@ import { Query as ExpressQuery } from 'express-serve-static-core';
 import { AuthGuard } from '@nestjs/passport';
 import { Role } from '../../../auth/schemas/userAuth.model';
 import { AttendEventDto } from '../../dto/attend-event.dto';
+import { AttendanceService } from 'src/attendance/services/attendance.service';
 @Controller('events')
 export class ActivityController {
-  constructor(private readonly activityService: ActivityService) {}
+  constructor(
+    private readonly activityService: ActivityService,
+    private readonly attendanceService: AttendanceService,
+  ) {}
   @Get('')
   async getAllActivities(@Query() query: ExpressQuery): Promise<Activity[]> {
     return await this.activityService.getAllActivities(query);
@@ -45,8 +49,12 @@ export class ActivityController {
   async attendEvent(
     @Param('id') eventId: string,
     @Body() attendEventDto: AttendEventDto,
+    @Req() req: any,
   ) {
-    return await this.activityService.attendEvent(eventId, attendEventDto);
+    return await Promise.allSettled([
+      this.attendanceService.createAttendance(eventId, req.user),
+      this.activityService.attendEvent(eventId, attendEventDto),
+    ]);
   }
 
   @Post('new')
