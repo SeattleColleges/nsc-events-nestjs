@@ -173,6 +173,8 @@ export class UserService {
       pronouns: user.pronouns,
       email: updatedUser.email,
       role: updatedUser.role,
+      // added the attendances to the update
+      attendances: updatedUser.attendances,
     } as UserDocument;
   }
 

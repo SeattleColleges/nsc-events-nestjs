@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { Date, Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 export interface UserDocument extends Document {
@@ -9,6 +9,7 @@ export interface UserDocument extends Document {
   pronouns: string;
   password?: string;
   role: Role;
+  attendances?: [string];
 }
 
 export interface UserSearchData {
@@ -31,6 +32,12 @@ export interface UserSearchFilters {
   email?: string;
   page?: number;
   role?: string;
+}
+
+export interface Attendance {
+  activityId: string;
+  dateRegistered: Date;
+  heardFrom?: string[];
 }
 
 export enum Role {
@@ -59,6 +66,12 @@ export class U extends Document {
 
   @Prop()
   readonly role: Role;
+
+  // embedding the attendance record
+  @Prop({
+    type: [{ activityId: String, dateRegistered: Date, heardFrom: [] }],
+  })
+  attendances?: Attendance[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(U);
