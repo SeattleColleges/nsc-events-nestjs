@@ -19,6 +19,7 @@ import { Query as ExpressQuery } from 'express-serve-static-core';
 import { AuthGuard } from '@nestjs/passport';
 import { Role } from '../../../auth/schemas/userAuth.model';
 import { AttendEventDto } from '../../dto/attend-event.dto';
+
 @Controller('events')
 export class ActivityController {
   constructor(private readonly activityService: ActivityService) {}
@@ -43,9 +44,12 @@ export class ActivityController {
   @UseGuards(AuthGuard())
   // TODO: rate limit this so you can't spam this route
   async attendEvent(
+    // want to update the user when attending event
+    // we would call the user service to add the attendance data to the user
     @Param('id') eventId: string,
     @Body() attendEventDto: AttendEventDto,
   ) {
+    // use await Promise.all([activityService call, userService call])
     return await this.activityService.attendEvent(eventId, attendEventDto);
   }
 

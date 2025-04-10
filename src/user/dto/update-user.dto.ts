@@ -1,5 +1,5 @@
 import { IsEmpty, IsEnum, IsOptional, IsString } from 'class-validator';
-import { Role } from '../schemas/user.model';
+import { Attendance, Role } from '../schemas/user.model';
 
 export class UpdateUserDto {
   @IsOptional()
@@ -25,4 +25,8 @@ export class UpdateUserDto {
   @IsOptional()
   @IsEnum(Role)
   readonly role: Role;
+
+  // adding the attendance array to update
+  @IsOptional()
+  readonly attendances: Attendance[];
 }
