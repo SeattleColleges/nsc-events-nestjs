@@ -128,8 +128,8 @@ export class ActivityController {
     }
   }
 
+  //
   // Attachments Routes:
-
   // Add Cover Image to a specific event
   @Put(':id/cover-image')
   @UseGuards(AuthGuard())

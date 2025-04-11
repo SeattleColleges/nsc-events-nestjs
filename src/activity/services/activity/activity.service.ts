@@ -239,4 +239,26 @@ export class ActivityService {
       message: 'Activity archived successfully.',
     };
   }
+
+  // // Add cover image to a specific event via pushing to an S3 bucket
+  // // and updating the event's eventCoverPhoto field
+  // async addCoverImageToEvent(
+  //   id: string,
+  //   coverImage: string,
+  // ): Promise<{ updatedActivity: Activity; message: string }> {
+  //   const isValidId = mongoose.isValidObjectId(id);
+  //   if (!isValidId) {
+  //     throw new BadRequestException('Invalid ID. Please enter correct id.');
+  //   }
+  //   const activity = await this.activityModel.findById(id).exec();
+  //   if (!activity) {
+  //     throw new NotFoundException(`Activity with ID ${id} not found.`);
+  //   }
+  //   activity.eventCoverPhoto = coverImage;
+  //   await activity.save();
+  //   return {
+  //     updatedActivity: activity,
+  //     message: 'Cover image added successfully.',
+  //   };
+  }
 }
