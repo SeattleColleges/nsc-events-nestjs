@@ -10,12 +10,15 @@ import { Query } from 'express-serve-static-core';
 import { User } from '../../../auth/schemas/userAuth.model';
 import { AttendEventDto } from '../../dto/attend-event.dto';
 import { format } from 'date-fns';
+import { S3Service } from './s3.service';
+import { Multer } from 'multer';
 
 @Injectable()
 export class ActivityService {
   constructor(
     @InjectModel(Activity.name)
     private activityModel: Model<Activity>,
+    private readonly s3Service: S3Service,
   ) {
     // activity defined in activity.module.ts
   }
@@ -240,25 +243,50 @@ export class ActivityService {
     };
   }
 
-  // // Add cover image to a specific event via pushing to an S3 bucket
-  // // and updating the event's eventCoverPhoto field
-  // async addCoverImageToEvent(
-  //   id: string,
-  //   coverImage: string,
-  // ): Promise<{ updatedActivity: Activity; message: string }> {
-  //   const isValidId = mongoose.isValidObjectId(id);
-  //   if (!isValidId) {
-  //     throw new BadRequestException('Invalid ID. Please enter correct id.');
-  //   }
-  //   const activity = await this.activityModel.findById(id).exec();
-  //   if (!activity) {
-  //     throw new NotFoundException(`Activity with ID ${id} not found.`);
-  //   }
-  //   activity.eventCoverPhoto = coverImage;
-  //   await activity.save();
-  //   return {
-  //     updatedActivity: activity,
-  //     message: 'Cover image added successfully.',
-  //   };
+  /**
+   * Add a cover image to an activity.
+   * Uploads the image to S3 and updates the activity with the image URL.
+   *
+   * @param activityId - The ID of the activity.
+   * @param image - The image file to upload.
+   * @returns The updated activity with the cover image URL.
+   * @throws {BadRequestException} If the activity ID is invalid or the image upload fails.
+   * @throws {NotFoundException} If the activity is not found.
+   */
+
+  async addCoverImage(
+    activityId: string,
+    image: Multer.File,
+  ): Promise<Activity> {
+    const isValidId = mongoose.isValidObjectId(activityId);
+    if (!isValidId) {
+      throw new BadRequestException('Invalid activity ID.');
+    }
+
+    const activity = await this.activityModel.findById(activityId).exec();
+    if (!activity) {
+      throw new NotFoundException('Activity not found!');
+    }
+
+    // Upload the image to S3 and get the URL
+    const imageUrl = await this.s3Service
+      .uploadFile(image, 'cover-images')
+      .catch((error) => {
+        throw new BadRequestException(
+          `Failed to upload image: ${error.message}`,
+        );
+      });
+
+    // Update the activity with the image URL
+    try {
+      activity.eventCoverPhoto = imageUrl;
+      await activity.save();
+    } catch (error) {
+      throw new BadRequestException(
+        `Failed to update activity with image URL: ${error.message}`,
+      );
+    }
+
+    return activity;
   }
 }

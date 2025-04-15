@@ -59,7 +59,7 @@ export class S3Service {
    * @throws {Error} If the upload fails.
    */
   async uploadFile(
-    file: Express.Multer.File | File,
+    file: import('multer').File | File,
     folder: string,
   ): Promise<string> {
     // Validate file size before uploading.

@@ -4,6 +4,7 @@ import { ActivityService } from './services/activity/activity.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ActivitySchema } from './schemas/activity.schema';
 import { AuthModule } from '../auth/auth.module';
+import { S3Service } from './services/activity/s3.service';
 
 @Module({
   imports: [
@@ -11,6 +12,6 @@ import { AuthModule } from '../auth/auth.module';
     MongooseModule.forFeature([{ name: 'Activity', schema: ActivitySchema }]),
   ],
   controllers: [ActivityController],
-  providers: [ActivityService],
+  providers: [ActivityService, S3Service],
 })
 export class ActivityModule {}
