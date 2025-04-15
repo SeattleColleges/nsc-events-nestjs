@@ -9,13 +9,17 @@ import {
   Query,
   Req,
   UnauthorizedException,
+  BadRequestException,
   UseGuards,
+  UploadedFile,
 } from '@nestjs/common';
 import { ActivityService } from '../../services/activity/activity.service';
 import { Activity } from '../../schemas/activity.schema';
 import { CreateActivityDto } from '../../dto/create-activity.dto';
 import { UpdateActivityDto } from '../../dto/update-activity.dto';
 import { Query as ExpressQuery } from 'express-serve-static-core';
+import { Multer } from 'multer';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
 import { Role } from '../../../auth/schemas/userAuth.model';
 import { AttendEventDto } from '../../dto/attend-event.dto';
@@ -128,108 +132,24 @@ export class ActivityController {
     }
   }
 
-  // //
-  // // Attachments Routes:
-  // // Add Cover Image to a specific event
-  // @Put(':id/cover-image')
+  /**
+   * Upload a cover image for an event
+   *
+   * @param id - The event ID
+   * @param file - The image file to upload
+   * @returns The updated event with cover image URL
+   */
+  @Put(':id/cover-image')
   // @UseGuards(AuthGuard())
-  // async addCoverImage(
-  //   @Param('id') id: string,
-  //   @Body() fileData: { fileUrl: string },
-  //   @Req() req: any,
-  // ): Promise<{ updatedActivity: Activity; message: string }> {
-  //   const activity = await this.activityService.getActivityById(id);
-  //   // Authorization check
-  //   if (
-  //     req.user.role === Role.admin ||
-  //     (activity.createdByUser.equals(req.user._id) &&
-  //       req.user.role === Role.creator)
-  //   ) {
-  //     return await this.activityService.addCoverImage(id, fileData);
-  //   } else {
-  //     throw new UnauthorizedException();
-  //   }
-  // }
+  async uploadCoverImage(
+    @Param('id') id: string,
+    @UploadedFile() file: Multer.File,
+  ): Promise<{ updatedActivity: Activity; message: string }> {
+    if (!file) {
+      throw new BadRequestException('No file uploaded');
+    }
 
-  // // Remove Cover Image from a specific event
-  // @Delete(':id/cover-image')
-  // @UseGuards(AuthGuard())
-  // async removeCoverImage(
-  //   @Param('id') id: string,
-  //   @Req() req: any,
-  // ): Promise<{ updatedActivity: Activity; message: string }> {
-  //   const activity = await this.activityService.getActivityById(id);
-  //   // Authorization check
-  //   if (
-  //     req.user.role === Role.admin ||
-  //     (activity.createdByUser.equals(req.user._id) &&
-  //       req.user.role === Role.creator)
-  //   ) {
-  //     return await this.activityService.removeCoverImage(id);
-  //   } else {
-  //     throw new UnauthorizedException();
-  //   }
-  // }
-
-  // // Add an attachment to a specific event
-  // @Put(':id/attachments')
-  // @UseGuards(AuthGuard())
-  // async addFileAttachment(
-  //   @Param('id') id: string,
-  //   @Body()
-  //   fileData: {
-  //     fileUrl: string;
-  //     fileType: string;
-  //     fileName?: string;
-  //     contentType?: string;
-  //   },
-  //   @Req() req: any,
-  // ): Promise<{ updatedActivity: Activity; message: string }> {
-  //   const activity = await this.activityService.getActivityById(id);
-
-  //   // Authorization check
-  //   if (
-  //     req.user.role === Role.admin ||
-  //     (activity.createdByUser.equals(req.user._id) &&
-  //       req.user.role === Role.creator)
-  //   ) {
-  //     return await this.activityService.addFileAttachment(id, fileData);
-  //   } else {
-  //     throw new UnauthorizedException();
-  //   }
-  // }
-
-  // // Remove an attachment from a specific event
-  // @Delete(':id/attachments')
-  // @UseGuards(AuthGuard())
-  // async removeFileAttachment(
-  //   @Param('id') id: string,
-  //   @Body() fileData: { fileUrl: string },
-  //   @Req() req: any,
-  // ): Promise<{ updatedActivity: Activity; message: string }> {
-  //   const activity = await this.activityService.getActivityById(id);
-
-  //   // Authorization check
-  //   if (
-  //     req.user.role === Role.admin ||
-  //     (activity.createdByUser.equals(req.user._id) &&
-  //       req.user.role === Role.creator)
-  //   ) {
-  //     return await this.activityService.removeFileAttachment(
-  //       id,
-  //       fileData.fileUrl,
-  //     );
-  //   } else {
-  //     throw new UnauthorizedException();
-  //   }
-  // }
-
-  // // Get all attachments for a specific event
-  // @Get(':id/attachments')
-  // async getEventAttachments(
-  //   @Param('id') id: string,
-  // ): Promise<FileAttachment[]> {
-  //   const activity = await this.activityService.getActivityById(id);
-  //   return activity.attachments || [];
-  // }
+    const updatedActivity = await this.activityService.addCoverImage(id, file);
+    return { updatedActivity, message: 'Cover image uploaded successfully' };
+  }
 }
