@@ -11,7 +11,6 @@ import { User } from '../../../auth/schemas/userAuth.model';
 import { AttendEventDto } from '../../dto/attend-event.dto';
 import { format } from 'date-fns';
 import { S3Service } from './s3.service';
-import { Multer } from 'multer';
 
 @Injectable()
 export class ActivityService {

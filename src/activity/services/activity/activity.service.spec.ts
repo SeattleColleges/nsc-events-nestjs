@@ -9,6 +9,7 @@ import { User } from '../../../auth/schemas/userAuth.model';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import createMockActivity from '../../../../test/mock-data/createMockActivity';
 import mockActivityFromDB from '../../../../test/mock-data/returned-mock-activity';
+import { S3Service } from './s3.service';
 
 describe('ActivityService', () => {
   let activityService: ActivityService;
@@ -37,6 +38,13 @@ describe('ActivityService', () => {
         {
           provide: getModelToken(Activity.name),
           useValue: mockActivityService,
+        },
+        {
+          provide: S3Service,
+          useValue: {
+            uploadFile: jest.fn(),
+            deleteFile: jest.fn(),
+          },
         },
       ],
     }).compile();

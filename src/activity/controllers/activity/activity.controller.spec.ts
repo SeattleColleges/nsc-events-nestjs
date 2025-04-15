@@ -6,7 +6,6 @@ import { Role, UserDocument } from '../../../user/schemas/user.model';
 import mongoose from 'mongoose';
 import { PassportModule } from '@nestjs/passport';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { S3 } from '@aws-sdk/client-s3';
 import { S3Service } from '../../../activity/services/activity/s3.service';
 
 describe('ActivityController', () => {
