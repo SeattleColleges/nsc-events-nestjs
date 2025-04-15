@@ -10,7 +10,7 @@ import {
   GetObjectCommand,
   DeleteObjectCommand,
 } from '@aws-sdk/client-s3';
-import { Readable } from 'stream';
+import { Express } from 'express';
 
 @Injectable()
 export class S3Service {
@@ -58,10 +58,7 @@ export class S3Service {
    * @throws {BadRequestException} If the file type is not allowed.
    * @throws {Error} If the upload fails.
    */
-  async uploadFile(
-    file: import('multer').File | File,
-    folder: string,
-  ): Promise<string> {
+  async uploadFile(file: Express.Multer.File, folder: string): Promise<string> {
     // Validate file size before uploading.
     if (file.size > this.MAX_FILE_SIZE_BYTES) {
       throw new BadRequestException(
@@ -71,7 +68,9 @@ export class S3Service {
       );
     } else if (
       !this.ALLOWED_FILE_TYPES.includes(
-        'type' in file ? file.type : file.mimetype,
+        'type' in file
+          ? (file as Express.Multer.File).mimetype
+          : (file as Express.Multer.File).mimetype,
       )
     ) {
       throw new BadRequestException(
@@ -91,8 +90,10 @@ export class S3Service {
       const uploadParams = {
         Bucket: this.bucketName,
         Key: `${folder}/${fileName}`,
-        Body: 'buffer' in file ? file.buffer : file,
-        ContentType: 'type' in file ? file.type : file.mimetype,
+        Body: file.buffer,
+
+        ContentType:
+          'type' in file ? (file.type as string) : (file.mimetype as string),
       };
 
       // Send the request to upload the file.

@@ -256,7 +256,7 @@ export class ActivityService {
 
   async addCoverImage(
     activityId: string,
-    image: Multer.File,
+    image: Express.Multer.File,
   ): Promise<Activity> {
     const isValidId = mongoose.isValidObjectId(activityId);
     if (!isValidId) {
