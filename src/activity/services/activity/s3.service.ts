@@ -14,15 +14,10 @@ import { Express } from 'express';
 
 @Injectable()
 export class S3Service {
+  // Constructors and properties
   // Maximum allowed file size: 5MB
-  private readonly ALLOWED_FILE_TYPES = [
-    'image/jpeg',
-    'image/png',
-    'image/gif',
-    'image/webp',
-    'application/pdf',
-  ];
   private readonly MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024;
+
   // S3 bucket name and client instance
   private readonly bucketName: string;
   private readonly s3Client: S3Client;
@@ -67,16 +62,18 @@ export class S3Service {
         } MB.`,
       );
     } else if (
-      !this.ALLOWED_FILE_TYPES.includes(
+      !this.getContentTypeByExtension(
         'type' in file
           ? (file as Express.Multer.File).mimetype
           : (file as Express.Multer.File).mimetype,
       )
     ) {
       throw new BadRequestException(
-        `Invalid file type. Allowed types are: ${this.ALLOWED_FILE_TYPES.join(
-          ', ',
-        )}.`,
+        `Invalid file type. Allowed types are: ${this.getContentTypeByExtension(
+          'type' in file
+            ? (file as Express.Multer.File).mimetype
+            : (file as Express.Multer.File).mimetype,
+        )}`,
       );
     }
 
