@@ -267,6 +267,16 @@ export class ActivityService {
       throw new NotFoundException('Activity not found!');
     }
 
+    // If an image already exists, delete it from S3, this is done to prevent orphaned images
+    // and to ensure that the new image is the only one associated with the activity.
+    if (activity.eventCoverPhoto) {
+      const existingImageKey = activity.eventCoverPhoto.split('/').pop();
+      await this.s3Service.deleteFile(existingImageKey).catch((error) => {
+        throw new BadRequestException(
+          `Failed to delete existing image: ${error.message}`,
+        );
+      });
+    }
     // Upload the image to S3 and get the URL
     const imageUrl = await this.s3Service
       .uploadFile(image, 'cover-images')
@@ -285,6 +295,43 @@ export class ActivityService {
         `Failed to update activity with image URL: ${error.message}`,
       );
     }
+
+    return activity;
+  }
+
+  /**
+   * Delete a cover image from an activity.
+   * Removes the image from S3 and updates the activity to remove the image URL.
+   * @param activityId - The ID of the activity.
+   * @returns The updated activity with the cover image URL removed.
+   * @throws {BadRequestException} If the activity ID is invalid or the image deletion fails.
+   * @throws {NotFoundException} If the activity is not found.
+   */
+  async deleteCoverImage(activityId: string): Promise<Activity> {
+    const isValidId = mongoose.isValidObjectId(activityId);
+    if (!isValidId) {
+      throw new BadRequestException('Invalid activity ID.');
+    }
+
+    const activity = await this.activityModel.findById(activityId).exec();
+    if (!activity) {
+      throw new NotFoundException('Activity not found!');
+    }
+
+    // Extract the S3 key from the image URL
+    const imageKey = activity.eventCoverPhoto.split('/').pop();
+
+    // Delete the image from S3
+    await this.s3Service.deleteFile(imageKey).catch((error) => {
+      throw new BadRequestException(
+        `Failed to delete existing image: ${error.message}`,
+      );
+    });
+
+    // Remove the image URL from the activity
+    activity.eventCoverPhoto = null;
+
+    await activity.save();
 
     return activity;
   }
