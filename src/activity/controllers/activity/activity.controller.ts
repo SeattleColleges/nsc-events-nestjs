@@ -154,4 +154,18 @@ export class ActivityController {
     const updatedActivity = await this.activityService.addCoverImage(id, file);
     return { updatedActivity, message: 'Cover image uploaded successfully' };
   }
+  /**
+  * Delete a cover image for an event
+  * 
+  * @param id - The event ID
+  & @returns The updated event with cover image URL
+  */
+  @Delete(':id/cover-image')
+  // @UseGuards(AuthGuard())
+  async deleteCoverImage(
+    @Param('id') id: string,
+  ): Promise<{ updatedActivity: Activity; message: string }> {
+    const updatedActivity = await this.activityService.deleteCoverImage(id);
+    return { updatedActivity, message: 'Cover image deleted successfully' };
+  }
 }
