@@ -176,13 +176,28 @@ export class ActivityController {
   & @returns The updated event with cover image URL
   */
   @Delete(':id/cover-image')
-  // @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard())
   async deleteCoverImage(
     @Param('id') id: string,
+    @Req() req: any,
   ): Promise<{ updatedActivity: Activity; message: string }> {
+    const activity = await this.activityService.getActivityById(id);
+
+    const isAdmin = req.user.role === Role.admin;
+    const isCreator =
+      req.user.role === Role.creator &&
+      activity.createdByUser.equals(req.user._id);
+
+    if (!isAdmin && !isCreator) {
+      throw new UnauthorizedException(
+        'You are not authorized to delete a cover image for this event',
+      );
+    }
+
     const updatedActivity = await this.activityService.deleteCoverImage(id);
     return { updatedActivity, message: 'Cover image deleted successfully' };
   }
+
   /**
    * Upload a document for an event
    *
