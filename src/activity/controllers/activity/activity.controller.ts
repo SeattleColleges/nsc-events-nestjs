@@ -168,4 +168,39 @@ export class ActivityController {
     const updatedActivity = await this.activityService.deleteCoverImage(id);
     return { updatedActivity, message: 'Cover image deleted successfully' };
   }
+  /**
+   * Upload a document for an event
+   *
+   * @param id - The event ID
+   * @param file - The document file to upload
+   * @returns The updated event with document URL
+   */
+  @Put(':id/document')
+  // @UseGuards(AuthGuard())
+  @UseInterceptors(FileInterceptor('document'))
+  async uploadDocument(
+    @Param('id') id: string,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<{ updatedActivity: Activity; message: string }> {
+    if (!file) {
+      throw new BadRequestException('No file uploaded');
+    }
+
+    const updatedActivity = await this.activityService.addDocument(id, file);
+    return { updatedActivity, message: 'Document uploaded successfully' };
+  }
+  /**
+   * Delete a document for an event
+   *
+   * @param id - The event ID
+   * @returns The updated event with document URL
+   */
+  @Delete(':id/document')
+  // @UseGuards(AuthGuard())
+  async deleteDocument(
+    @Param('id') id: string,
+  ): Promise<{ updatedActivity: Activity; message: string }> {
+    const updatedActivity = await this.activityService.deleteDocument(id);
+    return { updatedActivity, message: 'Document deleted successfully' };
+  }
 }
