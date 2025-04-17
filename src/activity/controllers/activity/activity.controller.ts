@@ -141,19 +141,34 @@ export class ActivityController {
    * @returns The updated event with cover image URL
    */
   @Put(':id/cover-image')
-  // @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard())
   @UseInterceptors(FileInterceptor('coverImage'))
   async uploadCoverImage(
     @Param('id') id: string,
     @UploadedFile() file: Express.Multer.File,
+    @Req() req: any,
   ): Promise<{ updatedActivity: Activity; message: string }> {
     if (!file) {
       throw new BadRequestException('No file uploaded');
     }
 
+    const activity = await this.activityService.getActivityById(id);
+
+    const isAdmin = req.user.role === Role.admin;
+    const isCreator =
+      req.user.role === Role.creator &&
+      activity.createdByUser.equals(req.user._id);
+
+    if (!isAdmin && !isCreator) {
+      throw new UnauthorizedException(
+        'You are not authorized to upload a cover image for this event',
+      );
+    }
+
     const updatedActivity = await this.activityService.addCoverImage(id, file);
     return { updatedActivity, message: 'Cover image uploaded successfully' };
   }
+
   /**
   * Delete a cover image for an event
   * 
