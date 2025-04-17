@@ -335,4 +335,96 @@ export class ActivityService {
 
     return activity;
   }
+
+  /**
+   * Add a document to an activity.
+   * Uploads the document to S3 and updates the activity with the document URL.
+   *
+   * @param activityId - The ID of the activity.
+   * @param document - The document file to upload.
+   * @returns The updated activity with the document URL.
+   * @throws {BadRequestException} If the activity ID is invalid or the document upload fails.
+   * @throws {NotFoundException} If the activity is not found.
+   */
+  async addDocument(
+    activityId: string,
+    document: Express.Multer.File,
+  ): Promise<Activity> {
+    const isValidId = mongoose.isValidObjectId(activityId);
+    if (!isValidId) {
+      throw new BadRequestException('Invalid activity ID.');
+    }
+
+    const activity = await this.activityModel.findById(activityId).exec();
+    if (!activity) {
+      throw new NotFoundException('Activity not found!');
+    }
+
+    // If a document already exists, delete it from S3
+    if (activity.eventDocument) {
+      const existingDocumentKey = activity.eventDocument.split('/').pop();
+      await this.s3Service.deleteFile(existingDocumentKey).catch((error) => {
+        throw new BadRequestException(
+          `Failed to delete existing document: ${error.message}`,
+        );
+      });
+    }
+
+    // Upload the document to S3 and get the URL
+    const documentUrl = await this.s3Service
+      .uploadFile(document, 'documents')
+      .catch((error) => {
+        throw new BadRequestException(
+          `Failed to upload document: ${error.message}`,
+        );
+      });
+
+    // Update the activity with the document URL
+    try {
+      activity.eventDocument = documentUrl;
+      await activity.save();
+    } catch (error) {
+      throw new BadRequestException(
+        `Failed to update activity with document URL: ${error.message}`,
+      );
+    }
+
+    return activity;
+  }
+  /**
+   * Delete a document from an activity.
+   * Removes the document from S3 and updates the activity to remove the document URL.
+   * @param activityId - The ID of the activity.
+   * @returns The updated activity with the document URL removed.
+   * @throws {BadRequestException} If the activity ID is invalid or the document deletion fails.
+   * @throws {NotFoundException} If the activity is not found.
+   */
+  async deleteDocument(activityId: string): Promise<Activity> {
+    const isValidId = mongoose.isValidObjectId(activityId);
+    if (!isValidId) {
+      throw new BadRequestException('Invalid activity ID.');
+    }
+
+    const activity = await this.activityModel.findById(activityId).exec();
+    if (!activity) {
+      throw new NotFoundException('Activity not found!');
+    }
+
+    // Extract the S3 key from the document URL
+    const documentKey = activity.eventDocument.split('/').pop();
+
+    // Delete the document from S3
+    await this.s3Service.deleteFile(documentKey).catch((error) => {
+      throw new BadRequestException(
+        `Failed to delete existing document: ${error.message}`,
+      );
+    });
+
+    // Remove the document URL from the activity
+    activity.eventDocument = null;
+
+    await activity.save();
+
+    return activity;
+  }
 }
