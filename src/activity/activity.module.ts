@@ -12,5 +12,6 @@ import { AuthModule } from '../auth/auth.module';
   ],
   controllers: [ActivityController],
   providers: [ActivityService],
+  exports: [MongooseModule],
 })
 export class ActivityModule {}
