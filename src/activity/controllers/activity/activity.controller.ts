@@ -118,6 +118,18 @@ export class ActivityController {
     @Param('id') id: string,
     @Req() req: any,
   ): Promise<{ archivedActivity: Activity; message: string }> {
+    const activity = await this.activityService.getActivityById(id);
+
+    const isAdmin = req.user.role === Role.admin;
+    const isCreator =
+      req.user.role === Role.creator &&
+      activity.createdByUser.equals(req.user._id);
+
+    if (!isAdmin || !isCreator) {
+      throw new UnauthorizedException(
+        'You are not authorized to upload a cover image for this event',
+      );
+    }
     const preOperationActivity: Activity =
       await this.activityService.getActivityById(id);
     if (req.user.role === Role.admin) {
@@ -245,20 +257,25 @@ export class ActivityController {
   @UseGuards(AuthGuard())
   async deleteDocument(
     @Param('id') id: string,
+    @Req() req: any,
   ): Promise<{ updatedActivity: Activity; message: string }> {
     if (!id) {
       throw new BadRequestException('No activity ID provided');
     }
+
     const activity = await this.activityService.getActivityById(id);
-    const isAdmin = activity.createdByUser.role === Role.admin;
+
+    const isAdmin = req.user.role === Role.admin;
     const isCreator =
-      activity.createdByUser.role === Role.creator &&
-      activity.createdByUser.toString() === id;
+      req.user.role === Role.creator &&
+      activity.createdByUser.toString() === req.user._id;
+
     if (!isAdmin && !isCreator) {
       throw new UnauthorizedException(
         'You are not authorized to delete a document for this event',
       );
     }
+
     const updatedActivity = await this.activityService.deleteDocument(id);
     return { updatedActivity, message: 'Document deleted successfully' };
   }
