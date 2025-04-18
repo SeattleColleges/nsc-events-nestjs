@@ -206,30 +206,59 @@ export class ActivityController {
    * @returns The updated event with document URL
    */
   @Put(':id/document')
-  // @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard())
   @UseInterceptors(FileInterceptor('document'))
   async uploadDocument(
     @Param('id') id: string,
+    @Req() req: any,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<{ updatedActivity: Activity; message: string }> {
     if (!file) {
       throw new BadRequestException('No file uploaded');
     }
+    const activity = await this.activityService.getActivityById(id);
 
+    const isAdmin = req.user.role === Role.admin;
+    const isCreator =
+      req.user.role === Role.creator &&
+      activity.createdByUser.equals(req.user._id);
+
+    if (!isAdmin && !isCreator) {
+      throw new UnauthorizedException(
+        'You are not authorized to delete a cover image for this event',
+      );
+    }
     const updatedActivity = await this.activityService.addDocument(id, file);
     return { updatedActivity, message: 'Document uploaded successfully' };
   }
+
   /**
    * Delete a document for an event
    *
    * @param id - The event ID
-   * @returns The updated event with document URL
+   * @param req - The request object
+   * @throws UnauthorizedException if the user is not authorized
+   * @throws NotFoundException if the event is not found
+   * @returns The updated event with document URL, and a success message
    */
   @Delete(':id/document')
-  // @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard())
   async deleteDocument(
     @Param('id') id: string,
   ): Promise<{ updatedActivity: Activity; message: string }> {
+    if (!id) {
+      throw new BadRequestException('No activity ID provided');
+    }
+    const activity = await this.activityService.getActivityById(id);
+    const isAdmin = activity.createdByUser.role === Role.admin;
+    const isCreator =
+      activity.createdByUser.role === Role.creator &&
+      activity.createdByUser.toString() === id;
+    if (!isAdmin && !isCreator) {
+      throw new UnauthorizedException(
+        'You are not authorized to delete a document for this event',
+      );
+    }
     const updatedActivity = await this.activityService.deleteDocument(id);
     return { updatedActivity, message: 'Document deleted successfully' };
   }
