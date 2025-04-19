@@ -13,5 +13,6 @@ import { S3Service } from './services/activity/s3.service';
   ],
   controllers: [ActivityController],
   providers: [ActivityService, S3Service],
+  exports: [MongooseModule],
 })
 export class ActivityModule {}

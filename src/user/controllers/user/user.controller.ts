@@ -23,7 +23,6 @@ import { UserRole } from '../../../enums/roles.enum';
 
 // ================== User admin routes ======================== \\
 @Roles('admin')
-@UseGuards(AuthGuard('jwt'), RoleGuard)
 @Controller('users')
 export class UserController {
   constructor(
