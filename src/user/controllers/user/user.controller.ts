@@ -22,7 +22,7 @@ import { Request } from 'express';
 import { UserRole } from '../../../enums/roles.enum';
 
 // ================== User admin routes ======================== \\
-@Roles('admin')
+@UseGuards(AuthGuard('jwt'))
 @Controller('users')
 export class UserController {
   constructor(
@@ -31,13 +31,15 @@ export class UserController {
 
   // ----------------- Get Users ----------------------------- \\
   @Roles('admin')
-  @UseGuards(AuthGuard('jwt'), RoleGuard)
+  @UseGuards(RoleGuard)
   @Get('')
   async getAllUsers() {
     return await this.userService.getAllUsers();
   }
 
   // -------------------- Search Users ----------------------- \\
+  @Roles('admin')
+  @UseGuards(RoleGuard)
   @Get('search')
   async searchUsers(@Req() req: Request) {
     console.log('Search Users Request Received:', req.query);

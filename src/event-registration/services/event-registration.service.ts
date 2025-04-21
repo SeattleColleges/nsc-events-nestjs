@@ -44,6 +44,19 @@ export class EventRegistrationService {
     }
   }
 
+  async isAttendingEvent(eventId: string, userId: string) {
+    try {
+        // Check if the user is registered for the event
+        const registration = await this.registrationModel.findOne({ eventId, userId });
+        if (registration) {
+            return true;
+        }
+        return false;
+    } catch (error) {
+        throw new InternalServerErrorException('Something went wrong');
+    }
+  }
+
   async findByEvent(eventId: string) {
     try {
         // Find all registrations for the given eventId
