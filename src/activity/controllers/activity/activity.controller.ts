@@ -118,18 +118,6 @@ export class ActivityController {
     @Param('id') id: string,
     @Req() req: any,
   ): Promise<{ archivedActivity: Activity; message: string }> {
-    const activity = await this.activityService.getActivityById(id);
-
-    const isAdmin = req.user.role === Role.admin;
-    const isCreator =
-      req.user.role === Role.creator &&
-      activity.createdByUser.equals(req.user._id);
-
-    if (!isAdmin || !isCreator) {
-      throw new UnauthorizedException(
-        'You are not authorized to upload a cover image for this event',
-      );
-    }
     const preOperationActivity: Activity =
       await this.activityService.getActivityById(id);
     if (req.user.role === Role.admin) {
