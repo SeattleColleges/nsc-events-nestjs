@@ -24,7 +24,7 @@ export class EventRegistrationService {
         if (error instanceof MongoServerError && error.code === 11000) {
             throw new ConflictException('You have already registered for this event.');
         }
-            throw new InternalServerErrorException('Something went wrong');
+            throw new InternalServerErrorException(error.message);
     }
   }
 
@@ -40,7 +40,7 @@ export class EventRegistrationService {
         return result;
 
     } catch (error) {
-        throw new InternalServerErrorException('Something went wrong');
+        throw new InternalServerErrorException(error.message);
     }
   }
 
@@ -53,7 +53,7 @@ export class EventRegistrationService {
         }
         return false;
     } catch (error) {
-        throw new InternalServerErrorException('Something went wrong');
+        throw new InternalServerErrorException(error.message);
     }
   }
 
@@ -78,7 +78,7 @@ export class EventRegistrationService {
 
         return { count, anonymousCount, attendeeNames };
     } catch (error) {
-        throw new InternalServerErrorException('Something went wrong');
+        throw new InternalServerErrorException(error.message);
     }
   }
 
@@ -128,7 +128,7 @@ export class EventRegistrationService {
         return signedUpEvents;
 
     } catch (error) {
-        throw new InternalServerErrorException('Something went wrong');
+        throw new InternalServerErrorException(error.message);
     }
   }
 }
