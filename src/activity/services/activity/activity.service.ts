@@ -270,7 +270,7 @@ export class ActivityService {
     // If an image already exists, delete it from S3, this is done to prevent orphaned images
     // and to ensure that the new image is the only one associated with the activity.
     if (activity.eventCoverPhoto) {
-      const existingImageKey = activity.eventCoverPhoto.split('/').pop();
+      const existingImageKey = activity.eventCoverPhoto.split('.com/').pop();
       await this.s3Service.deleteFile(existingImageKey).catch((error) => {
         throw new BadRequestException(
           `Failed to delete existing image: ${error.message}`,
@@ -319,7 +319,7 @@ export class ActivityService {
     }
 
     // Extract the S3 key from the image URL
-    const imageKey = activity.eventCoverPhoto.split('/').pop();
+    const imageKey = activity.eventCoverPhoto.split('.com/').pop();
 
     // Delete the image from S3
     await this.s3Service.deleteFile(imageKey).catch((error) => {
@@ -362,7 +362,7 @@ export class ActivityService {
 
     // If a document already exists, delete it from S3
     if (activity.eventDocument) {
-      const existingDocumentKey = activity.eventDocument.split('/').pop();
+      const existingDocumentKey = activity.eventDocument.split('.com/').pop();
       await this.s3Service.deleteFile(existingDocumentKey).catch((error) => {
         throw new BadRequestException(
           `Failed to delete existing document: ${error.message}`,
@@ -411,7 +411,7 @@ export class ActivityService {
     }
 
     // Extract the S3 key from the document URL
-    const documentKey = activity.eventDocument.split('/').pop();
+    const documentKey = activity.eventDocument.split('.com/').pop();
 
     // Delete the document from S3
     await this.s3Service.deleteFile(documentKey).catch((error) => {
