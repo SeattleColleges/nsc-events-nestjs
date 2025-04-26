@@ -182,7 +182,7 @@ export class S3Service {
     const contentTypes = {
       pdf: 'application/pdf',
       png: 'image/png',
-      jpg: 'image/jpeg',
+      jpg: 'image/jpg',
       jpeg: 'image/jpeg',
       gif: 'image/gif',
       webp: 'image/webp',
