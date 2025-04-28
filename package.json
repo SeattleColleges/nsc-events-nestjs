@@ -24,6 +24,7 @@
     "compile": "tsc"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.787.0",
     "@nestjs/common": "10.4.8",
     "@nestjs/config": "3.3.0",
     "@nestjs/core": "10.4.8",
@@ -32,6 +33,7 @@
     "@nestjs/passport": "10.0.3",
     "@nestjs/platform-express": "10.4.8",
     "@sendgrid/mail": "8.1.4",
+    "@types/multer": "^1.4.12",
     "bcryptjs": "2.4.3",
     "class-transformer": "0.5.1",
     "class-validator": "0.14.0",
