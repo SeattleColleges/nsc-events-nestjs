@@ -24,7 +24,7 @@ export class EventRegistrationService {
         if (error instanceof MongoServerError && error.code === 11000) {
             throw new ConflictException('You have already registered for this event.');
         }
-            throw new InternalServerErrorException('Something went wrong');
+            throw new InternalServerErrorException(error.message);
     }
   }
 
@@ -40,7 +40,20 @@ export class EventRegistrationService {
         return result;
 
     } catch (error) {
-        throw new InternalServerErrorException('Something went wrong');
+        throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  async isAttendingEvent(eventId: string, userId: string) {
+    try {
+        // Check if the user is registered for the event
+        const registration = await this.registrationModel.findOne({ eventId, userId });
+        if (registration) {
+            return true;
+        }
+        return false;
+    } catch (error) {
+        throw new InternalServerErrorException(error.message);
     }
   }
 
@@ -52,7 +65,7 @@ export class EventRegistrationService {
         // Grab the count of attendees
         const count = results.length;
 
-        // Use reduce to create an array of attendee names because some might be anonymous
+        // Use reduce to create an array of attendee names because some might be anonymous (null)
         const attendeeNames = results.reduce<string[]>((acc, attendee) => {
             if (attendee.firstName && attendee.lastName) {
                 acc.push(`${attendee.firstName.trim()} ${attendee.lastName.trim()}`);
@@ -65,22 +78,57 @@ export class EventRegistrationService {
 
         return { count, anonymousCount, attendeeNames };
     } catch (error) {
-        throw new InternalServerErrorException('Something went wrong');
+        throw new InternalServerErrorException(error.message);
     }
   }
 
   async findByUser(userId: string): Promise<Activity[]> {
     try {
-        // Return list of eventIds for the user
-        const results = await this.registrationModel.find({ userId }).select('eventId');
-        console.log(results)
-        const eventIds = results.map(event => event.eventId);
-        
-        // Use the eventIds to find the corresponding activities
-        // We can change what we want to select from the activity model here with the select statement
-        return this.activityModel.find({ _id: { $in: eventIds } }).select('eventTitle eventDate eventStartTime').exec();
+        // aggregate function to join the event registration with the activities collection
+        // and return the event details for signed up events by the given userId
+        const signedUpEvents = await this.registrationModel.aggregate([
+            {
+                // Match the userId in the event registration collection
+                $match: { userId },
+            },
+            {   
+                // Convert the eventId to an ObjectId for the lookup
+                // This is necessary because the eventId in the registration collection is a string
+                $addFields: {
+                    eventObjectId: { $toObjectId: "$eventId" },
+                },
+            },
+            {   
+
+                $lookup: {
+                    from: 'activities', // collection to join with
+                    localField: 'eventObjectId', // use the converted ObjectId field to match with the foreign field in the activities collection
+                    foreignField: '_id',
+                    as: 'eventDetails',
+                },
+            },
+            {
+                $unwind: '$eventDetails',
+            },
+            {   
+                // event data we want to return
+                $project: {
+                    _id: 0, // exclude the _id field from the result
+                    eventId: '$eventDetails._id',
+                    eventTitle: '$eventDetails.eventTitle',
+                    eventDate: '$eventDetails.eventDate',
+                    eventStartTime: '$eventDetails.eventStartTime',
+                    eventLocation: '$eventDetails.eventLocation',
+                    eventHost: '$eventDetails.eventHost',
+                    // Add or remove fields as needed
+                },
+            },
+        ]);
+
+        return signedUpEvents;
+
     } catch (error) {
-        throw new InternalServerErrorException('Something went wrong');
+        throw new InternalServerErrorException(error.message);
     }
   }
 }
