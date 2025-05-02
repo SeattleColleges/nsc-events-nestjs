@@ -10,12 +10,14 @@ import { Query } from 'express-serve-static-core';
 import { User } from '../../../auth/schemas/userAuth.model';
 import { AttendEventDto } from '../../dto/attend-event.dto';
 import { format } from 'date-fns';
+import { S3Service } from './s3.service';
 
 @Injectable()
 export class ActivityService {
   constructor(
     @InjectModel(Activity.name)
     private activityModel: Model<Activity>,
+    private readonly s3Service: S3Service,
   ) {
     // activity defined in activity.module.ts
   }
@@ -238,5 +240,191 @@ export class ActivityService {
       archivedActivity,
       message: 'Activity archived successfully.',
     };
+  }
+
+  /**
+   * Add a cover image to an activity.
+   * Uploads the image to S3 and updates the activity with the image URL.
+   *
+   * @param activityId - The ID of the activity.
+   * @param image - The image file to upload.
+   * @returns The updated activity with the cover image URL.
+   * @throws {BadRequestException} If the activity ID is invalid or the image upload fails.
+   * @throws {NotFoundException} If the activity is not found.
+   */
+
+  async addCoverImage(
+    activityId: string,
+    image: Express.Multer.File,
+  ): Promise<Activity> {
+    const isValidId = mongoose.isValidObjectId(activityId);
+    if (!isValidId) {
+      throw new BadRequestException('Invalid activity ID.');
+    }
+
+    const activity = await this.activityModel.findById(activityId).exec();
+    if (!activity) {
+      throw new NotFoundException('Activity not found!');
+    }
+
+    // If an image already exists, delete it from S3, this is done to prevent orphaned images
+    // and to ensure that the new image is the only one associated with the activity.
+    if (activity.eventCoverPhoto) {
+      const existingImageKey = activity.eventCoverPhoto.split('.com/').pop();
+      await this.s3Service.deleteFile(existingImageKey).catch((error) => {
+        throw new BadRequestException(
+          `Failed to delete existing image: ${error.message}`,
+        );
+      });
+    }
+    // Upload the image to S3 and get the URL
+    const imageUrl = await this.s3Service
+      .uploadFile(image, 'cover-images')
+      .catch((error) => {
+        throw new BadRequestException(
+          `Failed to upload image: ${error.message}`,
+        );
+      });
+
+    // Update the activity with the image URL
+    try {
+      activity.eventCoverPhoto = imageUrl;
+      await activity.save();
+    } catch (error) {
+      throw new BadRequestException(
+        `Failed to update activity with image URL: ${error.message}`,
+      );
+    }
+
+    return activity;
+  }
+
+  /**
+   * Delete a cover image from an activity.
+   * Removes the image from S3 and updates the activity to remove the image URL.
+   * @param activityId - The ID of the activity.
+   * @returns The updated activity with the cover image URL removed.
+   * @throws {BadRequestException} If the activity ID is invalid or the image deletion fails.
+   * @throws {NotFoundException} If the activity is not found.
+   */
+  async deleteCoverImage(activityId: string): Promise<Activity> {
+    const isValidId = mongoose.isValidObjectId(activityId);
+    if (!isValidId) {
+      throw new BadRequestException('Invalid activity ID.');
+    }
+
+    const activity = await this.activityModel.findById(activityId).exec();
+    if (!activity) {
+      throw new NotFoundException('Activity not found!');
+    }
+
+    // Extract the S3 key from the image URL
+    const imageKey = activity.eventCoverPhoto.split('.com/').pop();
+
+    // Delete the image from S3
+    await this.s3Service.deleteFile(imageKey).catch((error) => {
+      throw new BadRequestException(
+        `Failed to delete existing image: ${error.message}`,
+      );
+    });
+
+    // Remove the image URL from the activity
+    activity.eventCoverPhoto = null;
+
+    await activity.save();
+
+    return activity;
+  }
+
+  /**
+   * Add a document to an activity.
+   * Uploads the document to S3 and updates the activity with the document URL.
+   *
+   * @param activityId - The ID of the activity.
+   * @param document - The document file to upload.
+   * @returns The updated activity with the document URL.
+   * @throws {BadRequestException} If the activity ID is invalid or the document upload fails.
+   * @throws {NotFoundException} If the activity is not found.
+   */
+  async addDocument(
+    activityId: string,
+    document: Express.Multer.File,
+  ): Promise<Activity> {
+    const isValidId = mongoose.isValidObjectId(activityId);
+    if (!isValidId) {
+      throw new BadRequestException('Invalid activity ID.');
+    }
+
+    const activity = await this.activityModel.findById(activityId).exec();
+    if (!activity) {
+      throw new NotFoundException('Activity not found!');
+    }
+
+    // If a document already exists, delete it from S3
+    if (activity.eventDocument) {
+      const existingDocumentKey = activity.eventDocument.split('.com/').pop();
+      await this.s3Service.deleteFile(existingDocumentKey).catch((error) => {
+        throw new BadRequestException(
+          `Failed to delete existing document: ${error.message}`,
+        );
+      });
+    }
+
+    // Upload the document to S3 and get the URL
+    const documentUrl = await this.s3Service
+      .uploadFile(document, 'documents')
+      .catch((error) => {
+        throw new BadRequestException(
+          `Failed to upload document: ${error.message}`,
+        );
+      });
+
+    // Update the activity with the document URL
+    try {
+      activity.eventDocument = documentUrl;
+      await activity.save();
+    } catch (error) {
+      throw new BadRequestException(
+        `Failed to update activity with document URL: ${error.message}`,
+      );
+    }
+
+    return activity;
+  }
+  /**
+   * Delete a document from an activity.
+   * Removes the document from S3 and updates the activity to remove the document URL.
+   * @param activityId - The ID of the activity.
+   * @returns The updated activity with the document URL removed.
+   * @throws {BadRequestException} If the activity ID is invalid or the document deletion fails.
+   * @throws {NotFoundException} If the activity is not found.
+   */
+  async deleteDocument(activityId: string): Promise<Activity> {
+    const isValidId = mongoose.isValidObjectId(activityId);
+    if (!isValidId) {
+      throw new BadRequestException('Invalid activity ID.');
+    }
+
+    const activity = await this.activityModel.findById(activityId).exec();
+    if (!activity) {
+      throw new NotFoundException('Activity not found!');
+    }
+
+    // Extract the S3 key from the document URL
+    const documentKey = activity.eventDocument.split('.com/').pop();
+
+    // Delete the document from S3
+    await this.s3Service.deleteFile(documentKey).catch((error) => {
+      throw new BadRequestException(
+        `Failed to delete existing document: ${error.message}`,
+      );
+    });
+
+    // Remove the document URL from the activity
+    activity.eventDocument = null;
+
+    await activity.save();
+
+    return activity;
   }
 }

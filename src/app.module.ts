@@ -5,6 +5,7 @@ import { UserModule } from './user/user.module';
 import { ActivityModule } from './activity/activity.module';
 import { AuthModule } from './auth/auth.module';
 import { GoogleAuthModule } from './auth/google-auth/google-auth.module';
+import { EventRegistrationModule } from './event-registration/event-registration.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { GoogleAuthModule } from './auth/google-auth/google-auth.module';
     ActivityModule,
     AuthModule,
     GoogleAuthModule,
+    EventRegistrationModule,
   ],
   controllers: [],
   providers: [],
