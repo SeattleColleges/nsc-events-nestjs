@@ -21,7 +21,7 @@ export class GoogleAuthService {
     return this.oauth2Client.generateAuthUrl({
       access_type: 'offline',
       scope: scopes,
-      prompt: 'consent',
+      prompt: 'consent select_account',
     });
   }
 
