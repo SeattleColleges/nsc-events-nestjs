@@ -76,7 +76,7 @@ export class EventRegistrationService {
         // Calculate the anonymous count (total attendees - attendees with names)
         const anonymousCount = count - attendeeNames.length;
 
-        return { count, anonymousCount, attendeeNames };
+        return { count, anonymousCount, attendeeNames, attendees:results };
     } catch (error) {
         throw new InternalServerErrorException(error.message);
     }
