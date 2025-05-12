@@ -20,15 +20,15 @@ export class GoogleAuthController {
     try {
       // Exchange code for token
       const tokens = await this.googleAuthService.getTokensFromCode(code);
-// Remove console log in production
-// console.log('tokens: ', tokens);
+      // Remove console log in production
+      // console.log('tokens: ', tokens);
 
       // Immediately use the token to fetch calendar data
       const calendarData = await this.googleAuthService.getCalendarData(
         tokens.access_token,
       );
-// Remove console log in production
-// console.log('calendarData: ', calendarData);
+      // Remove console log in production
+      // console.log('calendarData: ', calendarData);
 
       // Return the data directly as a downloadable file
       res.setHeader(
