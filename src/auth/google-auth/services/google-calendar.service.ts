@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { google } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
+import { get } from 'http';
 
 @Injectable()
 export class GoogleAuthService {
@@ -16,7 +18,7 @@ export class GoogleAuthService {
   }
 
   // Authentication
-  getConsent(): string {
+  getAuthUrl(): string {
     // TODO
     return '';
   }
@@ -24,7 +26,18 @@ export class GoogleAuthService {
   async getCallback(code: string): Promise<any> {
     // TODO
   }
-
+  getTokensFromCode(code: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.oauth2Client.getToken(code, (err, tokens) => {
+        if (err) {
+          reject(err);
+        } else {
+          this.oauth2Client.setCredentials(tokens);
+          resolve(tokens);
+        }
+      });
+    });
+  }
   // Token management
   async refreshToken(refreshToken: string): Promise<any> {
     // TODO
