@@ -28,6 +28,9 @@ export class User extends Document {
 
   @Prop()
   role: Role;
+
+  @Prop({ type: Object})
+  googleCredentials?: Record<string, any>;
 }
 
 export const UserAuthSchema = SchemaFactory.createForClass(User);

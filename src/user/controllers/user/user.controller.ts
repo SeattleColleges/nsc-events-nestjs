@@ -13,15 +13,16 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from '../../services/user/user.service';
-import { UserDocument } from '../../schemas/user.model';
+import { UserDocument, UserSearchFilters } from '../../schemas/user.model';
 import { AuthGuard } from '@nestjs/passport';
 import { UpdateUserDto } from '../../dto/update-user.dto';
 import { Roles } from '../../../auth/roles.decorator';
 import { RoleGuard } from '../../../auth/role.guard';
 import { Request } from 'express';
+import { UserRole } from '../../../enums/roles.enum';
 
 // ================== User admin routes ======================== \\
-
+@UseGuards(AuthGuard('jwt'))
 @Controller('users')
 export class UserController {
   constructor(
@@ -30,41 +31,25 @@ export class UserController {
 
   // ----------------- Get Users ----------------------------- \\
   @Roles('admin')
-  @UseGuards(AuthGuard('jwt'), RoleGuard)
+  @UseGuards(RoleGuard)
   @Get('')
   async getAllUsers() {
     return await this.userService.getAllUsers();
   }
 
+  // -------------------- Search Users ----------------------- \\
   @Roles('admin')
-  @UseGuards(AuthGuard('jwt'), RoleGuard)
+  @UseGuards(RoleGuard)
   @Get('search')
   async searchUsers(@Req() req: Request) {
-    // Destructure query parameters with defaults
-    const {
-      firstName = '',
-      lastName = '',
-      email = '',
-      page,
-      sort,
-    } = req.query as {
-      firstName?: string;
-      lastName?: string;
-      email?: string;
-      page?: number;
-      sort?: string;
-    };
-
-    console.log('Request received:', req.query, req.ip);
-
-    const filters: {
-      firstName: string;
-      lastName: string;
-      email: string;
-      page: number;
-      sort: string;
-    } = { firstName, lastName, email, page, sort };
-
+    console.log('Search Users Request Received:', req.query);
+    const filters: UserSearchFilters = req.query;
+    
+    // Validate the role
+    if (filters.role && !Object.values(UserRole).includes(filters.role as UserRole)) {
+      filters.role = ''; // Defaults to fetching all users
+    }
+    
     return this.userService.searchUsers(filters);
   }
 

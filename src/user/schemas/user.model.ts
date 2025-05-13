@@ -7,8 +7,30 @@ export interface UserDocument extends Document {
   firstName: string;
   lastName: string;
   pronouns: string;
-  password: string;
+  password?: string;
   role: Role;
+}
+
+export interface UserSearchData {
+  data: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    pronouns: string;
+    email: string;
+    role: string;
+  }[];
+  page: number;
+  total: number;
+  pages: number;
+}
+
+export interface UserSearchFilters {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  page?: number;
+  role?: string;
 }
 
 export enum Role {
@@ -37,6 +59,9 @@ export class U extends Document {
 
   @Prop()
   readonly role: Role;
+
+  @Prop({ type: Object })
+  googleCredentials?: Record<string, any>;
 }
 
 export const UserSchema = SchemaFactory.createForClass(U);
