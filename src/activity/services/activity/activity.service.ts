@@ -267,6 +267,16 @@ export class ActivityService {
       throw new NotFoundException('Activity not found!');
     }
 
+    
+    // Upload the image to S3 and get the URL
+    const imageUrl = await this.s3Service
+      .uploadFile(image, 'cover-images')
+      .catch((error) => {
+        throw new BadRequestException(
+          `Failed to upload image: ${error.message}`,
+        );
+      });
+
     // If an image already exists, delete it from S3, this is done to prevent orphaned images
     // and to ensure that the new image is the only one associated with the activity.
     if (activity.eventCoverPhoto) {
@@ -277,15 +287,7 @@ export class ActivityService {
         );
       });
     }
-    // Upload the image to S3 and get the URL
-    const imageUrl = await this.s3Service
-      .uploadFile(image, 'cover-images')
-      .catch((error) => {
-        throw new BadRequestException(
-          `Failed to upload image: ${error.message}`,
-        );
-      });
-
+    
     // Update the activity with the image URL
     try {
       activity.eventCoverPhoto = imageUrl;
