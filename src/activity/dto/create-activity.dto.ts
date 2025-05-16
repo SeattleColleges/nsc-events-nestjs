@@ -28,9 +28,12 @@ export class CreateActivityDto {
   @IsString()
   readonly eventDescription: string;
 
+  // NO LONGER NEEDED
+  /*
   @IsOptional()
   @IsString() //TODO: lead dev talk to PO and possibly turn this into enum to give admin more fine-grained control
   readonly eventCategory: string;
+  */
 
   @IsDateString()
   readonly eventDate: Date;
@@ -47,11 +50,11 @@ export class CreateActivityDto {
 
   @IsOptional()
   @IsUrl() // TODO: look into options to ensure it has a https prefix
-  readonly eventCoverPhoto: string;
+  readonly eventCoverPhoto?: string;
 
   @IsOptional()
   @IsUrl()
-  readonly eventDocument: string;
+  readonly eventDocument?: string;
 
   @IsNotEmpty()
   @IsString()
@@ -59,11 +62,12 @@ export class CreateActivityDto {
 
   @IsOptional()
   @IsUrl()
-  readonly eventMeetingURL: string;
+  readonly eventMeetingURL?: string;
 
   @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  readonly eventRegistration: string;
+  readonly eventRegistration?: string;
 
   @IsNotEmpty()
   @IsNumberString()
@@ -77,7 +81,7 @@ export class CreateActivityDto {
   @IsOptional()
   @IsNotEmpty()
   @IsString()
-  readonly eventSchedule: string;
+  readonly eventSchedule?: string;
 
   @IsOptional()
   @IsArray({
@@ -85,20 +89,21 @@ export class CreateActivityDto {
       "eventSpeakers must be an array. Did you mean to enter ['speaker']?",
   })
   @ArrayNotEmpty()
+  @IsOptional()
   @IsString({
     each: true,
   })
-  readonly eventSpeakers: string[];
+  readonly eventSpeakers?: string[];
 
   @IsOptional()
   @IsNotEmpty()
   @IsString()
-  readonly eventPrerequisites: string;
+  readonly eventPrerequisites?: string;
 
   @IsOptional()
   @IsNotEmpty()
   @IsString()
-  readonly eventCancellationPolicy: string;
+  readonly eventCancellationPolicy?: string;
 
   @IsNotEmpty({ message: 'Be sure to enter club email or a point of contact.' })
   @IsEmail()
@@ -111,11 +116,12 @@ export class CreateActivityDto {
   @IsOptional()
   @IsNotEmpty()
   @IsString()
-  readonly eventPrivacy: string;
+  readonly eventPrivacy?: string;
 
+  @IsOptional()
   @IsNotEmpty()
   @IsString()
-  readonly eventAccessibility: string;
+  readonly eventAccessibility?: string;
 
   @IsOptional()
   @IsString()
