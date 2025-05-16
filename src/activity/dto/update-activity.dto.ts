@@ -30,10 +30,13 @@ export class UpdateActivityDto {
   @IsString()
   readonly eventDescription: string;
 
+  // NO LONGER NEEDED
+  /*
   @IsOptional()
   @IsNotEmpty()
   @IsString() //TODO: lead dev talk to PO and turn this into enum
   readonly eventCategory: string;
+  */
 
   @IsOptional()
   @IsDateString()
@@ -54,11 +57,11 @@ export class UpdateActivityDto {
 
   @IsOptional()
   @IsUrl() // TODO: look into options to ensure it has a https prefix
-  readonly eventCoverPhoto: string;
+  readonly eventCoverPhoto?: string;
 
   @IsOptional()
   @IsUrl()
-  readonly eventDocument: string;
+  readonly eventDocument?: string;
 
   @IsOptional()
   @IsNotEmpty()
@@ -68,12 +71,12 @@ export class UpdateActivityDto {
   @IsOptional()
   @IsNotEmpty()
   @IsUrl()
-  readonly eventMeetingURL: string;
+  readonly eventMeetingURL?: string;
 
   @IsOptional()
   @IsNotEmpty()
   @IsString()
-  readonly eventRegistration: string;
+  readonly eventRegistration?: string;
 
   @IsOptional()
   @IsNumberString()
@@ -88,7 +91,7 @@ export class UpdateActivityDto {
   @IsOptional()
   @IsNotEmpty()
   @IsString()
-  readonly eventSchedule: string;
+  readonly eventSchedule?: string;
 
   @IsOptional()
   @IsArray({
@@ -99,17 +102,17 @@ export class UpdateActivityDto {
   @IsString({
     each: true,
   })
-  readonly eventSpeakers: string[];
+  readonly eventSpeakers?: string[];
 
   @IsOptional()
   @IsNotEmpty()
   @IsString()
-  readonly eventPrerequisites: string;
+  readonly eventPrerequisites?: string;
 
   @IsOptional()
   @IsNotEmpty()
   @IsString()
-  readonly eventCancellationPolicy: string;
+  readonly eventCancellationPolicy?: string;
 
   @IsOptional()
   @IsNotEmpty({ message: 'Be sure to enter club email or a point of contact.' })
@@ -123,12 +126,12 @@ export class UpdateActivityDto {
   @IsOptional()
   @IsNotEmpty()
   @IsString()
-  readonly eventPrivacy: string;
+  readonly eventPrivacy?: string;
 
   @IsOptional()
   @IsNotEmpty()
   @IsString()
-  readonly eventAccessibility: string;
+  readonly eventAccessibility?: string;
 
   @IsOptional()
   @IsString()

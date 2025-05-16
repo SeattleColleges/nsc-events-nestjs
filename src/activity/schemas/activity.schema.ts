@@ -27,8 +27,11 @@ export class Activity {
   @Prop()
   eventDescription: string;
 
+  // NO LONGER NEEDED
+  /*
   @Prop()
   eventCategory: string;
+  */
 
   @Prop()
   eventDate: Date;
@@ -42,20 +45,20 @@ export class Activity {
   @Prop()
   eventLocation: string;
 
-  @Prop()
-  eventCoverPhoto: string;
+  @Prop({ default: "" })
+  eventCoverPhoto?: string;
 
-  @Prop()
-  eventDocument: string;
+  @Prop({ default: "" })
+  eventDocument?: string;
 
   @Prop()
   eventHost: string;
 
   @Prop()
-  eventMeetingURL: string;
+  eventMeetingURL?: string;
 
   @Prop()
-  eventRegistration: string;
+  eventRegistration?: string;
 
   @Prop()
   eventCapacity: string;
@@ -64,16 +67,16 @@ export class Activity {
   eventTags: string[];
 
   @Prop()
-  eventSchedule: string;
+  eventSchedule?: string;
 
   @Prop()
-  eventSpeakers: string[];
+  eventSpeakers?: string[];
 
   @Prop()
-  eventPrerequisites: string;
+  eventPrerequisites?: string;
 
   @Prop()
-  eventCancellationPolicy: string;
+  eventCancellationPolicy?: string;
 
   @Prop()
   eventContact: string;
@@ -92,10 +95,10 @@ export class Activity {
   attendees?: Attendee[];
 
   @Prop()
-  eventPrivacy: string;
+  eventPrivacy?: string;
 
   @Prop()
-  eventAccessibility: string;
+  eventAccessibility?: string;
 
   @Prop()
   eventNote: string;
