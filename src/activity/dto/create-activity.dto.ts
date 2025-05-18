@@ -11,6 +11,8 @@ import {
   IsString,
   IsUrl,
   IsBoolean,
+  isNotEmpty,
+  ValidateIf,
 } from 'class-validator';
 import { IsTime } from '../../../custom-validators/is-time';
 import { IsSocialMedia } from '../../../custom-validators/is-social-media';
@@ -60,11 +62,11 @@ export class CreateActivityDto {
   @IsString()
   readonly eventHost: string;
 
+  @ValidateIf((object) => object.eventMeetingURL !== '')
   @IsOptional()
   @IsUrl()
   readonly eventMeetingURL?: string;
 
-  @IsNotEmpty()
   @IsOptional()
   @IsString()
   readonly eventRegistration?: string;
@@ -79,7 +81,6 @@ export class CreateActivityDto {
   readonly eventTags: string[];
 
   @IsOptional()
-  @IsNotEmpty()
   @IsString()
   readonly eventSchedule?: string;
 
@@ -88,7 +89,6 @@ export class CreateActivityDto {
     message:
       "eventSpeakers must be an array. Did you mean to enter ['speaker']?",
   })
-  @ArrayNotEmpty()
   @IsOptional()
   @IsString({
     each: true,
@@ -96,12 +96,10 @@ export class CreateActivityDto {
   readonly eventSpeakers?: string[];
 
   @IsOptional()
-  @IsNotEmpty()
   @IsString()
   readonly eventPrerequisites?: string;
 
   @IsOptional()
-  @IsNotEmpty()
   @IsString()
   readonly eventCancellationPolicy?: string;
 
@@ -114,12 +112,10 @@ export class CreateActivityDto {
   readonly eventSocialMedia: SocialMedia;
 
   @IsOptional()
-  @IsNotEmpty()
   @IsString()
   readonly eventPrivacy?: string;
 
   @IsOptional()
-  @IsNotEmpty()
   @IsString()
   readonly eventAccessibility?: string;
 
