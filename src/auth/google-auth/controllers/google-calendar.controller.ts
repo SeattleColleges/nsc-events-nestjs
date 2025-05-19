@@ -20,23 +20,12 @@ export class GoogleAuthController {
     try {
       // Exchange code for token
       const tokens = await this.googleAuthService.getTokensFromCode(code);
-      // Remove console log in production
-      // console.log('tokens: ', tokens);
-
-      // Immediately use the token to fetch calendar data
-      const calendarData = await this.googleAuthService.getCalendarData(
-        tokens.access_token,
-      );
-      // Remove console log in production
-      // console.log('calendarData: ', calendarData);
-
-      // Return the data directly as a downloadable file
-      res.setHeader(
-        'Content-Disposition',
-        'attachment; filename=calendar-data.json',
-      );
-      res.setHeader('Content-Type', 'application/json');
-      res.send(JSON.stringify(calendarData, null, 2));
+      console.log('tokens: ', tokens);
+      // Set the tokens in the OAuth2 client
+      this.googleAuthService.setCredentials(tokens);
+      res
+        .status(HttpStatus.OK)
+        .send('Authentication successful! You can close this window.');
     } catch (error) {
       res.status(HttpStatus.BAD_REQUEST).json({
         message: 'Failed to process Google authentication',

@@ -12,6 +12,6 @@ async function bootstrap() {
     origin: 'http://localhost:3001', // the frontend (next.js) server
   }*/ { credentials: true },
   );
-  await app.listen(process.env.PORT || 3001);
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
