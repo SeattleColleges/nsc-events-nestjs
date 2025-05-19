@@ -19,10 +19,8 @@ export class GoogleAuthController {
   ): Promise<void> {
     try {
       // Exchange code for token
-      const tokens = await this.googleAuthService.getTokensFromCode(code);
+      const tokens = await this.googleAuthService.setCredentials(code);
       console.log('tokens: ', tokens);
-      // Set the tokens in the OAuth2 client
-      this.googleAuthService.setCredentials(tokens);
       res
         .status(HttpStatus.OK)
         .send('Authentication successful! You can close this window.');
