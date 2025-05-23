@@ -3,7 +3,7 @@ const mockActivityFromDB = {
   eventCreatorId: '11f4fb4f18500161673ba4ac',
   eventTitle: 'Sample Event',
   eventDescription: 'This is a sample event description.',
-  eventCategory: 'Tech',
+  // eventCategory: 'Tech', // no longer needed
   eventDate: new Date('8-15-2023'),
   eventStartTime: '10:00 AM',
   eventEndTime: '4:00 PM',
