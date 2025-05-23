@@ -11,7 +11,6 @@ import {
   IsString,
   IsUrl,
   IsBoolean,
-  isNotEmpty,
   ValidateIf,
 } from 'class-validator';
 import { IsTime } from '../../../custom-validators/is-time';
@@ -50,11 +49,11 @@ export class CreateActivityDto {
   @IsString()
   readonly eventLocation: string;
 
-  @ValidateIf((object) => object.eventCoverPhoto !== '')
+  @ValidateIf((obj) => obj.eventCoverPhoto !== undefined && obj.eventCoverPhoto!== '')
   @IsUrl() // TODO: look into options to ensure it has a https prefix
   readonly eventCoverPhoto?: string;
 
-  @ValidateIf((object) => object.eventDocument !== '')
+  @ValidateIf((obj) => obj.eventDocument !== undefined && obj.eventDocument !== '')
   @IsUrl()
   readonly eventDocument?: string;
 
@@ -62,7 +61,8 @@ export class CreateActivityDto {
   @IsString()
   readonly eventHost: string;
 
-  @ValidateIf((object) => object.eventMeetingURL !== '')
+  @ValidateIf((obj) => obj.eventMeetingURL !== undefined && obj.eventMeetingURL !== '')
+  @IsOptional()
   @IsUrl()
   readonly eventMeetingURL?: string;
 

@@ -56,11 +56,11 @@ export class UpdateActivityDto {
   @IsString()
   readonly eventLocation: string;
 
-  @IsOptional()
+  @ValidateIf((obj) => obj.eventCoverPhoto !== undefined && obj.eventCoverPhoto!== '')
   @IsUrl() // TODO: look into options to ensure it has a https prefix
   readonly eventCoverPhoto?: string;
 
-  @IsOptional()
+  @ValidateIf((obj) => obj.eventDocument !== undefined && obj.eventDocument !== '')
   @IsUrl()
   readonly eventDocument?: string;
 
@@ -69,7 +69,7 @@ export class UpdateActivityDto {
   @IsString()
   readonly eventHost: string;
 
-  @ValidateIf((object) => object.eventMeetingURL !== '')
+  @ValidateIf((obj) => obj.eventMeetingURL !== undefined && obj.eventMeetingURL !== '')
   @IsOptional()
   @IsUrl()
   readonly eventMeetingURL?: string;
