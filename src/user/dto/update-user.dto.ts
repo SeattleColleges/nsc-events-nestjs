@@ -25,4 +25,25 @@ export class UpdateUserDto {
   @IsOptional()
   @IsEnum(Role)
   readonly role: Role;
+
+  // Google OAuth
+  @IsOptional()
+  @IsString()
+  readonly googleId: string;
+
+  @IsOptional()
+  @IsString()
+  readonly googleEmail: string;
+
+  @IsOptional()
+  @IsString()
+  readonly googleAccessToken: string;
+
+  @IsOptional()
+  @IsString()
+  readonly googleRefreshToken: string;
+
+  @IsOptional()
+  @IsString()
+  readonly googleTokenExpiry: string;
 }
