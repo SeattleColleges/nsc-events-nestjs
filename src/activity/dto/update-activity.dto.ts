@@ -11,6 +11,7 @@ import {
   IsString,
   IsUrl,
   IsBoolean,
+  ValidateIf,
 } from 'class-validator';
 import { IsTime } from '../../../custom-validators/is-time';
 import { IsSocialMedia } from '../../../custom-validators/is-social-media';
@@ -30,10 +31,13 @@ export class UpdateActivityDto {
   @IsString()
   readonly eventDescription: string;
 
+  // NO LONGER NEEDED
+  /*
   @IsOptional()
   @IsNotEmpty()
   @IsString() //TODO: lead dev talk to PO and turn this into enum
   readonly eventCategory: string;
+  */
 
   @IsOptional()
   @IsDateString()
@@ -52,28 +56,27 @@ export class UpdateActivityDto {
   @IsString()
   readonly eventLocation: string;
 
-  @IsOptional()
+  @ValidateIf((obj) => obj.eventCoverPhoto !== undefined && obj.eventCoverPhoto!== '')
   @IsUrl() // TODO: look into options to ensure it has a https prefix
-  readonly eventCoverPhoto: string;
+  readonly eventCoverPhoto?: string;
 
-  @IsOptional()
+  @ValidateIf((obj) => obj.eventDocument !== undefined && obj.eventDocument !== '')
   @IsUrl()
-  readonly eventDocument: string;
+  readonly eventDocument?: string;
 
   @IsOptional()
   @IsNotEmpty()
   @IsString()
   readonly eventHost: string;
 
+  @ValidateIf((obj) => obj.eventMeetingURL !== undefined && obj.eventMeetingURL !== '')
   @IsOptional()
-  @IsNotEmpty()
   @IsUrl()
-  readonly eventMeetingURL: string;
+  readonly eventMeetingURL?: string;
 
   @IsOptional()
-  @IsNotEmpty()
   @IsString()
-  readonly eventRegistration: string;
+  readonly eventRegistration?: string;
 
   @IsOptional()
   @IsNumberString()
@@ -86,30 +89,26 @@ export class UpdateActivityDto {
   readonly eventTags: string[];
 
   @IsOptional()
-  @IsNotEmpty()
   @IsString()
-  readonly eventSchedule: string;
+  readonly eventSchedule?: string;
 
   @IsOptional()
   @IsArray({
     message:
       "eventSpeakers must be an array. Did you mean to enter ['speaker']?",
   })
-  @ArrayNotEmpty()
   @IsString({
     each: true,
   })
-  readonly eventSpeakers: string[];
+  readonly eventSpeakers?: string[];
 
   @IsOptional()
-  @IsNotEmpty()
   @IsString()
-  readonly eventPrerequisites: string;
+  readonly eventPrerequisites?: string;
 
   @IsOptional()
-  @IsNotEmpty()
   @IsString()
-  readonly eventCancellationPolicy: string;
+  readonly eventCancellationPolicy?: string;
 
   @IsOptional()
   @IsNotEmpty({ message: 'Be sure to enter club email or a point of contact.' })
@@ -121,14 +120,12 @@ export class UpdateActivityDto {
   readonly eventSocialMedia: SocialMedia;
 
   @IsOptional()
-  @IsNotEmpty()
   @IsString()
-  readonly eventPrivacy: string;
+  readonly eventPrivacy?: string;
 
   @IsOptional()
-  @IsNotEmpty()
   @IsString()
-  readonly eventAccessibility: string;
+  readonly eventAccessibility?: string;
 
   @IsOptional()
   @IsString()
