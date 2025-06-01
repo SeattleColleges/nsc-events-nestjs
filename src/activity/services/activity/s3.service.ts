@@ -22,6 +22,14 @@ export class S3Service {
   private readonly bucketName: string;
   private readonly s3Client: S3Client;
 
+  private readonly allowedImageMimeTypes = [
+    'image/png',
+    'image/jpeg',
+    'image/jpg',
+    'image/webp',
+    'image/gif',
+  ];
+
   constructor(private readonly configService: ConfigService) {
     this.bucketName = this.configService.get<string>('AWS_S3_BUCKET_NAME');
     this.s3Client = new S3Client({
@@ -61,19 +69,11 @@ export class S3Service {
           this.MAX_FILE_SIZE_BYTES / 1024 / 1024
         } MB.`,
       );
-    } else if (
-      !this.getContentTypeByExtension(
-        'type' in file
-          ? (file as Express.Multer.File).mimetype
-          : (file as Express.Multer.File).mimetype,
-      )
-    ) {
+    } 
+
+    if (!this.allowedImageMimeTypes.includes(file.mimetype)) {
       throw new BadRequestException(
-        `Invalid file type. Allowed types are: ${this.getContentTypeByExtension(
-          'type' in file
-            ? (file as Express.Multer.File).mimetype
-            : (file as Express.Multer.File).mimetype,
-        )}`,
+        `Invalid file type. Allowed types are: png, jpg, jpeg, gif, webp.`,
       );
     }
 
@@ -88,9 +88,7 @@ export class S3Service {
         Bucket: this.bucketName,
         Key: `${folder}/${fileName}`,
         Body: file.buffer,
-
-        ContentType:
-          'type' in file ? (file.type as string) : (file.mimetype as string),
+        ContentType: file.mimetype,
       };
 
       // Send the request to upload the file.
