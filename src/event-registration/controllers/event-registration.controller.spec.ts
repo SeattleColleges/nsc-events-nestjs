@@ -54,6 +54,22 @@ describe('EventRegistrationController', () => {
     });
   });
 
+  describe('unregisterAttendee', () => {
+    it('should pass userId & eventId to service.deleteAttendee and return the result', async () => {
+      const body = { userId: 'user123', eventId: 'event456' };
+      const mockResult = { deletedCount: 1 };
+  
+      jest
+        .spyOn(service, 'deleteAttendee')
+        .mockResolvedValue(mockResult as any);
+  
+      const result = await controller.unregisterAttendee(body);
+  
+      expect(service.deleteAttendee).toHaveBeenCalledWith('user123', 'event456');
+      expect(result).toBe(mockResult);
+    });
+  });
+
   describe('isAttendingEvent', () => {
     it('should return true if user is attending the event', async () => {
       const eventId = 'event123';
@@ -84,5 +100,36 @@ describe('EventRegistrationController', () => {
       expect(service.isAttendingEvent).toHaveBeenCalledWith(eventId, userId);
       expect(result).toBe(mockResponse);
     });
+  
   });
+
+  describe('additional controller methods', () => {
+  
+    it('should relay payload from service for getAttendeesForEvent', async () => {
+      const payload = { count: 2, anonymousCount: 0, attendeeNames: ['Ana Alpha'], attendees: [] };
+  
+      jest
+        .spyOn(service, 'findByEvent')
+        .mockResolvedValue(payload as any);
+  
+      const result = await controller.getAttendeesForEvent('eventId123');
+  
+      expect(service.findByEvent).toHaveBeenCalledWith('eventId123');
+      expect(result).toBe(payload);
+    });
+  
+    it('should relay events array from service for getEventsForUser', async () => {
+      const events = [{ eventId: 'e1' }, { eventId: 'e2' }];
+  
+      jest
+        .spyOn(service, 'findByUser')
+        .mockResolvedValue(events as any);
+  
+      const result = await controller.getEventsForUser('userId123');
+  
+      expect(service.findByUser).toHaveBeenCalledWith('userId123');
+      expect(result).toBe(events);
+    });
+  });
+
 });
