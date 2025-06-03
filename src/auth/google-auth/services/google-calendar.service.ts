@@ -3,16 +3,16 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { google } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
-import { get } from 'http';
-import { User } from 'src/auth/schemas/userAuthSchema';
 import { UserService } from 'src/user/services/user/user.service';
 
 @Injectable()
 export class GoogleAuthService {
   private oauth2Client: OAuth2Client;
-  private readonly userService: UserService;
 
-  constructor(private configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly userService: UserService,
+  ) {
     this.oauth2Client = new google.auth.OAuth2(
       this.configService.get<string>('GOOGLE_CLIENT_ID'),
       this.configService.get<string>('GOOGLE_CLIENT_SECRET'),
@@ -27,47 +27,53 @@ export class GoogleAuthService {
       'https://www.googleapis.com/auth/userinfo.profile',
       'https://www.googleapis.com/auth/userinfo.email',
     ];
-    const authUrl = this.oauth2Client.generateAuthUrl({
+    return this.oauth2Client.generateAuthUrl({
       access_type: 'offline',
       scope: scopes,
       prompt: 'consent',
     });
-    return authUrl;
   }
 
   async getCallback(code: string): Promise<any> {
-    // Exchange the authorization code for tokens
     return new Promise((resolve, reject) => {
       this.oauth2Client.getToken(code, (err, tokens) => {
         if (err) {
           reject(err);
         } else {
+          console.log('Google tokens received:', tokens);
           this.oauth2Client.setCredentials(tokens);
           resolve(tokens);
         }
       });
     });
   }
-  setCredentials(tokens: any): void {
-    // Set the credentials for the OAuth2 client
+
+  async setCredentials(tokens: any) {
     this.oauth2Client.setCredentials(tokens);
-    // Store tokens in the user database object
-    this.userService.getUserByEmail(tokens.email).then((user: User) => {
-      if (user) {
-        user.googleTokens = tokens;
-        this.userService.updateUser(user).then(() => {
-          console.log('User tokens updated successfully');
-        });
-      } else {
-        console.log('User not found');
-      }
-    }
-    
+    console.log('OAuth2 client credentials set:', tokens);
+
+    const updatedFields = {
+      accessToken: tokens.access_token,
+      refreshToken: tokens.refresh_token,
+      expiryDate: tokens.expiry_date,
+      idToken: tokens.id_token,
+      scope: tokens.scope,
+      tokenType: tokens.token_type,
+      googleId: tokens.googleId,
+    };
+    console.log('Updated fields:', updatedFields);
+
+    await this.userService.updateGoogleCredentialsByEmail(tokens.email, {
+      accessToken: tokens.access_token,
+      refreshToken: tokens.refresh_token,
+      idToken: tokens.id_token,
+      expiryDate: tokens.expiry_date,
+    });
+  }
   // Token management
   async refreshToken(refreshToken: string): Promise<any> {
     // TODO
   }
-
   async validateToken(accessToken: string): Promise<boolean> {
     // Check if a token is valid and not expired
     return true;

@@ -25,9 +25,7 @@ import { UserRole } from '../../../enums/roles.enum';
 @UseGuards(AuthGuard('jwt'))
 @Controller('users')
 export class UserController {
-  constructor(
-    @Inject('USER_SERVICE') private readonly userService: UserService,
-  ) {}
+  constructor(private readonly userService: UserService) {}
 
   // ----------------- Get Users ----------------------------- \\
   @Roles('admin')
@@ -44,12 +42,13 @@ export class UserController {
   async searchUsers(@Req() req: Request) {
     console.log('Search Users Request Received:', req.query);
     const filters: UserSearchFilters = req.query;
-    
     // Validate the role
-    if (filters.role && !Object.values(UserRole).includes(filters.role as UserRole)) {
+    if (
+      filters.role &&
+      !Object.values(UserRole).includes(filters.role as UserRole)
+    ) {
       filters.role = ''; // Defaults to fetching all users
     }
-    
     return this.userService.searchUsers(filters);
   }
 
@@ -68,7 +67,7 @@ export class UserController {
   // ----------------- Update User --------------------------- \\
   @Patch('update/:id')
   async updateUser(@Param('id') id: string, @Body() userDto: UpdateUserDto) {
-    return await this.userService.updateUser(id, userDto as UserDocument);
+    return await this.userService.updateUser(id, userDto);
   }
 
   // ----------------- Delete User --------------------------- //
