@@ -38,6 +38,7 @@ export class GoogleAuthService {
     return new Promise((resolve, reject) => {
       this.oauth2Client.getToken(code, (err, tokens) => {
         if (err) {
+          console.error('Error retrieving Google tokens:', err);
           reject(err);
         } else {
           console.log('Google tokens received:', tokens);
@@ -70,10 +71,30 @@ export class GoogleAuthService {
       expiryDate: tokens.expiry_date,
     });
   }
+
   // Token management
-  async refreshToken(refreshToken: string): Promise<any> {
-    // TODO
+  async refreshToken(refreshToken: string, email: string): Promise<any> {
+    // Refresh the access token using the refresh token
+    return new Promise((resolve, reject) => {
+      this.oauth2Client.refreshAccessToken(async (err, tokens) => {
+        if (err) {
+          reject(err);
+        } else {
+          console.log('Refreshed tokens:', tokens);
+          this.oauth2Client.setCredentials(tokens);
+          await this.userService.updateGoogleCredentialsByEmail(email, {
+            // Update the user's Google credentials in the database
+            accessToken: tokens.access_token,
+            refreshToken: tokens.refresh_token,
+            idToken: tokens.id_token,
+            expiryDate: tokens.expiry_date,
+          });
+          resolve(tokens);
+        }
+      });
+    });
   }
+
   async validateToken(accessToken: string): Promise<boolean> {
     // Check if a token is valid and not expired
     return true;
