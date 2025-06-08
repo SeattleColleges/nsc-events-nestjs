@@ -2,8 +2,8 @@ import { Controller, Post, Body, Get, Param, Delete, UseGuards } from '@nestjs/c
 import { EventRegistrationService } from '../services/event-registration.service';
 import { AttendeeDto } from '../dto/attendEvent.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { Public } from 'src/common/decorators/public.decorator';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { Public } from '../../common/decorators/public.decorator';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 
 // @UseGuards(AuthGuard('jwt')) - keep for now, might remove later
 @Controller('event-registration')

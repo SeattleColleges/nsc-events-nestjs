@@ -3,7 +3,7 @@
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport'; // Built-in NestJS wrapper for Passport strategies (e.g., JWT)
 import { Reflector } from '@nestjs/core'; // Used to access metadata like @Public()
-import { IS_PUBLIC_KEY } from 'src/common/decorators/public.decorator'; // Custom metadata key set by @Public()
+import { IS_PUBLIC_KEY } from '../../common/decorators/public.decorator'; // Custom metadata key set by @Public()
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
