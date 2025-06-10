@@ -118,6 +118,75 @@ describe('EventRegistrationService', () => {
       ).rejects.toThrow(InternalServerErrorException);
     });
   });
+  
+  describe('isAttendingEvent', () => {
+    it('returns true when registration found', async () => {
+      registrationModel.findOne.mockResolvedValue({ _id: 'reg1' });
 
-  // Add similar tests for isAttendingEvent, findByEvent, findByUser as needed
+      await expect(service.isAttendingEvent('e1', 'u1')).resolves.toBe(true);
+    });
+
+    it('returns false when none found', async () => {
+      registrationModel.findOne.mockResolvedValue(null);
+
+      await expect(service.isAttendingEvent('e1', 'u1')).resolves.toBe(false);
+    });
+
+    it('wraps errors in InternalServerError', async () => {
+      registrationModel.findOne.mockRejectedValue(new Error('db-boom'));
+
+      await expect(
+        service.isAttendingEvent('e1', 'u1'),
+      ).rejects.toBeInstanceOf(InternalServerErrorException);
+    });
+  });
+
+  describe('findByEvent', () => {
+    it('computes count, anonymousCount, attendeeNames correctly', async () => {
+      const docs = [
+        { firstName: 'Ana', lastName: 'Alpha' },
+        { firstName: null, lastName: null },
+      ];
+      registrationModel.find.mockReturnValue({
+        exec: jest.fn().mockResolvedValue(docs),
+      });
+
+      const res = await service.findByEvent('e1');
+
+      expect(res).toEqual({
+        count: 2,
+        anonymousCount: 1,
+        attendeeNames: ['Ana Alpha'],
+        attendees: docs,
+      });
+    });
+
+    it('wraps errors in InternalServerError', async () => {
+      registrationModel.find.mockImplementation(() => {
+        throw new Error('query-fail');
+      });
+
+      await expect(service.findByEvent('e1')).rejects.toBeInstanceOf(
+        InternalServerErrorException,
+      );
+    });
+  });
+
+  describe('findByUser', () => {
+    it('returns aggregate result', async () => {
+      const agg = [{ eventId: 'e1' }];
+      registrationModel.aggregate.mockResolvedValue(agg);
+
+      await expect(service.findByUser('u1')).resolves.toBe(agg);
+      expect(registrationModel.aggregate).toHaveBeenCalledWith(expect.any(Array));
+    });
+
+    it('wraps errors in InternalServerError', async () => {
+      registrationModel.aggregate.mockRejectedValue(new Error('agg-err'));
+
+      await expect(service.findByUser('u1')).rejects.toBeInstanceOf(
+        InternalServerErrorException,
+      );
+    });
+  });
 });
