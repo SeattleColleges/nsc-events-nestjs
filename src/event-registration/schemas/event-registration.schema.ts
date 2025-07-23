@@ -21,11 +21,12 @@ export class EventRegistration extends Document {
   referralSources: string[]; // Where did the user hear about the event?
 }
 
-export const EventRegistrationSchema = SchemaFactory.createForClass(EventRegistration);
+export const EventRegistrationSchema =
+  SchemaFactory.createForClass(EventRegistration);
 
 // Only one registration per user per event, this should produce a 500 internal server error if duplicate registration is attempted
 
 EventRegistrationSchema.index({ userId: 1, eventId: 1 }, { unique: true });
 
-// On the frontend, we still want to do a findOne() call before attempting to create a new registration, 
+// On the frontend, we still want to do a findOne() call before attempting to create a new registration,
 // so we can show a message to the user that they are already registered

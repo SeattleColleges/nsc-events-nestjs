@@ -118,7 +118,7 @@ describe('EventRegistrationService', () => {
       ).rejects.toThrow(InternalServerErrorException);
     });
   });
-  
+
   describe('isAttendingEvent', () => {
     it('returns true when registration found', async () => {
       registrationModel.findOne.mockResolvedValue({ _id: 'reg1' });
@@ -135,9 +135,9 @@ describe('EventRegistrationService', () => {
     it('wraps errors in InternalServerError', async () => {
       registrationModel.findOne.mockRejectedValue(new Error('db-boom'));
 
-      await expect(
-        service.isAttendingEvent('e1', 'u1'),
-      ).rejects.toBeInstanceOf(InternalServerErrorException);
+      await expect(service.isAttendingEvent('e1', 'u1')).rejects.toBeInstanceOf(
+        InternalServerErrorException,
+      );
     });
   });
 
@@ -178,7 +178,9 @@ describe('EventRegistrationService', () => {
       registrationModel.aggregate.mockResolvedValue(agg);
 
       await expect(service.findByUser('u1')).resolves.toBe(agg);
-      expect(registrationModel.aggregate).toHaveBeenCalledWith(expect.any(Array));
+      expect(registrationModel.aggregate).toHaveBeenCalledWith(
+        expect.any(Array),
+      );
     });
 
     it('wraps errors in InternalServerError', async () => {

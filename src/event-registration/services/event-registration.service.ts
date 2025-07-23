@@ -56,7 +56,6 @@ export class EventRegistrationService {
 
       return result;
     } catch (error) {
-
       if (error instanceof HttpException) {
         throw error;
       }

@@ -17,7 +17,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     // Check if the route or controller has the @Public() decorator
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(), // checks method-level decorator (e.g., a single route)
-      context.getClass(),   // checks controller-level decorator (e.g., whole controller)
+      context.getClass(), // checks controller-level decorator (e.g., whole controller)
     ]);
 
     // If @Public() is present, skip authentication and allow the request
