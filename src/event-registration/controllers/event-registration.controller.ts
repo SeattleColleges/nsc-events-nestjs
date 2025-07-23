@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Get, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { EventRegistrationService } from '../services/event-registration.service';
 import { AttendeeDto } from '../dto/attendEvent.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -13,16 +21,14 @@ export class EventRegistrationController {
   // endpoint to register a user for an event
   @UseGuards(JwtAuthGuard)
   @Post('attend')
-  async registerAttendee(
-    @Body() attendObj: AttendeeDto,
-  ) {
+  async registerAttendee(@Body() attendObj: AttendeeDto) {
     return this.registrationService.attendEvent(attendObj);
   }
 
   // endpoint to unregister a user from an event
   @UseGuards(JwtAuthGuard)
   @Delete('unattend')
-  async unregisterAttendee(@Body() body: { userId: string, eventId: string }) {
+  async unregisterAttendee(@Body() body: { userId: string; eventId: string }) {
     const { userId, eventId } = body;
     return this.registrationService.deleteAttendee(userId, eventId);
   }
@@ -30,7 +36,10 @@ export class EventRegistrationController {
   // endpoint to check if a user is attending an event
   @UseGuards(JwtAuthGuard)
   @Get('is-attending/:eventId/:userId')
-  async isAttendingEvent(@Param('eventId') eventId: string, @Param('userId') userId: string) {
+  async isAttendingEvent(
+    @Param('eventId') eventId: string,
+    @Param('userId') userId: string,
+  ) {
     return this.registrationService.isAttendingEvent(eventId, userId);
   }
 

@@ -267,7 +267,6 @@ export class ActivityService {
       throw new NotFoundException('Activity not found!');
     }
 
-    
     // Upload the image to S3 and get the URL
     const imageUrl = await this.s3Service
       .uploadFile(image, 'cover-images')
@@ -287,7 +286,7 @@ export class ActivityService {
         );
       });
     }
-    
+
     // Update the activity with the image URL
     try {
       activity.eventCoverPhoto = imageUrl;

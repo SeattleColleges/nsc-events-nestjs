@@ -49,11 +49,15 @@ export class CreateActivityDto {
   @IsString()
   readonly eventLocation: string;
 
-  @ValidateIf((obj) => obj.eventCoverPhoto !== undefined && obj.eventCoverPhoto!== '')
+  @ValidateIf(
+    (obj) => obj.eventCoverPhoto !== undefined && obj.eventCoverPhoto !== '',
+  )
   @IsUrl() // TODO: look into options to ensure it has a https prefix
   readonly eventCoverPhoto?: string;
 
-  @ValidateIf((obj) => obj.eventDocument !== undefined && obj.eventDocument !== '')
+  @ValidateIf(
+    (obj) => obj.eventDocument !== undefined && obj.eventDocument !== '',
+  )
   @IsUrl()
   readonly eventDocument?: string;
 
@@ -61,7 +65,9 @@ export class CreateActivityDto {
   @IsString()
   readonly eventHost: string;
 
-  @ValidateIf((obj) => obj.eventMeetingURL !== undefined && obj.eventMeetingURL !== '')
+  @ValidateIf(
+    (obj) => obj.eventMeetingURL !== undefined && obj.eventMeetingURL !== '',
+  )
   @IsOptional()
   @IsUrl()
   readonly eventMeetingURL?: string;

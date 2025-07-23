@@ -29,7 +29,7 @@ export class User extends Document {
   @Prop()
   role: Role;
 
-  @Prop({ type: Object})
+  @Prop({ type: Object })
   googleCredentials?: Record<string, any>;
 }
 

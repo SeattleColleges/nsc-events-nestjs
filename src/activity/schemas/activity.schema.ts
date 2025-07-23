@@ -45,10 +45,10 @@ export class Activity {
   @Prop()
   eventLocation: string;
 
-  @Prop({ default: "" })
+  @Prop({ default: '' })
   eventCoverPhoto?: string;
 
-  @Prop({ default: "" })
+  @Prop({ default: '' })
   eventDocument?: string;
 
   @Prop()
