@@ -1,6 +1,13 @@
 import { Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
+export interface GoogleCredentials {
+  accessToken: string;
+  refreshToken: string;
+  idToken?: string;
+  expiryDate?: number;
+}
+
 export interface UserDocument extends Document {
   id: string;
   email: string;
@@ -9,6 +16,7 @@ export interface UserDocument extends Document {
   pronouns: string;
   password?: string;
   role: Role;
+  googleCredentials?: GoogleCredentials;
 }
 
 export interface UserSearchData {
@@ -38,10 +46,9 @@ export enum Role {
   creator = 'creator',
   user = 'user',
 }
-@Schema({
-  timestamps: true,
-})
-export class U extends Document {
+
+@Schema({ timestamps: true })
+export class User extends Document {
   @Prop()
   firstName: string;
 
@@ -59,6 +66,9 @@ export class U extends Document {
 
   @Prop()
   readonly role: Role;
+
+  @Prop({ type: Object })
+  googleCredentials?: GoogleCredentials;
 }
 
-export const UserSchema = SchemaFactory.createForClass(U);
+export const UserSchema = SchemaFactory.createForClass(User);

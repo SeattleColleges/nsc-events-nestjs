@@ -14,6 +14,7 @@ import {
 } from '../../schemas/user.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Request } from 'express';
+import { GoogleCredentials } from '../../schemas/user.model';
 
 @Injectable()
 export class UserService {
@@ -148,7 +149,7 @@ export class UserService {
   }
 
   // ----------------- Update user ----------------- \\
-  async updateUser(id: string, user: UserDocument) {
+  async updateUser(id: string, user: Partial<UserDocument>) {
     // we may want to check if id is a valid id
     // if you remove/add a character, it returns a 500 error
     if (user === null) {
@@ -187,6 +188,22 @@ export class UserService {
     } catch (error) {
       throw new Error('Error deleting user: ' + error);
     }
+  }
+
+  async updateGoogleCredentialsByEmail(
+    email: string,
+    tokens: GoogleCredentials,
+  ): Promise<UserDocument | null> {
+    const user = await this.getUserByEmail(email);
+
+    if (!user) {
+      console.warn(`User not found with email: ${email}`);
+      return null;
+    }
+
+    return await this.updateUser(user.id, {
+      googleCredentials: tokens,
+    });
   }
 
   // ================== End Admin routes ======================== \\
