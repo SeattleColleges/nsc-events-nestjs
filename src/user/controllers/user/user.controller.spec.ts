@@ -59,14 +59,14 @@ describe('UserController', () => {
       controllers: [UserController],
       providers: [
         {
-          provide: 'USER_SERVICE',
+          provide: 'UserService',
           useValue: mockUserService,
         },
       ],
     }).compile();
 
     controller = module.get<UserController>(UserController);
-    service = module.get<UserService>('USER_SERVICE');
+    service = module.get<UserService>('UserService');
     jest.clearAllMocks();
   });
 
